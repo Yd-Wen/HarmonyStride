@@ -13,4 +13,12 @@
 
     <dimen name="titleSize">24sp</dimen>
     <dimen name="textSize">18sp</dimen>
+    <dimen name="hintSize">12sp</dimen>
+
+    <dimen name="dimen10">10dp</dimen>
+    <dimen name="dimen20">20dp</dimen>
+    <dimen name="dimen30">30dp</dimen>
+    <dimen name="dimen200">200dp</dimen>
+    <dimen name="dimen250">250dp</dimen>
+    <dimen name="dimen300">300dp</dimen>
 </resources>

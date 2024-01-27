@@ -20,10 +20,9 @@
         <item name="android:textSize">@dimen/textSize</item>
     </style>
 
-
+    <!-- Custom activity appearance -->
     <style name="PostActivityTheme" parent="AppTheme">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-
 
 </resources>

@@ -45,4 +45,7 @@ dependencies {
 
     //swiperefreshlayout 控件依赖
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    //卡片视图依赖
+    implementation 'androidx.cardview:cardview:1.0.0'
 }

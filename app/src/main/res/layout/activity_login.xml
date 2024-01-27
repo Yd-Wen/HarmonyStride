@@ -1,0 +1,123 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activity.LoginActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/welcome" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen200"
+        android:layout_marginHorizontal="@dimen/dimen30"
+        app:cardCornerRadius="@dimen/dimen30"
+        app:cardElevation="@dimen/dimen30"
+        app:cardBackgroundColor="@color/colorFormBackground">
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:stretchColumns="0,3"
+            android:layout_margin="@dimen/dimen10"
+            android:paddingVertical="@dimen/dimen10">
+            <TableRow>
+
+                <TextView/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/account"
+                    android:textSize="@dimen/titleSize"
+                    android:gravity="center_horizontal"/>
+                <EditText
+                    android:id="@+id/et_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/account_hint"
+                    android:inputType="number"
+                    android:maxEms="11"
+                    android:textSize="@dimen/textSize"/>
+                <TextView/>
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/password"
+                    android:textSize="@dimen/titleSize"
+                    android:gravity="center_horizontal"/>
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password_hint"
+                    android:inputType="textPassword"
+                    android:maxEms="12"
+                    android:minEms="6"
+                    android:textSize="@dimen/textSize" />
+                <TextView/>
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView/>
+
+                <Button
+                    android:id="@+id/btn_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dimen10"
+                    android:backgroundTint="@color/colorSmallBtn"
+                    android:gravity="center_horizontal"
+                    android:text="@string/register"
+                    android:textSize="@dimen/textSize" />
+
+                <Button
+                    android:id="@+id/btn_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login"
+                    android:textSize="@dimen/titleSize"
+                    android:gravity="center"
+                    android:background="@color/colorLargeBtn"/>
+                <TextView/>
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView/>
+                <CheckBox
+                    android:id="@+id/cb_password_remember"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/password_remember"
+                    android:textSize="@dimen/hintSize" />
+                <TextView
+                    android:id="@+id/tv_password_forget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/password_forget"
+                    android:textSize="@dimen/hintSize"
+                    android:textColor="@color/colorWarning"
+                    android:gravity="end"
+                    android:paddingTop="@dimen/dimen10"/>
+                <TextView/>
+
+            </TableRow>
+        </TableLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

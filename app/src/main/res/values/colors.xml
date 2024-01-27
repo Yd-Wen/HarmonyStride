@@ -10,8 +10,17 @@
 
     <color name="colorText">#323131</color>
     <color name="colorTitle">#000000</color>
+    <color name="colorHint">#332F2F</color>
 
     <color name="colorDividingLine">#737272</color>
 
     <color name="progressBackground">#FFFFFF</color>
+
+    <color name="colorWarning">#FF1100</color>
+
+    <color name="colorSmallBtn">#D3FF9800</color>
+    <color name="colorLargeBtn">#32E9FA</color>
+
+    <color name="colorFormBackground">#CDCBCB</color>
+
 </resources>
