@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="actionBarSize">50dp</dimen>
+    <dimen name="bottomNavigationSize">50dp</dimen>
+    <dimen name="drawerWidth">250dp</dimen>
+    <dimen name="drawerHeaderHeight">250dp</dimen>
+    <dimen name="circleImageSize">80dp</dimen>
+    <dimen name="lineHeight">1dp</dimen>
+
+    <dimen name="floatingActionButtonMargin">30dp</dimen>
+    <dimen name="paddingDrawer">20dp</dimen>
+    <dimen name="paddingHeader">80dp</dimen>
+
+    <dimen name="titleSize">24sp</dimen>
+    <dimen name="textSize">18sp</dimen>
+</resources>

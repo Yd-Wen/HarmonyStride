@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#00FAFA</color>
+
+    <color name="colorPrimaryDark">#FF008EFF</color>
+    <color name="colorPrimary">#FF00B0FF</color>
+    <color name="colorAccent">#FFFF00</color>
+
+    <color name="colorMenuBackground">#FFFFFF</color>
+
+    <color name="colorText">#323131</color>
+    <color name="colorTitle">#000000</color>
+
+    <color name="colorDividingLine">#737272</color>
+
+    <color name="progressBackground">#FFFFFF</color>
+</resources>

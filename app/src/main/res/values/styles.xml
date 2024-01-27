@@ -1,0 +1,29 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="MenuStyle" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/colorMenuBackground</item>
+        <item name="android:textSize">@dimen/textSize</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
+        <!--把该属性改为false即可使menu位置位于toolbar之下-->
+        <item name="overlapAnchor">false</item>
+    </style>
+
+    <!-- Custom title text appearance -->
+    <style name="TitleAppearance" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/colorTitle</item>
+        <item name="android:textSize">@dimen/titleSize</item>
+    </style>
+
+    <!-- Custom text appearance -->
+    <style name="TextAppearance" parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textSize">@dimen/textSize</item>
+    </style>
+
+
+    <style name="PostActivityTheme" parent="AppTheme">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+
+</resources>
