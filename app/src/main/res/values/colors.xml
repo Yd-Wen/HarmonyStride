@@ -6,11 +6,13 @@
     <color name="colorPrimary">#FF00B0FF</color>
     <color name="colorAccent">#FFFF00</color>
 
+    <color name="colorDialogBackground">#FFFFFF</color>
+
     <color name="colorMenuBackground">#FFFFFF</color>
 
     <color name="colorText">#323131</color>
     <color name="colorTitle">#000000</color>
-    <color name="colorHint">#332F2F</color>
+    <color name="colorHint">#929292</color>
 
     <color name="colorDividingLine">#737272</color>
 
@@ -18,8 +20,11 @@
 
     <color name="colorWarning">#FF1100</color>
 
-    <color name="colorSmallBtn">#D3FF9800</color>
-    <color name="colorLargeBtn">#32E9FA</color>
+    <color name="colorBtnOrange">#D3FF9800</color>
+    <color name="colorBtnBlue">#32E9FA</color>
+
+    <color name="colorBtnOrangePressed">#FF3D00</color>
+    <color name="colorBtnBluePressed">#00B0FF</color>
 
     <color name="colorFormBackground">#CDCBCB</color>
 

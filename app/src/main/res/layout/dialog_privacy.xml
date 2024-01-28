@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorDialogBackground">
+
+    <LinearLayout
+        android:id="@+id/ll_privacy"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen30">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen30"
+            android:textAppearance="@style/TitleAppearance"
+            android:text="@string/privacy_tip"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen50"
+                    android:textAppearance="@style/TextAppearance"/>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_btn"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_privacy"
+        android:layout_marginTop="@dimen/dimen30"
+        android:layout_marginHorizontal="@dimen/dimen30">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="@dimen/dimen30"
+            android:gravity="center"
+            android:text="@string/privacy_disagree"
+            android:textAppearance="@style/TextAppearance"
+            android:background="@drawable/selector_shape_button_orange"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="@dimen/dimen30"
+            android:gravity="center"
+            android:text="@string/privacy_agree"
+            android:textAppearance="@style/TextAppearance"
+            android:background="@drawable/selector_shape_button_blue"
+            style="?android:attr/buttonBarButtonStyle" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -39,7 +39,9 @@
                     android:id="@+id/et_account"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance"
                     android:hint="@string/account_hint"
+                    android:textColorHint="@color/colorHint"
                     android:inputType="number"
                     android:maxEms="11"
                     android:textSize="@dimen/textSize"/>
@@ -60,7 +62,9 @@
                     android:id="@+id/et_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance"
                     android:hint="@string/password_hint"
+                    android:textColorHint="@color/colorHint"
                     android:inputType="textPassword"
                     android:maxEms="12"
                     android:minEms="6"
@@ -75,22 +79,24 @@
 
                 <Button
                     android:id="@+id/btn_register"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dimen10"
-                    android:backgroundTint="@color/colorSmallBtn"
-                    android:gravity="center_horizontal"
+                    android:layout_margin="@dimen/dimen5"
+                    android:layout_gravity="center_vertical"
                     android:text="@string/register"
-                    android:textSize="@dimen/textSize" />
+                    android:textSize="@dimen/textSize"
+                    android:gravity="center"
+                    android:background="@drawable/selector_shape_button_orange" />
 
                 <Button
                     android:id="@+id/btn_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:text="@string/login"
                     android:textSize="@dimen/titleSize"
                     android:gravity="center"
-                    android:background="@color/colorLargeBtn"/>
+                    android:background="@drawable/selector_shape_button_blue"/>
                 <TextView/>
 
             </TableRow>

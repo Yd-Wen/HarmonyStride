@@ -3,13 +3,23 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven {
+            // 添加Mob Maven地址
+            url "https://mvn.mob.com/android"
+        }
     }
 }
+
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    // 注意设置repositoriesMode为RepositoriesMode.PREFER_SETTINGS
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()
+        maven {
+            // 添加Mob Maven地址
+            url "https://mvn.mob.com/android"
+        }
     }
 }
 rootProject.name = "HarmonyStride"

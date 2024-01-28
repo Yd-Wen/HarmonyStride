@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.mob.sdk'
 }
 
 android {
@@ -48,4 +49,14 @@ dependencies {
 
     //卡片视图依赖
     implementation 'androidx.cardview:cardview:1.0.0'
+}
+
+// MobSDK依赖
+MobSDK {
+    // "替换为mob官方申请的appkey"
+    appKey "392dd3f31f86d"
+    // "替换为mob官方申请的appkey对应的appSecret"
+    appSecret "863eab5dbd9d70e808cad4dddbf26436"
+    spEdition "IZNAO"
+    SMSSDK {}
 }

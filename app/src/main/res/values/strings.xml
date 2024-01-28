@@ -1,6 +1,10 @@
 <resources>
     <string name="harmony_stride">与你同行</string>
 
+    <string name="privacy_tip">隐私政策授权提示</string>
+    <string name="privacy_agree">同意协议</string>
+    <string name="privacy_disagree">放弃使用</string>
+
     <string name="account">账号</string>
     <string name="account_hint">手机号</string>
     <string name="password">密码</string>
