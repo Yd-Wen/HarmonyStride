@@ -3,6 +3,7 @@ package com.srdp.harmonystride.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,15 +66,12 @@ public class PostActivity extends BaseActivity {
         Glide.with(this).load(imageId).into(imageView);
         textView.setText(getString(R.string.content));
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.home:
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+            }
+        });
+
     }
 }

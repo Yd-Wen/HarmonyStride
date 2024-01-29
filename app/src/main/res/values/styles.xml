@@ -20,6 +20,16 @@
         <item name="android:textSize">@dimen/textSize</item>
     </style>
 
+    <!-- Custom tip appearance -->
+    <style name="TipBlackAppearance" parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textSize">@dimen/hintSize</item>
+    </style>
+    <style name="TipRedAppearance" parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@color/colorWarning</item>
+        <item name="android:textSize">@dimen/hintSize</item>
+    </style>
+
     <!-- Custom activity appearance -->
     <style name="PostActivityTheme" parent="AppTheme">
         <item name="android:statusBarColor">@android:color/transparent</item>

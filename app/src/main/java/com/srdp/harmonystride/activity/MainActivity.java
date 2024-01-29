@@ -164,11 +164,10 @@ public class MainActivity extends BaseActivity {
         super.onResume();
     }
 
-
     //获取工具栏菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_main_toolbar, menu);
         return true;
     }
 

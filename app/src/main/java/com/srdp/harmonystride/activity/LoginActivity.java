@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.util.HTTPUtil;
@@ -27,9 +30,12 @@ import okhttp3.Response;
 
 public class LoginActivity extends BaseActivity {
 
-    private Button loginButton;
-    private EditText account;
-    private EditText password;
+    private EditText accountEt;
+    private EditText passwordEt;
+    private Button registerBtn;
+    private Button loginBtn;
+    private CheckBox rememberPwdCb;
+    private TextView forgetPwdTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,26 +45,35 @@ public class LoginActivity extends BaseActivity {
         initViews();
         //初始化事件
         initEvents();
-
     }
 
 
     private void initViews() {
-        loginButton = findViewById(R.id.btn_login);
-        account = findViewById(R.id.et_account);
-        password = findViewById(R.id.et_password);
+        accountEt = findViewById(R.id.et_account);
+        passwordEt = findViewById(R.id.et_password);
+        registerBtn = findViewById(R.id.btn_register);
+        loginBtn = findViewById(R.id.btn_login);
+        rememberPwdCb = findViewById(R.id.cb_password_remember);
+        forgetPwdTv = findViewById(R.id.tv_password_forget);
     }
 
     private void initEvents(){
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateTo(RegisterActivity.class);
+            }
+        });
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                navigateTo(MainActivity.class);
 //                finish();
                 Toast.makeText(LoginActivity.this,"请求中", Toast.LENGTH_SHORT).show();
                 Map map=new HashMap();
-                map.put("account",account.getText().toString());
-                map.put("password",password.getText().toString());
+                map.put("account",accountEt.getText().toString());
+                map.put("password",passwordEt.getText().toString());
                 String url= "/user/login";
                 HTTPUtil.POST(url, "", map, new Callback() {
                     @Override
@@ -94,6 +109,13 @@ public class LoginActivity extends BaseActivity {
                 } catch (JSONException e) {
                     Toast.makeText(LoginActivity.this,e.toString(),Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        forgetPwdTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateTo(PasswordResetActivity.class);
             }
         });
     }

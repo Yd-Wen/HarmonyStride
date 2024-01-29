@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="@dimen/drawerHeaderHeight"
@@ -11,6 +12,8 @@
         android:id="@+id/user_circle_image"
         android:layout_width="@dimen/circleImageSize"
         android:layout_height="@dimen/circleImageSize"
+        app:civ_border_color="@color/colorCircleImageBorder"
+        app:civ_border_width="@dimen/dimen2"
         android:layout_gravity="center"
         android:src="@drawable/default_avatar" />
     <TextView
