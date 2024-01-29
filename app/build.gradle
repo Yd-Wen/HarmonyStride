@@ -49,6 +49,11 @@ dependencies {
 
     //卡片视图依赖
     implementation 'androidx.cardview:cardview:1.0.0'
+
+    // json 依赖
+    implementation 'com.google.code.gson:gson:2.9.0'
+    // okhttp 依赖
+    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
 }
 
 // MobSDK依赖

@@ -31,8 +31,8 @@ public class HomeFragment extends Fragment{
     private FloatingActionButton floatingActionButton;
 
     private MyEntity[] myEntities = {
-            new MyEntity("111", R.drawable.test1),
-            new MyEntity("222", R.drawable.test2)
+            new MyEntity("111", R.drawable.welcome),
+            new MyEntity("222", R.drawable.welcome)
     };
 
     private List<MyEntity> myEntityList = new ArrayList<>();
