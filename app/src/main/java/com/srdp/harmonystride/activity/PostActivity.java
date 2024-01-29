@@ -38,7 +38,7 @@ public class PostActivity extends BaseActivity {
         //初始化视图
         initViews();
         //初始化事件
-        initActions();
+        initEvents();
     }
 
     private void initDatas(){
@@ -54,7 +54,7 @@ public class PostActivity extends BaseActivity {
         textView = findViewById(R.id.content_tv);
     }
 
-    private void initActions(){
+    private void initEvents(){
         setSupportActionBar(toolbar);
 //        ActionBar actionBar = getSupportActionBar();
 //        if(actionBar != null){

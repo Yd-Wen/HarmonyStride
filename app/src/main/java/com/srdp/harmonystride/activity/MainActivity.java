@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity {
         //初始化视图
         initViews();
         //初始化事件
-        initActions();
+        initEvents();
     }
 
     public void initViews(){
@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private void initActions(){
+    private void initEvents(){
         //滑动菜单单击事件监听器
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

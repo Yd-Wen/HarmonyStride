@@ -9,7 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/welcome" />
+        android:background="@drawable/welcome"
+        android:contentDescription="@string/harmony_stride" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -44,7 +45,8 @@
                     android:textColorHint="@color/colorHint"
                     android:inputType="number"
                     android:maxEms="11"
-                    android:textSize="@dimen/textSize"/>
+                    android:textSize="@dimen/textSize"
+                    android:autofillHints="username" />
                 <TextView/>
 
             </TableRow>
@@ -68,7 +70,8 @@
                     android:inputType="textPassword"
                     android:maxEms="12"
                     android:minEms="6"
-                    android:textSize="@dimen/textSize" />
+                    android:textSize="@dimen/textSize"
+                    android:autofillHints="password"/>
                 <TextView/>
 
             </TableRow>
