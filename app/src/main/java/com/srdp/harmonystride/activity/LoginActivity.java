@@ -1,16 +1,23 @@
 package com.srdp.harmonystride.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+
 import com.srdp.harmonystride.R;
 
 public class LoginActivity extends BaseActivity {
 
+    private ActivityResultLauncher activityResultLauncher;
     private EditText accountEt;
     private EditText passwordEt;
     private Button registerBtn;
@@ -23,14 +30,21 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                // 处理返回的数据
+                Intent data = result.getData();
+                // 进行你的操作
+                accountEt.setText(data.getStringExtra("account"));
+                passwordEt.setText(data.getStringExtra("password"));
+            }
+        });
+
         //初始化视图
         initViews();
         //初始化事件
         initEvents();
-
     }
-
-
 
     private void initViews() {
         accountEt = findViewById(R.id.et_account);
@@ -45,7 +59,10 @@ public class LoginActivity extends BaseActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigateTo(RegisterActivity.class);
+                //navigateTo(RegisterActivity.class);
+                Intent intent = new Intent(myContext, RegisterActivity.class);
+                activityResultLauncher.launch(intent);
+
             }
         });
 
