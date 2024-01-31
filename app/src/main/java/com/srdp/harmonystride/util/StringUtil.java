@@ -27,4 +27,16 @@ public class StringUtil {
         return string.matches(phonePattern);
     }
 
+    /**
+     * Check if the given string is a 6-12 password.
+     *
+     * @param string The string to be checked.
+     * @return True if the string is an 6-12 password, otherwise false.
+     */
+    public static boolean isPassword(String string) {
+        // Use a regular expression to match the 6-12 password
+        String passwordPattern = "^(?=.*[0-9a-zA-Z]).{6,12}$";
+        return string.matches(passwordPattern);
+    }
+
 }

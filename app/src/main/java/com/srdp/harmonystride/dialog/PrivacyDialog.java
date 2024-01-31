@@ -33,10 +33,8 @@ public class PrivacyDialog extends BaseDialog{
 
         //设置透明背景
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
         //屏蔽返回键
-        //setCancelable(false);
-
+        setCancelable(false);
     }
 
     public void initViews(){
@@ -58,7 +56,7 @@ public class PrivacyDialog extends BaseDialog{
             @Override
             public void onClick(View view) {
                 dismiss();
-                SharedPreferenceUtil.setParam(context, "AGREE", true);
+                SharedPreferenceUtil.setParam(context, "privacy_agree", true);
                 ((WelcomeActivity) context).navigateTo(LoginActivity.class);
                 ((WelcomeActivity) context).finish();
             }

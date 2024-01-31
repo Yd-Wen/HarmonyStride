@@ -60,7 +60,7 @@ public class WelcomeActivity extends BaseActivity {
 
     //检查隐私是否同意
     private void checkPrivacy(){
-        Boolean status = (Boolean) SharedPreferenceUtil.getParam(this, "AGREE", false);
+        Boolean status = (Boolean) SharedPreferenceUtil.getParam(this, "privacy_agree", false);
         if (status){
             Log.d("check", "1");
             Timer timer = new Timer();

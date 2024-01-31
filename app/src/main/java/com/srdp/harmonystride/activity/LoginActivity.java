@@ -17,7 +17,6 @@ import com.srdp.harmonystride.R;
 
 public class LoginActivity extends BaseActivity {
 
-    private ActivityResultLauncher activityResultLauncher;
     private EditText accountEt;
     private EditText passwordEt;
     private Button registerBtn;
@@ -30,15 +29,27 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == Activity.RESULT_OK) {
-                // 处理返回的数据
-                Intent data = result.getData();
-                // 进行你的操作
-                accountEt.setText(data.getStringExtra("account"));
-                passwordEt.setText(data.getStringExtra("password"));
-            }
-        });
+        setActivityResultLauncher(
+                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // 处理返回的数据
+                        Intent data = result.getData();
+                        // 进行你的操作
+                        accountEt.setText(data.getStringExtra("account"));
+                        passwordEt.setText(data.getStringExtra("password"));
+                    }
+                })
+        );
+
+//        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+//            if (result.getResultCode() == Activity.RESULT_OK) {
+//                // 处理返回的数据
+//                Intent data = result.getData();
+//                // 进行你的操作
+//                accountEt.setText(data.getStringExtra("account"));
+//                passwordEt.setText(data.getStringExtra("password"));
+//            }
+//        });
 
         //初始化视图
         initViews();
@@ -59,10 +70,7 @@ public class LoginActivity extends BaseActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //navigateTo(RegisterActivity.class);
-                Intent intent = new Intent(myContext, RegisterActivity.class);
-                activityResultLauncher.launch(intent);
-
+                navigateForResult(RegisterActivity.class);
             }
         });
 
@@ -77,7 +85,7 @@ public class LoginActivity extends BaseActivity {
         forgetPwdTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigateTo(PasswordResetActivity.class);
+                navigateForResult(PasswordResetActivity.class);
             }
         });
     }

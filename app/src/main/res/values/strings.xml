@@ -34,6 +34,15 @@
     <string name="no_certify">未认证</string>
     <string name="setting">设置</string>
 
+    <!--用户相关-->
+    <string name="user">用户</string>
+    <string name="sex_unknown">保密</string>
+    <string name="sex_male">男</string>
+    <string name="sex_female">女</string>
+    <string name="location_unknown">未定位</string>
+    <string name="introduction_default">系统原装签名：与你同行</string>
+
+    <!--帖子相关-->
     <string name="post">帖子</string>
     <string name="content">帖子内容：xxxxxxxxxxxxxxxxxxxx</string>
 

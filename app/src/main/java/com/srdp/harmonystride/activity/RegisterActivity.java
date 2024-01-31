@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.util.StringUtil;
+import com.srdp.harmonystride.util.TimerUtil;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -47,18 +48,20 @@ public class RegisterActivity extends BaseActivity {
             switch (tag){
                 case 1:
                     Log.d("Codr","注册成功");
-                    showToast("注册成功");
+                    showToast("注册成功，请登录");
 
+                    //TODO:将注册用户写入数据库
+
+                    //返回登录页
                     Intent resutltIntent = new Intent();
-
                     resutltIntent.putExtra("account", accountEt.getText().toString().trim())
                             .putExtra("password", passwordEt.getText().toString().trim());
                     setResult(Activity.RESULT_OK, resutltIntent);
                     finish();
                     break;
                 case 2:
-                    Log.d("Codr","获取短信验证码成功");
-                    showToast("获取短信验证码成功");
+                    Log.d("Codr","短信已发送");
+                    showToast("短信已发送");
                     break;
                 case 3:
                     Log.d("Codr","获取短信验证码失败");
@@ -69,8 +72,6 @@ public class RegisterActivity extends BaseActivity {
             }
         }
     };
-    private TimeCount timeCount;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +105,6 @@ public class RegisterActivity extends BaseActivity {
     }
 
     public void initEvents(){
-        timeCount = new TimeCount(60000, 1000);
 
         eventHandler = new EventHandler(){
             @Override
@@ -153,15 +153,22 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 String account = accountEt.getText().toString().trim();
+                String password = passwordEt.getText().toString().trim();
+
+                //TODO：数据库查重，是否未注册
                 if(StringUtil.isEmpty(account)){
                     showToast("请输入手机号");
                 }else if(!StringUtil.isPhone(account)){
                     showToast("请输入正确的手机号");
+                }else if(StringUtil.isEmpty(password)){
+                    showToast("请输入密码");
+                }else if(!StringUtil.isPassword(password)){
+                    showToast("请输入正确的密码");
                 } else if(!privacyAgreeCb.isChecked()){
                     showToast("请同意隐私协议");
                 }else{
                     SMSSDK.getVerificationCode("+86", account); //获取验证码
-                    timeCount.start(); //开始倒计时
+                    new TimerUtil(baseContext, (Button) view, 60000, 1000).start(); //开始倒计时
                 }
             }
         });
@@ -170,13 +177,17 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 String account = accountEt.getText().toString().trim();
+                String password = passwordEt.getText().toString().trim();
                 String verificationCode = verificationCodeEt.getText().toString().trim();
-
                 if(StringUtil.isEmpty(account)){
                     showToast("请输入手机号");
                 }else if(!StringUtil.isPhone(account)){
                     showToast("请输入正确的手机号");
-                }else if(!privacyAgreeCb.isChecked()){
+                }else if(StringUtil.isEmpty(password)){
+                    showToast("请输入密码");
+                }else if(!StringUtil.isPassword(password)){
+                    showToast("请输入正确的密码");
+                } else if(!privacyAgreeCb.isChecked()){
                     showToast("请同意隐私协议");
                 }else if(StringUtil.isEmpty(verificationCode)){
                     showToast("请输入验证码");
@@ -214,27 +225,4 @@ public class RegisterActivity extends BaseActivity {
         SMSSDK.unregisterEventHandler(eventHandler);
     }
 
-    /**
-     * 计时器
-     */
-    class TimeCount extends CountDownTimer {
-
-        public TimeCount(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onTick(long l) {
-            getVerificationCodeBtn.setClickable(false);
-            getVerificationCodeBtn.setText(l/1000 + "秒后重试");
-            getVerificationCodeBtn.setBackground(getDrawable(R.drawable.selector_shape_button_grey));
-        }
-
-        @Override
-        public void onFinish() {
-            getVerificationCodeBtn.setClickable(true);
-            getVerificationCodeBtn.setText(R.string.verification_code_get);
-            getVerificationCodeBtn.setBackground(getDrawable(R.drawable.selector_shape_button_orange));
-        }
-    }
 }
