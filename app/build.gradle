@@ -49,6 +49,10 @@ dependencies {
 
     //卡片视图依赖
     implementation 'androidx.cardview:cardview:1.0.0'
+
+    //LitePal依赖
+    implementation 'org.litepal.guolindev:core:3.2.3'
+
 }
 
 // MobSDK依赖

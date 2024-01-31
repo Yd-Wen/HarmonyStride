@@ -14,6 +14,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.entity.User;
+import com.srdp.harmonystride.util.SharedPreferenceUtil;
 
 public class LoginActivity extends BaseActivity {
 
@@ -37,19 +39,10 @@ public class LoginActivity extends BaseActivity {
                         // 进行你的操作
                         accountEt.setText(data.getStringExtra("account"));
                         passwordEt.setText(data.getStringExtra("password"));
+                        rememberPwdCb.setChecked((Boolean)SharedPreferenceUtil.getParam(this, "password_remember", false));
                     }
                 })
         );
-
-//        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-//            if (result.getResultCode() == Activity.RESULT_OK) {
-//                // 处理返回的数据
-//                Intent data = result.getData();
-//                // 进行你的操作
-//                accountEt.setText(data.getStringExtra("account"));
-//                passwordEt.setText(data.getStringExtra("password"));
-//            }
-//        });
 
         //初始化视图
         initViews();
@@ -77,8 +70,26 @@ public class LoginActivity extends BaseActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigateTo(MainActivity.class);
-                finish();
+                String account = accountEt.getText().toString().trim();
+                String password = passwordEt.getText().toString().trim();
+                Boolean pwdRemember = rememberPwdCb.isChecked();
+
+                User user = new User(account, password);
+
+                //TODO:服务端检查用户是否存在
+                if(verifyUser(user)){
+                    //写入SQLite本地数据库
+                    user.save();
+                    //写入配置信息
+                    SharedPreferenceUtil.setParam(getBaseContext(), "current_account", account);
+                    SharedPreferenceUtil.setParam(getBaseContext(), "current_password", password);
+                    SharedPreferenceUtil.setParam(getBaseContext(), "password_remember", pwdRemember);
+
+                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                    intent.putExtra("account", account);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
@@ -90,5 +101,22 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    //TODO:服务端检查用户是否存在
+    private boolean verifyUser(User user){
+
+        return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //加载配置信息（二次登录）
+        accountEt.setText((String)SharedPreferenceUtil.getParam(this, "current_account", ""));
+        rememberPwdCb.setChecked((Boolean)SharedPreferenceUtil.getParam(this, "password_remember", false));
+        //是否记住密码
+        if(rememberPwdCb.isChecked()){
+            passwordEt.setText((String)SharedPreferenceUtil.getParam(this, "current_password", ""));
+        }
+    }
 }
 

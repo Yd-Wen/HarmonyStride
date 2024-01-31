@@ -18,8 +18,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.TimerUtil;
+
+import org.litepal.LitePal;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -46,14 +49,24 @@ public class PasswordResetActivity extends BaseActivity {
                     Log.d("Codr","重置密码成功");
                     showToast("重置密码成功，请登录");
 
-                    //TODO：更新数据库
+                    String account = accountEt.getText().toString().trim();
+                    String password = newPwdEt.getText().toString().trim();
 
-                    //返回登录页
-                    Intent resutltIntent = new Intent();
-                    resutltIntent.putExtra("account", accountEt.getText().toString().trim())
-                            .putExtra("password", newPwdEt.getText().toString().trim());
-                    setResult(Activity.RESULT_OK, resutltIntent);
-                    finish();
+                    //TODO：更新数据库
+                    if(updateUser(new User(account, password))){
+                        //更新SQLite本地数据库
+                        User user = new User();
+                        user.setPassword(password);
+                        user.updateAll("account = ?", account);
+                        //返回登录页
+                        Intent resutltIntent = new Intent();
+                        resutltIntent.putExtra("account", account)
+                                .putExtra("password", password);
+                        setResult(Activity.RESULT_OK, resutltIntent);
+                        finish();
+                    }else {
+                        showToast("服务端数据库更新失败");
+                    }
                     break;
                 case 2:
                     Log.d("Codr","短信已发送");
@@ -180,6 +193,12 @@ public class PasswordResetActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    //TODO：数据库查重，是否已经注册过
+    private boolean updateUser(User user){
+
+        return true;
     }
 
     //获取工具栏菜单

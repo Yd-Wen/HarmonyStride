@@ -4,6 +4,7 @@
     package="com.srdp.harmonystride">
 
     <application
+        android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -23,7 +24,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.WelcomeActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
