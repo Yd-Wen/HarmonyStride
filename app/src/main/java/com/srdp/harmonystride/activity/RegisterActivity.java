@@ -162,12 +162,15 @@ public class RegisterActivity extends BaseActivity {
                 String account = accountEt.getText().toString().trim();
                 String password = passwordEt.getText().toString().trim();
 
-                //TODO：数据库查重，是否未注册
+
+
                 if(StringUtil.isEmpty(account)){
                     showToast("请输入手机号");
                 }else if(!StringUtil.isPhone(account)){
                     showToast("请输入正确的手机号");
-                }else if(StringUtil.isEmpty(password)){
+                }else if(userRegistered(account)){//TODO：服务端查重，是否已注册
+                    showToast("账号已注册，请登录");
+                } else if(StringUtil.isEmpty(password)){
                     showToast("请输入密码");
                 }else if(!StringUtil.isPassword(password)){
                     showToast("请输入正确的密码");
@@ -203,6 +206,12 @@ public class RegisterActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    //TODO：服务端查重，是否已注册
+    private boolean userRegistered(String account){
+
+        return true;
     }
 
     //TODO:将注册用户写入数据库
