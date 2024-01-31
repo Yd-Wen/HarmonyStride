@@ -169,7 +169,7 @@ public class RegisterActivity extends BaseActivity {
                 }else if(!StringUtil.isPhone(account)){
                     showToast("请输入正确的手机号");
                 }else if(userRegistered(account)){//TODO：服务端查重，是否已注册
-                    showToast("账号已注册，请登录");
+                    showToast("该账号已注册，请登录");
                 } else if(StringUtil.isEmpty(password)){
                     showToast("请输入密码");
                 }else if(!StringUtil.isPassword(password)){

@@ -52,7 +52,7 @@ public class PasswordResetActivity extends BaseActivity {
                     String account = accountEt.getText().toString().trim();
                     String password = newPwdEt.getText().toString().trim();
 
-                    //TODO：更新数据库
+                    //TODO：更新服务端数据库
                     if(updateUser(new User(account, password))){
                         //更新SQLite本地数据库
                         User user = new User();
@@ -156,12 +156,13 @@ public class PasswordResetActivity extends BaseActivity {
                 String account = accountEt.getText().toString().trim();
                 String password = newPwdEt.getText().toString().trim();
 
-                //TODO：数据库查重，是否已经注册过
                 if(StringUtil.isEmpty(account)){
                     showToast("请输入手机号");
                 }else if(!StringUtil.isPhone(account)){
                     showToast("请输入正确的手机号");
-                }else if(StringUtil.isEmpty(password)){
+                }else if(!userRegistered(account)){//TODO：服务端查重，是否已经注册过
+                    showToast("该账号未注册，请先注册");
+                } else if(StringUtil.isEmpty(password)){
                     showToast("请输入新密码");
                 }else if(!StringUtil.isPassword(password)){
                     showToast("请输入正确的新密码");
@@ -195,7 +196,13 @@ public class PasswordResetActivity extends BaseActivity {
         });
     }
 
-    //TODO：数据库查重，是否已经注册过
+    //TODO：服务端查查，是否已经注册
+    private boolean userRegistered(String account){
+
+        return true;
+    }
+
+    //TODO：更新服务端数据库
     private boolean updateUser(User user){
 
         return true;
