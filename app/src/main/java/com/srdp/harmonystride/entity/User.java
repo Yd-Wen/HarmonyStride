@@ -17,10 +17,10 @@ public class User extends LitePalSupport {
     private String nickname; //昵称，默认为"用户"+账号
 
     @Column(defaultValue = "0")
-    private String certify; //是否认证, 默认0,SQLite无Boolean型
+    private String certify; //是否认证, 默认0,SQLite无Boolean型，1：残疾人；2：志愿者；3：用人单位
 
     @Column(defaultValue = "保密")
-    private String sex; //性别，默认"保密"，可选{"保密""男""女"}-01-01
+    private String gender; //性别，默认"保密"，可选{"保密""男""女"}-01-01
 
     @Column(defaultValue = "未定位")
     private String location; //定位，默认值："未定位"
@@ -43,13 +43,13 @@ public class User extends LitePalSupport {
         //focusUid = "";
     }
 
-    public User(String account, String password, String imageUrl, String nickname, String certify, String sex, String location, String introduction, String focusUid) {
+    public User(String account, String password, String imageUrl, String nickname, String certify, String gender, String location, String introduction, String focusUid) {
         this.account = account;
         this.password = password;
         this.imageUrl = imageUrl;
         this.nickname = nickname;
         this.certify = certify;
-        this.sex = sex;
+        this.gender = gender;
         this.location = location;
         this.introduction = introduction;
         this.focusUid = focusUid;
@@ -87,7 +87,7 @@ public class User extends LitePalSupport {
         this.nickname = nickname;
     }
 
-    public String isCertify() {
+    public String getCertify() {
         return certify;
     }
 
@@ -95,12 +95,12 @@ public class User extends LitePalSupport {
         this.certify = certify;
     }
 
-    public String getSex() {
-        return sex;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getLocation() {

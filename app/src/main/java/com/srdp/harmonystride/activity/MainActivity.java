@@ -1,15 +1,16 @@
 package com.srdp.harmonystride.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -30,6 +31,7 @@ import com.srdp.harmonystride.fragment.HomeFragment;
 import com.srdp.harmonystride.fragment.MessageFragment;
 import com.srdp.harmonystride.fragment.StatusFragment;
 import com.srdp.harmonystride.util.ScrollUtil;
+import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
 import org.litepal.LitePal;
@@ -47,7 +49,7 @@ public class MainActivity extends BaseActivity {
     private CircleImageView avatarCiv;
     private TextView nicknameTv;
 
-    private User curUser;
+    private User curUser; //当前用户
 
     private HomeFragment homeFragment;
     private StatusFragment statusFragment;
@@ -64,6 +66,20 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setActivityResultLauncher(
+                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // 处理返回的数据
+                        Intent data = result.getData();
+                        // 进行你的操作
+                        if(data.getBooleanExtra("update", false)){
+                            //如果用户更新数据，重新初始化
+                            initDatas();
+                            loadUserInfo();
+                        }
+                    }
+                })
+        );
         //初始化数据
         initDatas();
         //初始化视图
@@ -74,11 +90,8 @@ public class MainActivity extends BaseActivity {
 
     private void initDatas(){
         //通过账户名从本地数据库读取当前用户信息
-        Intent intent = getIntent();
-        List<User> Users = LitePal.where("account = ?", intent.getStringExtra("account")).find(User.class);
+        List<User> Users = LitePal.where("account = ?", getIntent().getStringExtra("account")).find(User.class);
         curUser = Users.get(0);
-        Log.d("account", curUser.getAccount());
-        Log.d("nickname", curUser.getNickname());
     }
 
     public void initViews(){
@@ -89,13 +102,6 @@ public class MainActivity extends BaseActivity {
         //获取header内部控件
         avatarCiv = navigationView.getHeaderView(0).findViewById(R.id.civ_avatar);
         nicknameTv = navigationView.getHeaderView(0).findViewById(R.id.tv_nickname);
-
-        //显示当前用户信息
-        if(!StringUtil.isEmpty(curUser.getImageUrl())){ //头像资源路径不为空
-            //TODO:从阿里云OSS读取并设置当前用户的头像
-            setUserAvatar(avatarCiv);
-        }
-        nicknameTv.setText(curUser.getNickname());
 
         //获取工具栏
         appBarLayout = findViewById(R.id.appbar_layout);
@@ -134,7 +140,9 @@ public class MainActivity extends BaseActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.profile:
-                        showToast(getString(R.string.profile));
+                        Intent intent = new Intent(baseContext, ProfileActivity.class);
+                        intent.putExtra("account", curUser.getAccount());
+                        navigateForResult(intent);
                         break;
                     case R.id.certify:
                         showToast(getString(R.string.certify));
@@ -195,22 +203,32 @@ public class MainActivity extends BaseActivity {
         //circleImageView.setImageResource();
     }
 
+    private void loadUserInfo(){
+        //显示当前用户信息
+        if(!StringUtil.isEmpty(curUser.getImageUrl())){ //头像资源路径不为空
+            //TODO:从阿里云OSS读取并设置当前用户的头像
+            setUserAvatar(avatarCiv);
+        }
+        nicknameTv.setText(curUser.getNickname());
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
+        loadUserInfo();
     }
 
     @Override
     protected void onResume() {
+        super.onResume();
         //初始化滑动工具
         scrollUtil = new ScrollUtil(bottomNavigationView, homeFragment.getView().findViewById(R.id.recycler_view));
-        super.onResume();
     }
 
     //获取工具栏菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_main_toolbar, menu);
+        getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
         return true;
     }
 

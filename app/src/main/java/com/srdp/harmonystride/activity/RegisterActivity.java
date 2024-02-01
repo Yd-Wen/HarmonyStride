@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -207,7 +206,7 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-    //TODO：服务端查重，是否已注册
+    //TODO:服务端查重，是否已注册
     private boolean userRegistered(String account){
 
         return false;
@@ -222,7 +221,7 @@ public class RegisterActivity extends BaseActivity {
     //获取工具栏菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_simple_toolbar, menu);
+        getMenuInflater().inflate(R.menu.menu_toolbar_close, menu);
         return true;
     }
 

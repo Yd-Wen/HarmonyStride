@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 public class BaseDialog extends Dialog {
 
-    private TextView contentTv;
     private Button cancelBtn;
     private Button confirmBtn;
 
@@ -21,20 +20,12 @@ public class BaseDialog extends Dialog {
         super.onCreate(savedInstanceState);
     }
 
-    public void setContentTv(TextView contentTv) {
-        this.contentTv = contentTv;
-    }
-
     public void setCancelBtn(Button cancelBtn) {
         this.cancelBtn = cancelBtn;
     }
 
     public void setConfirmBtn(Button confirmBtn) {
         this.confirmBtn = confirmBtn;
-    }
-
-    public TextView getContentTv() {
-        return contentTv;
     }
 
     public Button getCancelBtn() {

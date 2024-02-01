@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -21,8 +20,6 @@ import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.TimerUtil;
-
-import org.litepal.LitePal;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -211,7 +208,7 @@ public class PasswordResetActivity extends BaseActivity {
     //获取工具栏菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_simple_toolbar, menu);
+        getMenuInflater().inflate(R.menu.menu_toolbar_close, menu);
         return true;
     }
 

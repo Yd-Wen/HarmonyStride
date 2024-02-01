@@ -58,4 +58,9 @@ public class BaseActivity extends AppCompatActivity {
         Intent intent = new Intent(baseContext, cls);
         activityResultLauncher.launch(intent);
     }
+
+    //返回结果的活动跳转
+    public void navigateForResult(Intent intent){
+        activityResultLauncher.launch(intent);
+    }
 }
