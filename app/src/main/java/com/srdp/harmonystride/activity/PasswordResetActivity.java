@@ -93,7 +93,7 @@ public class PasswordResetActivity extends BaseActivity {
         initEvents();
     }
 
-    public void initViews(){
+    private void initViews(){
         toolbar = findViewById(R.id.tool_bar);
         //不要忘记设置工具栏
         setSupportActionBar(toolbar);
@@ -105,7 +105,7 @@ public class PasswordResetActivity extends BaseActivity {
         resetPwdBtn = findViewById(R.id.btn_password_reset);
     }
 
-    public void initEvents(){
+    private void initEvents(){
 
         eventHandler = new EventHandler(){
             @Override

@@ -38,7 +38,7 @@ public class User extends LitePalSupport {
     public User(String account, String password) {
         this.account = account;
         this.password = password;
-        nickname = "user" + account;
+        this.nickname = "User" + account;
         //TODO: 添加默认的管理员Uid
         //focusUid = "";
     }

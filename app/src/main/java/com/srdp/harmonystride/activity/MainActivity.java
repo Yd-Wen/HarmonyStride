@@ -1,10 +1,13 @@
 package com.srdp.harmonystride.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,10 +25,18 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.fragment.HomeFragment;
 import com.srdp.harmonystride.fragment.MessageFragment;
 import com.srdp.harmonystride.fragment.StatusFragment;
 import com.srdp.harmonystride.util.ScrollUtil;
+import com.srdp.harmonystride.util.StringUtil;
+
+import org.litepal.LitePal;
+
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity {
 
@@ -33,12 +44,18 @@ public class MainActivity extends BaseActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private CircleImageView avatarCiv;
+    private TextView nicknameTv;
+
+    private User curUser;
+
     private HomeFragment homeFragment;
     private StatusFragment statusFragment;
     private MessageFragment messageFragment;
+    private Fragment curFragment;
+
     private FloatingActionButton floatingActionButton;
     private BottomNavigationView bottomNavigationView;
-    private Fragment curFragment;
 
     private ScrollUtil scrollUtil; // 滑动工具
     private static final int SCROLL_THRESHOLD = 1000; // 设置滑动阈值
@@ -47,10 +64,21 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //初始化数据
+        initDatas();
         //初始化视图
         initViews();
         //初始化事件
         initEvents();
+    }
+
+    private void initDatas(){
+        //通过账户名从本地数据库读取当前用户信息
+        Intent intent = getIntent();
+        List<User> Users = LitePal.where("account = ?", intent.getStringExtra("account")).find(User.class);
+        curUser = Users.get(0);
+        Log.d("account", curUser.getAccount());
+        Log.d("nickname", curUser.getNickname());
     }
 
     public void initViews(){
@@ -58,6 +86,16 @@ public class MainActivity extends BaseActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         //获取滑动导航栏
         navigationView = findViewById(R.id.navigation_view);
+        //获取header内部控件
+        avatarCiv = navigationView.getHeaderView(0).findViewById(R.id.civ_avatar);
+        nicknameTv = navigationView.getHeaderView(0).findViewById(R.id.tv_nickname);
+
+        //显示当前用户信息
+        if(!StringUtil.isEmpty(curUser.getImageUrl())){ //头像资源路径不为空
+            //TODO:从阿里云OSS读取并设置当前用户的头像
+            setUserAvatar(avatarCiv);
+        }
+        nicknameTv.setText(curUser.getNickname());
 
         //获取工具栏
         appBarLayout = findViewById(R.id.appbar_layout);
@@ -150,6 +188,11 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+    }
+
+    //TODO:从阿里云OSS读取并设置当前用户的头像
+    private void setUserAvatar(CircleImageView circleImageView){
+        //circleImageView.setImageResource();
     }
 
     @Override

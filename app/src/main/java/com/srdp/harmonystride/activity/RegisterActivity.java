@@ -98,7 +98,7 @@ public class RegisterActivity extends BaseActivity {
         initEvents();
     }
 
-    public void initViews(){
+    private void initViews(){
         toolbar = findViewById(R.id.tool_bar);
         //不要忘记设置工具栏
         setSupportActionBar(toolbar);
@@ -111,7 +111,7 @@ public class RegisterActivity extends BaseActivity {
         privacyAgreeCb = findViewById(R.id.cb_privacy_agree);
     }
 
-    public void initEvents(){
+    private void initEvents(){
 
         eventHandler = new EventHandler(){
             @Override
@@ -162,8 +162,6 @@ public class RegisterActivity extends BaseActivity {
                 String account = accountEt.getText().toString().trim();
                 String password = passwordEt.getText().toString().trim();
 
-
-
                 if(StringUtil.isEmpty(account)){
                     showToast("请输入手机号");
                 }else if(!StringUtil.isPhone(account)){
@@ -189,6 +187,7 @@ public class RegisterActivity extends BaseActivity {
                 String account = accountEt.getText().toString().trim();
                 String password = passwordEt.getText().toString().trim();
                 String verificationCode = verificationCodeEt.getText().toString().trim();
+
                 if(StringUtil.isEmpty(account)){
                     showToast("请输入手机号");
                 }else if(!StringUtil.isPhone(account)){
@@ -211,7 +210,7 @@ public class RegisterActivity extends BaseActivity {
     //TODO：服务端查重，是否已注册
     private boolean userRegistered(String account){
 
-        return true;
+        return false;
     }
 
     //TODO:将注册用户写入数据库

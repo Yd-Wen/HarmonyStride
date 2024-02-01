@@ -3,19 +3,19 @@ package com.srdp.harmonystride.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
+
+import org.litepal.LitePal;
 
 public class LoginActivity extends BaseActivity {
 
@@ -79,7 +79,9 @@ public class LoginActivity extends BaseActivity {
                 //TODO:服务端检查用户是否存在
                 if(verifyUser(user)){
                     //写入SQLite本地数据库
-                    user.save();
+                    if(!LitePal.isExist(User.class, "account = ?", account)){
+                        user.save();
+                    }
                     //写入配置信息
                     SharedPreferenceUtil.setParam(getBaseContext(), "current_account", account);
                     SharedPreferenceUtil.setParam(getBaseContext(), "current_password", password);
