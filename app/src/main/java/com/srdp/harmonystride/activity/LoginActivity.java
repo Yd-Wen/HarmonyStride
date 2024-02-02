@@ -68,23 +68,23 @@ public class LoginActivity extends BaseActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                navigateTo(MainActivity.class);
-//                finish();
-                Toast.makeText(LoginActivity.this,"请求中", Toast.LENGTH_SHORT).show();
-                Map map=new HashMap();
-                map.put("account",accountEt.getText().toString());
-                map.put("password",passwordEt.getText().toString());
-                String url= "/user/login";
-                HTTPUtil.POST(url, "", map, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.e(TAG, e.toString());
-                    }
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        nextAction(response.body().string());
-                    }
-                });
+                navigateTo(MainActivity.class);
+                finish();
+//                Toast.makeText(LoginActivity.this,"请求中", Toast.LENGTH_SHORT).show();
+//                Map map=new HashMap();
+//                map.put("account",accountEt.getText().toString());
+//                map.put("password",passwordEt.getText().toString());
+//                String url= "/user/login";
+//                HTTPUtil.POST(url, "", map, new Callback() {
+//                    @Override
+//                    public void onFailure(Call call, IOException e) {
+//                        Log.e(TAG, e.toString());
+//                    }
+//                    @Override
+//                    public void onResponse(Call call, Response response) throws IOException {
+//                        nextAction(response.body().string());
+//                    }
+//                });
 
             }
         });
@@ -97,7 +97,7 @@ public class LoginActivity extends BaseActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(statue);
                     String re=jsonObject.getString("status");
-                    if(re.equals("1")){
+                    if(re.equals("success")){
                         re = jsonObject.getString("user");
                         Toast.makeText(LoginActivity.this,re,Toast.LENGTH_LONG).show();
                         navigateTo(MainActivity.class);
