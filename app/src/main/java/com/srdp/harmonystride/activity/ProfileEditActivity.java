@@ -6,12 +6,16 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.Toolbar;
 
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.dialog.EditTextDialog;
 import com.srdp.harmonystride.entity.User;
+import com.srdp.harmonystride.util.SharedPreferenceUtil;
 
 import org.litepal.LitePal;
 
@@ -35,6 +39,9 @@ public class ProfileEditActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_edit);
+
+        baseContext = this;
+
         //初始化数据
         initDatas();
         //初始化视图
@@ -73,7 +80,15 @@ public class ProfileEditActivity extends BaseActivity {
         nicknameTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                new EditTextDialog(baseContext, "nickname", new EditTextDialog.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        //重新初始化和加载数据
+                        initDatas();
+                        loadUserInfo();
+                        update = true;
+                    }
+                }).show();
             }
         });
 
@@ -94,7 +109,15 @@ public class ProfileEditActivity extends BaseActivity {
         introductionTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                new EditTextDialog(baseContext, "introduction", new EditTextDialog.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        //重新初始化和加载数据
+                        initDatas();
+                        loadUserInfo();
+                        update = true;
+                    }
+                }).show();
             }
         });
     }

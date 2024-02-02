@@ -21,6 +21,9 @@ public class WelcomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        baseContext = this;
+
         //展示隐私内容
         checkPrivacy();
     }

@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
-    public Context baseContext;
+    protected Context baseContext;
     private ActivityResultLauncher activityResultLauncher;
 
     @Override

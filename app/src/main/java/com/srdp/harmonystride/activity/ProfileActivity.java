@@ -54,6 +54,8 @@ public class ProfileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        baseContext = this;
+
         setActivityResultLauncher(
                 registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
@@ -62,9 +64,9 @@ public class ProfileActivity extends BaseActivity {
                         // 进行你的操作
                         if(data.getBooleanExtra("update", false)){
                             //如果用户更新数据，重新初始化
-                            update = true;
                             initDatas();
                             loadUserInfo();
+                            update = true;
                         }
                     }
                 })

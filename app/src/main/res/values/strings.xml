@@ -51,6 +51,12 @@
     <string name="gender">性别</string>
     <string name="location">定位</string>
     <string name="introduction">签名</string>
+    <string name="edit_confirm">提交</string>
+    <string name="edit_cancel">取消</string>
+    <string name="nickname_edit">修改昵称</string>
+    <string name="nickname_edit_hint">输入新昵称</string>
+    <string name="introduction_edit">修改签名</string>
+    <string name="introduction_edit_hint">输入新签名</string>
 
     <!--帖子相关-->
     <string name="post">帖子</string>

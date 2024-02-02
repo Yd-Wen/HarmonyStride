@@ -91,6 +91,8 @@ public class RegisterActivity extends BaseActivity {
          */
         submitPolicyGrantResult(true);
 
+        baseContext = this;
+
         //初始化视图
         initViews();
         //初始化事件
