@@ -10,11 +10,13 @@
     <color name="colorTitle">#000000</color>
     <color name="colorHint">#929292</color>
     <color name="colorWarning">#FF1100</color>
+    <color name="colorToolbarTitle">#FFFFFF</color>
 
     <color name="colorBtnOrange">#D3FF9800</color>
-    <color name="colorBtnBlue">#32E9FA</color>
     <color name="colorBtnOrangePressed">#FF3D00</color>
+    <color name="colorBtnBlue">#32E9FA</color>
     <color name="colorBtnBluePressed">#00B0FF</color>
+    <color name="colorBtnGrey">#B6B6D8</color>
 
     <color name="colorDialogBackground">#FFFFFF</color>
 
@@ -28,5 +30,7 @@
 
     <color name="colorCircleImageBorder">#FFFFFF</color>
     <color name="colorCircleImageBackground">#EBEBEB</color>
+
+    <color name="colorProfileItemBackground">#2AA4DC</color>
 
 </resources>

@@ -34,6 +34,25 @@
     <string name="no_certify">未认证</string>
     <string name="setting">设置</string>
 
+    <!--用户相关-->
+    <string name="user">用户</string>
+    <string name="certify_unknown">未认证</string>
+    <string name="certify_disabled">残疾人</string>
+    <string name="certify_volunteer">志愿者</string>
+    <string name="certify_employer">用人单位</string>
+    <string name="gender_unknown">保密</string>
+    <string name="gender_male">男</string>
+    <string name="gender_female">女</string>
+    <string name="location_unknown">未定位</string>
+    <string name="introduction_default">系统原装签名：与你同行</string>
+    <string name="profile_edit">修改资料</string>
+    <string name="avatar_edit">点击修改头像</string>
+    <string name="nickname">昵称</string>
+    <string name="gender">性别</string>
+    <string name="location">定位</string>
+    <string name="introduction">签名</string>
+
+    <!--帖子相关-->
     <string name="post">帖子</string>
     <string name="content">帖子内容：xxxxxxxxxxxxxxxxxxxx</string>
 

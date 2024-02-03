@@ -2,12 +2,10 @@ package com.srdp.harmonystride.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
@@ -51,16 +49,14 @@ public class PostActivity extends BaseActivity {
     private void initViews(){
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout);
         toolbar = findViewById(R.id.tool_bar);
+        //不要忘记设置工具栏
+        setSupportActionBar(toolbar);
+
         imageView = findViewById(R.id.image_view);
         textView = findViewById(R.id.content_tv);
     }
 
     private void initEvents(){
-        setSupportActionBar(toolbar);
-//        ActionBar actionBar = getSupportActionBar();
-//        if(actionBar != null){
-//            actionBar.setTitle(R.string.post);
-//        }
 
         collapsingToolbarLayout.setTitle(postTitle);
         Glide.with(this).load(imageId).into(imageView);

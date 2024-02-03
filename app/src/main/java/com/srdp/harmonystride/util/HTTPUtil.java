@@ -1,5 +1,7 @@
 package com.srdp.harmonystride.util;
 
+import com.google.gson.Gson;
+
 import java.util.Map;
 
 import okhttp3.Call;
@@ -10,6 +12,7 @@ import okhttp3.Request;
 
 public class HTTPUtil {
     public static String IP = "http://192.168.1.7:8080";
+    public static Gson gson = new Gson();
 
     public static void POST(String url, String header, Map map, Callback callback){
         new Thread(new Runnable() {

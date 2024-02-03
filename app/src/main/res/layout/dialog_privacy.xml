@@ -1,45 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorDialogBackground">
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="100dp"
+    android:layout_marginHorizontal="@dimen/dimen30"
+    android:background="@drawable/shape_dialog"
+    android:padding="@dimen/dimen10">
 
-    <LinearLayout
-        android:id="@+id/ll_privacy"
-        android:orientation="vertical"
+    <TextView
+        android:id="@+id/tv_dialog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/dimen30">
+        android:layout_marginTop="@dimen/dimen10"
+        android:text="@string/privacy_tip"
+        android:textAppearance="@style/TitleAppearance" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen300">
 
         <TextView
+            android:id="@+id/tv_dialog_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen30"
-            android:textAppearance="@style/TitleAppearance"
-            android:text="@string/privacy_tip"/>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen50"
-                    android:textAppearance="@style/TextAppearance"/>
-        </ScrollView>
-    </LinearLayout>
+            android:layout_marginTop="@dimen/dimen20"
+            android:textAppearance="@style/TextAppearance" />
+    </ScrollView>
 
     <LinearLayout
-        android:id="@+id/ll_btn"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_privacy"
-        android:layout_marginTop="@dimen/dimen30"
-        android:layout_marginHorizontal="@dimen/dimen30">
+        android:layout_marginTop="@dimen/dimen20">
 
         <Button
+            android:id="@+id/btn_dialog_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -51,6 +47,7 @@
             style="?android:attr/buttonBarButtonStyle" />
 
         <Button
+            android:id="@+id/btn_dialog_ok"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -63,4 +60,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

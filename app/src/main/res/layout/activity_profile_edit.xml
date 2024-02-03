@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ProfileEditActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:popupTheme="@style/MenuStyle"
+        app:titleTextAppearance="@style/TitleAppearance"
+        app:title="@string/profile_edit"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_avatar"
+        android:layout_width="@dimen/dimen100"
+        android:layout_height="@dimen/dimen100"
+        android:layout_marginTop="@dimen/dimen30"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/default_avatar"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen5"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/TipBlackAppearance"
+        android:text="@string/avatar_edit" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen50"
+        android:layout_marginHorizontal="@dimen/dimen30"
+        app:cardCornerRadius="@dimen/dimen30"
+        app:cardElevation="@dimen/dimen30"
+        app:cardBackgroundColor="@color/colorFormBackground">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/dimen10">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen50"
+                android:layout_marginVertical="@dimen/dimen10"
+                android:layout_marginHorizontal="@dimen/dimen5">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance"
+                    android:text="@string/nickname"/>
+                <TextView
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:drawableEnd="@drawable/go"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextEditProfileAppearance" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen50"
+                android:layout_marginVertical="@dimen/dimen10"
+                android:layout_marginHorizontal="@dimen/dimen5">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance"
+                    android:text="@string/gender"/>
+                <TextView
+                    android:id="@+id/tv_gender"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:drawableEnd="@drawable/go"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextEditProfileAppearance"
+                    android:text="@string/gender_unknown"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen50"
+                android:layout_marginVertical="@dimen/dimen10"
+                android:layout_marginHorizontal="@dimen/dimen5">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance"
+                    android:text="@string/location"/>
+                <TextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:drawableEnd="@drawable/go"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextEditProfileAppearance"
+                    android:text="@string/location_unknown"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen50"
+                android:layout_marginVertical="@dimen/dimen10"
+                android:layout_marginHorizontal="@dimen/dimen5">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance"
+                    android:text="@string/introduction"/>
+                <TextView
+                    android:id="@+id/tv_introduction"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:drawableEnd="@drawable/go"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextEditProfileAppearance"
+                    android:singleLine="true"
+                    android:ellipsize="middle"
+                    android:text="@string/introduction_default"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

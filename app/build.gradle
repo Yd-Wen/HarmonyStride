@@ -54,6 +54,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
     // okhttp 依赖
     implementation 'com.squareup.okhttp3:okhttp:3.8.1'
+    //LitePal依赖
+    implementation 'org.litepal.guolindev:core:3.2.3'
+
 }
 
 // MobSDK依赖
