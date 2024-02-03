@@ -23,7 +23,7 @@ public class User extends LitePalSupport {
     private String certify; //是否认证, 默认 no
 
     @Column(defaultValue = "")
-    private String sex; //性别，默认""，可选{"""male""female"}-01-01
+    private String gender; //性别，默认""，可选{"""male""female"}-01-01
 
     @Column(defaultValue = "")
     private String location; //定位，默认值：""
@@ -52,7 +52,7 @@ public class User extends LitePalSupport {
         this.avatar = avatar;
         this.nickname = nickname;
         this.certify = certify;
-        this.sex = sex;
+        this.gender = sex;
         this.location = location;
         this.introduction = introduction;
         this.focus = focus;
@@ -106,12 +106,12 @@ public class User extends LitePalSupport {
         this.certify = certify;
     }
 
-    public String getSex() {
-        return sex;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getLocation() {

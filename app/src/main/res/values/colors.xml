@@ -33,4 +33,6 @@
 
     <color name="colorProfileItemBackground">#2AA4DC</color>
 
+    <color name="editTextBackground">#FFFFFF</color>
+
 </resources>

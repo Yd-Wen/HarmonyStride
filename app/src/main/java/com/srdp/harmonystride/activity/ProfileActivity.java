@@ -2,7 +2,6 @@ package com.srdp.harmonystride.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,14 +11,12 @@ import android.widget.TextView;
 
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.User;
-import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
 import org.litepal.LitePal;
@@ -185,8 +182,8 @@ public class ProfileActivity extends BaseActivity {
                 break;
         }
         //显示性别
-        genderTv.setText(curUser.getSex());
-        switch (curUser.getSex()){
+        genderTv.setText(curUser.getGender());
+        switch (curUser.getGender()){
             case "保密":
                 genderTv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.gender_unknown), null, null, null);
                 break;

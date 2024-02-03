@@ -66,11 +66,13 @@
         <!-- 是否浮现在Activity之上 -->
         <item name="android:windowIsFloating">true</item>
         <!--背景透明 -->
-        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowIsTranslucent">true</item>
         <!-- 是否有覆盖 -->
         <item name="android:windowContentOverlay">@null</item>
         <!--背景变暗-->
         <item name="android:backgroundDimEnabled">true</item>
+        <!--点击对话框外部关闭-->
+        <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
 
 </resources>

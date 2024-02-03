@@ -6,16 +6,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.Toolbar;
 
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.dialog.CheckBoxDialog;
 import com.srdp.harmonystride.dialog.EditTextDialog;
 import com.srdp.harmonystride.entity.User;
-import com.srdp.harmonystride.util.SharedPreferenceUtil;
 
 import org.litepal.LitePal;
 
@@ -95,7 +93,15 @@ public class ProfileEditActivity extends BaseActivity {
         genderTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                new CheckBoxDialog(baseContext, new CheckBoxDialog.OnDismissListener(){
+                    @Override
+                    public void onDismiss() {
+                        //重新初始化和加载数据
+                        initDatas();
+                        loadUserInfo();
+                        update = true;
+                    }
+                }).show();
             }
         });
 
@@ -127,7 +133,7 @@ public class ProfileEditActivity extends BaseActivity {
         setUserAvatar(avatarCiv);
 
         nicknameTv.setText(curUser.getNickname());
-        genderTv.setText(curUser.getSex());
+        genderTv.setText(curUser.getGender());
         locationTv.setText(curUser.getLocation());
         introductionTv.setText(curUser.getIntroduction());
     }

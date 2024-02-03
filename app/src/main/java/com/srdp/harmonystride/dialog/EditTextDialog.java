@@ -7,12 +7,16 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.User;
+import com.srdp.harmonystride.util.ScreenSizeUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 
 import org.litepal.LitePal;
@@ -39,13 +43,8 @@ public class EditTextDialog extends BaseDialog {
 
     private OnDismissListener onDismissListener;
 
-    public EditTextDialog(Context context) {
-        super(context, R.style.DialogStyle);
-        baseContext = context;
-    }
-
     public EditTextDialog(Context context, String editKey, OnDismissListener onDismissListener) {
-        super(context, R.style.DialogStyle);
+        super(context);
         this.editKey = editKey;
         this.onDismissListener = onDismissListener;
     }
@@ -54,7 +53,7 @@ public class EditTextDialog extends BaseDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.dialog_edit_text);
+        setContentView(View.inflate(baseContext, R.layout.dialog_edit_text, null));
         //初始化数据
         initDatas();
         //初始化视图
@@ -63,16 +62,11 @@ public class EditTextDialog extends BaseDialog {
         initEvents();
         //加载数据
         loadDatas();
-
-        //设置透明背景
-        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //屏蔽返回键
-        setCancelable(false);
     }
 
     private void initDatas(){
         //读取当前用户
-        List<User> users = LitePal.where("account = ?", (String)SharedPreferenceUtil.getParam(baseContext, "current_account", "")).find(User.class);
+        List<User> users = LitePal.where("account = ?", SharedPreferenceUtil.getParam(baseContext, "current_account", "").toString()).find(User.class);
         curUser = users.get(0);
     }
 
@@ -81,6 +75,14 @@ public class EditTextDialog extends BaseDialog {
         contentEt = (findViewById(R.id.et_dialog_content));
         setCancelBtn(findViewById(R.id.btn_dialog_cancel));
         setConfirmBtn(findViewById(R.id.btn_dialog_confirm));
+
+        //设置布局
+        Window dialogWindow = this.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (ScreenSizeUtil.getInstance(baseContext).getScreenWidth() * 0.8f);
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
+        dialogWindow.setAttributes(lp);
     }
 
     private void initEvents(){
@@ -118,11 +120,13 @@ public class EditTextDialog extends BaseDialog {
         if(editKey.equals("nickname")){
             titleTv.setText(R.string.nickname_edit);
             contentEt.setHint(R.string.nickname_edit_hint);
-            contentEt.setText(curUser.getNickname());
+            content = curUser.getNickname();
+            contentEt.setText(content);
         }else if(editKey.equals("introduction")) {
             titleTv.setText(R.string.introduction_edit);
             contentEt.setHint(R.string.introduction_edit_hint);
-            contentEt.setText(curUser.getIntroduction());
+            content = curUser.getIntroduction();
+            contentEt.setText(content);
         }
     }
 

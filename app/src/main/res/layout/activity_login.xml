@@ -42,7 +42,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dimen50"
                 android:orientation="horizontal"
                 android:paddingVertical="@dimen/dimen5">
 
@@ -57,20 +57,21 @@
                 <EditText
                     android:id="@+id/et_account"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="3"
                     android:autofillHints="username"
                     android:hint="@string/account_hint"
                     android:inputType="number"
                     android:maxEms="11"
                     android:textAppearance="@style/TextAppearance"
-                    android:textColorHint="@color/colorHint" />
+                    android:textColorHint="@color/colorHint"
+                    android:background="@drawable/shape_edit_text"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dimen50"
                 android:orientation="horizontal"
                 android:paddingVertical="@dimen/dimen5">
 
@@ -85,7 +86,7 @@
                 <EditText
                     android:id="@+id/et_password"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="3"
                     android:autofillHints="password"
                     android:hint="@string/password_hint"
@@ -93,7 +94,8 @@
                     android:maxEms="12"
                     android:minEms="6"
                     android:textAppearance="@style/TextAppearance"
-                    android:textColorHint="@color/colorHint" />
+                    android:textColorHint="@color/colorHint"
+                    android:background="@drawable/shape_edit_text"/>
 
             </LinearLayout>
 

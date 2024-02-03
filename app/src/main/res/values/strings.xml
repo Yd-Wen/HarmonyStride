@@ -57,6 +57,7 @@
     <string name="nickname_edit_hint">输入新昵称</string>
     <string name="introduction_edit">修改签名</string>
     <string name="introduction_edit_hint">输入新签名</string>
+    <string name="gender_edit">选择性别</string>
 
     <!--帖子相关-->
     <string name="post">帖子</string>

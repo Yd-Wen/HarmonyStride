@@ -13,8 +13,8 @@ public class BaseDialog extends Dialog {
     private Button cancelBtn;
     private Button confirmBtn;
 
-    public BaseDialog(Context context, int style) {
-        super(context, style);
+    public BaseDialog(Context context) {
+        super(context, R.style.DialogStyle);
         baseContext = context;
     }
 

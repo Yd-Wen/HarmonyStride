@@ -44,86 +44,86 @@
 
       <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="@dimen/dimen50"
           android:orientation="horizontal"
           android:paddingVertical="@dimen/dimen5">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dimen100"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="2"
             android:text="@string/account"
             android:textAppearance="@style/TitleAppearance" />
 
         <EditText
             android:id="@+id/et_account"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:autofillHints="username"
             android:hint="@string/account_hint"
             android:inputType="number"
             android:maxEms="11"
             android:textAppearance="@style/TextAppearance"
-            android:textColorHint="@color/colorHint" />
+            android:textColorHint="@color/colorHint"
+            android:background="@drawable/shape_edit_text"/>
 
       </LinearLayout>
 
       <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="@dimen/dimen50"
           android:orientation="horizontal"
           android:paddingVertical="@dimen/dimen5">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dimen100"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="2"
             android:text="@string/password"
             android:textAppearance="@style/TitleAppearance" />
 
         <EditText
             android:id="@+id/et_password"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:autofillHints="password"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
             android:maxEms="12"
             android:minEms="6"
             android:textAppearance="@style/TextAppearance"
-            android:textColorHint="@color/colorHint" />
+            android:textColorHint="@color/colorHint"
+            android:background="@drawable/shape_edit_text"/>
 
       </LinearLayout>
 
       <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="@dimen/dimen50"
           android:orientation="horizontal"
           android:paddingVertical="@dimen/dimen5">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dimen100"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="2"
             android:text="@string/verification_code"
             android:textAppearance="@style/TitleAppearance" />
 
         <EditText
             android:id="@+id/et_verification_code"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:autofillHints="username"
             android:hint="@string/verification_code_hint"
             android:inputType="number"
             android:maxEms="6"
             android:textAppearance="@style/TextAppearance"
-            android:textColorHint="@color/colorHint" />
+            android:textColorHint="@color/colorHint"
+            android:background="@drawable/shape_edit_text"/>
 
       </LinearLayout>
 
