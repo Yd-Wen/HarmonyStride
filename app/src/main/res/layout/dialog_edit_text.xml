@@ -13,20 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen10"
-        android:text="@string/privacy_tip"
         android:textAppearance="@style/TitleAppearance" />
 
-    <ScrollView
+    <EditText
+        android:id="@+id/et_dialog_content"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen300">
-
-        <TextView
-            android:id="@+id/tv_dialog_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen20"
-            android:textAppearance="@style/TextAppearance" />
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen30"
+        android:textAppearance="@style/TextAppearance"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -41,10 +35,9 @@
             android:layout_weight="1"
             android:layout_marginHorizontal="@dimen/dimen30"
             android:gravity="center"
-            android:text="@string/privacy_disagree"
+            android:text="@string/edit_cancel"
             android:textAppearance="@style/TextAppearance"
-            android:background="@drawable/selector_shape_button_orange"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:background="@drawable/selector_shape_button_orange" />
 
         <Button
             android:id="@+id/btn_dialog_confirm"
@@ -53,10 +46,9 @@
             android:layout_weight="1"
             android:layout_marginHorizontal="@dimen/dimen30"
             android:gravity="center"
-            android:text="@string/privacy_agree"
+            android:text="@string/edit_confirm"
             android:textAppearance="@style/TextAppearance"
-            android:background="@drawable/selector_shape_button_blue"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:background="@drawable/selector_shape_button_blue" />
 
     </LinearLayout>
 

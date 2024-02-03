@@ -14,12 +14,11 @@ import com.srdp.harmonystride.util.SharedPreferenceUtil;
 
 public class PrivacyDialog extends BaseDialog{
 
-    private Context context;
     private TextView contentTv;
 
     public PrivacyDialog(Context context) {
-        super(context);
-        this.context = context;
+        super(context, R.style.DialogStyle);
+        baseContext = context;
         setContentView(R.layout.dialog_privacy);
         //初始化视图
         initViews();
@@ -33,10 +32,6 @@ public class PrivacyDialog extends BaseDialog{
         return contentTv;
     }
 
-    public void setContentTv(TextView contentTv) {
-        this.contentTv = contentTv;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +43,9 @@ public class PrivacyDialog extends BaseDialog{
     }
 
     private void initViews(){
-        setContentTv(findViewById(R.id.tv_dialog_content));
+        contentTv = findViewById(R.id.tv_dialog_content);
         setCancelBtn(findViewById(R.id.btn_dialog_cancel));
-        setConfirmBtn(findViewById(R.id.btn_dialog_ok));
+        setConfirmBtn(findViewById(R.id.btn_dialog_confirm));
     }
 
     private void initEvents(){
@@ -66,9 +61,9 @@ public class PrivacyDialog extends BaseDialog{
             @Override
             public void onClick(View view) {
                 dismiss();
-                SharedPreferenceUtil.setParam(context, "privacy_agree", true);
-                ((WelcomeActivity) context).navigateTo(LoginActivity.class);
-                ((WelcomeActivity) context).finish();
+                SharedPreferenceUtil.setParam(baseContext, "privacy_agree", true);
+                ((WelcomeActivity) baseContext).navigateTo(LoginActivity.class);
+                ((WelcomeActivity) baseContext).finish();
             }
         });
     }

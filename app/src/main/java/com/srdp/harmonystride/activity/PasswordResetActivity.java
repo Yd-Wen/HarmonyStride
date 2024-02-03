@@ -123,6 +123,8 @@ public class PasswordResetActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_reset);
 
+        baseContext = this;
+
         //初始化视图
         initViews();
         //初始化事件

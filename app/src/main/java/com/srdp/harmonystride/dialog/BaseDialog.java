@@ -4,15 +4,18 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.TextView;
+
+import com.srdp.harmonystride.R;
 
 public class BaseDialog extends Dialog {
 
+    protected Context baseContext;
     private Button cancelBtn;
     private Button confirmBtn;
 
-    public BaseDialog(Context context) {
-        super(context);
+    public BaseDialog(Context context, int style) {
+        super(context, style);
+        baseContext = context;
     }
 
     @Override
