@@ -4,8 +4,8 @@ import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
 public class User extends LitePalSupport {
-//    @Column(unique = true, nullable = false)
-//    private int id; //账号（手机号），非空唯一
+    @Column(unique = true, nullable = false)
+    private int id; //账号（手机号），非空唯一
 
     @Column(unique = true, nullable = false)
     private String account; //账号（手机号），非空唯一
@@ -19,19 +19,19 @@ public class User extends LitePalSupport {
     @Column(nullable = false)
     private String nickname; //昵称，默认为"用户"+账号
 
-    @Column(defaultValue = "no")
-    private String certify; //是否认证, 默认 no
+    @Column(defaultValue = "0")
+    private String certify; //是否认证, 默认 0
 
-    @Column(defaultValue = "")
+    @Column(defaultValue = "保密")
     private String gender; //性别，默认""，可选{"""male""female"}-01-01
 
-    @Column(defaultValue = "")
+    @Column(defaultValue = "未定位")
     private String location; //定位，默认值：""
 
     @Column(defaultValue = "系统原装签名：与你同行")
     private String introduction; //简介，默认值："系统原装签名：与你同行"
 
-    @Column(defaultValue = "")
+    @Column(defaultValue = "0")
     private String focus; //关注列表，默认为空
 
     public User(){
@@ -58,13 +58,13 @@ public class User extends LitePalSupport {
         this.focus = focus;
     }
 
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getAccount() {
         return account;
@@ -136,5 +136,21 @@ public class User extends LitePalSupport {
 
     public void setFocus(String focus) {
         this.focus = focus;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", account='" + account + '\'' +
+                ", password='" + password + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", certify='" + certify + '\'' +
+                ", gender='" + gender + '\'' +
+                ", location='" + location + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", focus='" + focus + '\'' +
+                '}';
     }
 }

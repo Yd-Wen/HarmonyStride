@@ -10,16 +10,25 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class BaseActivity extends AppCompatActivity {
+import com.srdp.harmonystride.MyApplication;
 
-    protected Context baseContext;
+public class BaseActivity extends AppCompatActivity {
     private ActivityResultLauncher activityResultLauncher;
 
     @Override
     protected  void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        baseContext = this;
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {});
+    }
+
+    //设置ActivityResultLauncher
+    public void setActivityResultLauncher(ActivityResultLauncher activityResultLauncher) {
+        this.activityResultLauncher = activityResultLauncher;
+    }
+
+    //获取ActivityResultLauncher
+    public ActivityResultLauncher getActivityResultLauncher() {
+        return activityResultLauncher;
     }
 
     @Override
@@ -39,23 +48,23 @@ public class BaseActivity extends AppCompatActivity {
 
     //消息提示
     public void showToast(String msg){
-        Toast.makeText(baseContext,msg,Toast.LENGTH_SHORT).show();
+        Toast.makeText(MyApplication.getContext(),msg,Toast.LENGTH_SHORT).show();
     }
 
     //活动跳转
     public void navigateTo(Class cls){
-        Intent intent = new Intent(baseContext,cls);
+        Intent intent = new Intent(MyApplication.getContext(),cls);
         startActivity(intent);
     }
 
-    //设置ActivityResultLauncher
-    public void setActivityResultLauncher(ActivityResultLauncher activityResultLauncher) {
-        this.activityResultLauncher = activityResultLauncher;
+    //活动跳转
+    public void navigateTo(Intent intent){
+        startActivity(intent);
     }
 
     //返回结果的活动跳转
     public void navigateForResult(Class cls){
-        Intent intent = new Intent(baseContext, cls);
+        Intent intent = new Intent(MyApplication.getContext(), cls);
         activityResultLauncher.launch(intent);
     }
 

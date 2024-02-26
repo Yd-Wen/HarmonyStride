@@ -1,6 +1,5 @@
 package com.srdp.harmonystride.activity;
 
-import static android.content.ContentValues.TAG;
 import static com.mob.MobSDK.submitPolicyGrantResult;
 
 import android.annotation.SuppressLint;
@@ -8,8 +7,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,26 +19,32 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.gson.Gson;
+import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
+import com.srdp.harmonystride.util.IMUtil;
+import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.TimerUtil;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
-import cn.smssdk.wrapper.TokenVerifyResult;
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.Response;
 
 public class RegisterActivity extends BaseActivity {
+    public static final int REGISTER_SUCCESS = 1; //注册成功
+    public static final int REGISTER_IM_SUCCESS = 2; //注册IM成功
+    private static final int EXIST = 3; //账号已存在
+    public static final int NOT_EXIST = 4; //账号不存在
+    private static final int MESSAGE_GET_SUCCESS = 5; //短信发送成功
+    private static final int MESSAGE_GET_ERROR = 6; //短信发送失败
 
     private Toolbar toolbar;
     private EditText accountEt;
@@ -50,62 +55,34 @@ public class RegisterActivity extends BaseActivity {
     private CheckBox privacyAgreeCb;
 
     private EventHandler eventHandler;
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler(){
+    private final Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            int tag = msg.what;
-            switch (tag){
-                case 1:
-                    Log.d("Codr","注册成功");
-
-                    String account = accountEt.getText().toString().trim();
-                    String password = passwordEt.getText().toString().trim();
-
-                    //DONE:将注册用户写入数据库
-                    Map map=new HashMap();
-                    map.put("account",account);
-                    map.put("password",password);
-                    String url= "/user/register";
-                    HTTPUtil.POST(url, "", map, new okhttp3.Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            Log.e(TAG, e.toString());
-                        }
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String result = response.body().string();
-                            RegisterActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(result);
-                                        if(jsonObject.getString("status").equals("success")){
-                                            showToast("注册成功，请登录");
-                                            //返回登录页
-                                            Intent resutltIntent = new Intent();
-                                            resutltIntent.putExtra("account", account)
-                                                    .putExtra("password", password);
-                                            setResult(Activity.RESULT_OK, resutltIntent);
-                                            finish();
-                                        }else{
-                                            showToast(jsonObject.getString("info"));
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                        }
-                    });
+            switch (msg.what){
+                case REGISTER_SUCCESS:
+                    registerIM();
                     break;
-                case 2:
-                    Log.d("Codr","短信已发送");
-                    showToast("短信已发送");
+                case REGISTER_IM_SUCCESS:
+                    //返回登录页
+                    Intent resutltIntent = new Intent();
+                    resutltIntent.putExtra("account", accountEt.getText().toString())
+                            .putExtra("password", passwordEt.getText().toString());
+                    setResult(Activity.RESULT_OK, resutltIntent);
+                    finish();
+                    showToast("注册成功，请登录");
                     break;
-                case 3:
-                    Log.d("Codr","获取短信验证码失败");
+                case EXIST:
+                    showToast("账号已注册");
+                    break;
+                case NOT_EXIST:
+                    SMSSDK.getVerificationCode("+86", accountEt.getText().toString()); //获取验证码
+                    new TimerUtil(MyApplication.getContext(), getVerificationCodeBtn, 60000, 1000).start(); //开始倒计时
+                    break;
+                case MESSAGE_GET_SUCCESS:
+                    showToast("获取短信验证码成功");
+                    break;
+                case MESSAGE_GET_ERROR:
                     showToast("获取短信验证码失败");
                     break;
                 default:
@@ -118,15 +95,6 @@ public class RegisterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        /**
-         * com.mob.MobSDK.class
-         * 回传用户隐私授权结果
-         * @param isGranted     用户是否同意隐私协议
-         */
-        submitPolicyGrantResult(true);
-
-        baseContext = this;
 
         //初始化视图
         initViews();
@@ -156,32 +124,18 @@ public class RegisterActivity extends BaseActivity {
                     //成功回调
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         //提交短信、语音验证码成功
-                        Message message = new Message();
-                        message.what = 1;
-                        handler.sendMessage(message);
+                        //服务端注册
+                        register(new User(accountEt.getText().toString(), passwordEt.getText().toString()));
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         //获取短信验证码成功
                         Message message = new Message();
-                        message.what = 2;
+                        message.what = MESSAGE_GET_SUCCESS;
                         handler.sendMessage(message);
-                    } else if (event == SMSSDK.EVENT_GET_VOICE_VERIFICATION_CODE) {
-                        //获取语音验证码成功
-                        Message message = new Message();
-                        message.what = 2;
-                        handler.sendMessage(message);
-                    } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
-                        //返回支持发送验证码的国家列表
-                    }else if (event == SMSSDK.EVENT_GET_VERIFY_TOKEN_CODE) {
-                        //本机验证获取token成功
-                        TokenVerifyResult tokenVerifyResult = (TokenVerifyResult) data;
-                        //SMSSDK.login(phoneNum,tokenVerifyResult);
-                    }else if (event == SMSSDK.EVENT_VERIFY_LOGIN) {
-                        //本机验证登陆成功
                     }
                 } else if (result == SMSSDK.RESULT_ERROR) {
-                    //失败回调
+                    //失败回调：短信发送失败
                     Message message = new Message();
-                    message.what = 3;
+                    message.what = MESSAGE_GET_ERROR;
                     handler.sendMessage(message);
                 } else {
                     //其他失败回调
@@ -202,48 +156,15 @@ public class RegisterActivity extends BaseActivity {
                     showToast("请输入手机号");
                 }else if(!StringUtil.isPhone(account)){
                     showToast("请输入正确的手机号");
-                }
-//                else if(userRegistered(account)){//TODO：服务端查重，是否已注册
-//                    showToast("该账号已注册，请登录");
-//                }
-                else if(StringUtil.isEmpty(password)){
+                }else if(StringUtil.isEmpty(password)){
                     showToast("请输入密码");
                 }else if(!StringUtil.isPassword(password)){
                     showToast("请输入正确的密码");
                 } else if(!privacyAgreeCb.isChecked()){
                     showToast("请同意隐私协议");
                 }else{
-                    Map map=new HashMap();
-                    map.put("account",account);
-                    String url= "/user/is_registered";
-                    HTTPUtil.POST(url, "", map, new okhttp3.Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            Log.e(TAG, e.toString());
-                        }
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String result = response.body().string();
-                            //RegisterActivity.this.runOnUiThread
-                            //((RegisterActivity)baseContext).runOnUiThread
-                            RegisterActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(result);
-                                        if(jsonObject.getString("status").equals("success")){
-                                            showToast("该账号已注册，请登录");
-                                        }else{
-                                            SMSSDK.getVerificationCode("+86", account); //获取验证码
-                                            new TimerUtil(baseContext, (Button) view, 60000, 1000).start(); //开始倒计时
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                        }
-                    });
+                    //服务端查重
+                    isRegistered(account);
                 }
             }
         });
@@ -268,22 +189,88 @@ public class RegisterActivity extends BaseActivity {
                 }else if(StringUtil.isEmpty(verificationCode)){
                     showToast("请输入验证码");
                 }else{
+                    //进行短信验证
                     SMSSDK.submitVerificationCode("+86", account, verificationCode);
                 }
             }
         });
     }
 
-    //DONE:服务端查重，是否已注册
-    private boolean userRegistered(String account){
+    //服务端查重，是否已注册
+    private void isRegistered(String account){
+        HTTPUtil.isExist(User.class, "account", account, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e(account, " request error " + e);
+            }
 
-        return false;
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d(account, "request success");
+
+                Gson gson = new Gson();
+                Result result = gson.fromJson(response.body().string(), Result.class);
+
+                Message message = new Message();
+                if(result.getCode() == 1){
+                    message.what = EXIST;
+                    handler.sendMessage(message);
+                    LogUtil.d(account, "already registered");
+                }else {
+                    message.what = NOT_EXIST;
+                    handler.sendMessage(message);
+                    LogUtil.d(account, "unregistered");
+                }
+            }
+        });
     }
 
-    //DONE:将注册用户写入数据库
-    private boolean addUser(User user){
+    //将注册用户写入数据库
+    private void register(User user){
+        //向服务端发起请求
+        HTTPUtil.insert(user, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e(user.getAccount(), "request error");
+            }
 
-        return true;
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d(user.getAccount(), "request success");
+
+                Gson gson = new Gson();
+                Result result = gson.fromJson(response.body().string(), Result.class);
+                if(result.getCode() == 1){
+                    Message message = new Message();
+                    message.what = REGISTER_SUCCESS;
+                    handler.sendMessage(message);
+                    LogUtil.d(user.getAccount(), "register success");
+                }
+            }
+        });
+    }
+
+    //向环信IM服务器注册
+    private void registerIM(){
+        IMUtil.registerUser(accountEt.getText().toString(), passwordEt.getText().toString(), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e("register into IM", "error");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d("register into IM", "success");
+                if(response.code() == 200){
+                    LogUtil.d("register success", String.valueOf(response.code()));
+                    Message message = new Message();
+                    message.what = REGISTER_IM_SUCCESS;
+                    handler.sendMessage(message);
+                }else {
+                    LogUtil.e("register error", String.valueOf(response.code()));
+                }
+            }
+        });
     }
 
     //获取工具栏菜单

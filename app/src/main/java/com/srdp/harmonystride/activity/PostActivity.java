@@ -31,9 +31,6 @@ public class PostActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-
-        baseContext = this;
-
         //初始化数据
         initDatas();
         //初始化视图

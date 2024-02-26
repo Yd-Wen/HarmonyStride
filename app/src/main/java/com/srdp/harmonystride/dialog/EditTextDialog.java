@@ -1,11 +1,6 @@
 package com.srdp.harmonystride.dialog;
 
-
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.nsd.NsdManager;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -14,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.ScreenSizeUtil;
@@ -38,7 +34,7 @@ public class EditTextDialog extends BaseDialog {
         /**
          * 回调函数，用于在Dialog的监听事件触发后刷新Activity的UI显示
          */
-        public void onDismiss();
+        public void onDismiss(Boolean isUpdate, String data);
     }
 
     private OnDismissListener onDismissListener;
@@ -53,7 +49,7 @@ public class EditTextDialog extends BaseDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(View.inflate(baseContext, R.layout.dialog_edit_text, null));
+        setContentView(View.inflate(MyApplication.getContext(), R.layout.dialog_edit_text, null));
         //初始化数据
         initDatas();
         //初始化视图
@@ -66,7 +62,7 @@ public class EditTextDialog extends BaseDialog {
 
     private void initDatas(){
         //读取当前用户
-        List<User> users = LitePal.where("account = ?", SharedPreferenceUtil.getParam(baseContext, "current_account", "").toString()).find(User.class);
+        List<User> users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
         curUser = users.get(0);
     }
 
@@ -79,7 +75,7 @@ public class EditTextDialog extends BaseDialog {
         //设置布局
         Window dialogWindow = this.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-        lp.width = (int) (ScreenSizeUtil.getInstance(baseContext).getScreenWidth() * 0.8f);
+        lp.width = (int) (ScreenSizeUtil.getInstance(MyApplication.getContext()).getScreenWidth() * 0.8f);
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.gravity = Gravity.CENTER;
         dialogWindow.setAttributes(lp);
@@ -109,7 +105,10 @@ public class EditTextDialog extends BaseDialog {
                     }
                     user.updateAll("account = ?", curUser.getAccount());
                     //回调方法
-                    onDismissListener.onDismiss();
+                    onDismissListener.onDismiss(true, newContent);
+                }else {
+                    //回调方法
+                    onDismissListener.onDismiss(false, null);
                 }
                 dismiss();
             }

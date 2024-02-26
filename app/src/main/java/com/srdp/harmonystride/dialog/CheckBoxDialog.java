@@ -2,6 +2,7 @@ package com.srdp.harmonystride.dialog;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.style.UpdateAppearance;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.ScreenSizeUtil;
@@ -37,7 +39,7 @@ public class CheckBoxDialog extends BaseDialog{
         /**
          * 回调函数，用于在Dialog的监听事件触发后刷新Activity的UI显示
          */
-        public void onDismiss();
+        public void onDismiss(Boolean update, String data);
     }
 
     private CheckBoxDialog.OnDismissListener onDismissListener;
@@ -50,7 +52,7 @@ public class CheckBoxDialog extends BaseDialog{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(View.inflate(baseContext, R.layout.dialog_check_box, null));
+        setContentView(View.inflate(MyApplication.getContext(), R.layout.dialog_check_box, null));
         //初始化数据
         initDatas();
         //初始化视图
@@ -63,7 +65,7 @@ public class CheckBoxDialog extends BaseDialog{
 
     private void initDatas(){
         //读取当前用户
-        List<User> users = LitePal.where("account = ?", SharedPreferenceUtil.getParam(baseContext, "current_account", "").toString()).find(User.class);
+        List<User> users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
         curUser = users.get(0);
         content = curUser.getGender();
     }
@@ -82,7 +84,7 @@ public class CheckBoxDialog extends BaseDialog{
         //设置布局
         Window dialogWindow = this.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-        lp.width = (int) (ScreenSizeUtil.getInstance(baseContext).getScreenWidth());
+        lp.width = (int) (ScreenSizeUtil.getInstance(MyApplication.getContext()).getScreenWidth());
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.gravity = Gravity.BOTTOM;
         dialogWindow.setAttributes(lp);
@@ -156,7 +158,7 @@ public class CheckBoxDialog extends BaseDialog{
                 user.setGender(content);
                 user.updateAll("account = ?", curUser.getAccount());
                 //回调方法
-                onDismissListener.onDismiss();
+                onDismissListener.onDismiss(true, content);
                 dismiss();
             }
         });

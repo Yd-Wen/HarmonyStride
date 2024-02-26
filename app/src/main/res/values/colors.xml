@@ -16,13 +16,15 @@
     <color name="colorBtnOrangePressed">#FF3D00</color>
     <color name="colorBtnBlue">#32E9FA</color>
     <color name="colorBtnBluePressed">#00B0FF</color>
+    <color name="colorBtnWhite">#FFFFFF</color>
+    <color name="colorBtnWhitePressed">#B6B6D8</color>
     <color name="colorBtnGrey">#B6B6D8</color>
 
     <color name="colorDialogBackground">#FFFFFF</color>
 
     <color name="colorMenuBackground">#FFFFFF</color>
 
-    <color name="colorDividingLine">#737272</color>
+    <color name="colorDividingLine">#B1B1B1</color>
 
     <color name="progressBackground">#FFFFFF</color>
 

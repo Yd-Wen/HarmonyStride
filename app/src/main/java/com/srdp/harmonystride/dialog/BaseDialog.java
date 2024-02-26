@@ -5,10 +5,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 
 public class BaseDialog extends Dialog {
-
     protected Context baseContext;
     private Button cancelBtn;
     private Button confirmBtn;

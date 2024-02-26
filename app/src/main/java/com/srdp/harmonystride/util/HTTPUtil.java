@@ -1,37 +1,137 @@
 package com.srdp.harmonystride.util;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.srdp.harmonystride.entity.Certification;
+import com.srdp.harmonystride.entity.Label;
+import com.srdp.harmonystride.entity.Post;
+import com.srdp.harmonystride.entity.User;
 
-import java.util.Map;
+import org.json.JSONObject;
 
-import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class HTTPUtil {
-    public static String IP = "http://192.168.1.7:8080";
-    public static Gson gson = new Gson();
+    public static final OkHttpClient client = new OkHttpClient();
+    //ublic static final String IP = "http://47.98.123.162:8080"; //服务器IP地址
+    //public static final String IP = "http://192.168.43.69:8080"; //服务器IP地址
+    public static final String IP = "http://10.152.222.247:8080"; //服务器IP地址
+    public static final Gson gson = new Gson();
 
-    public static void POST(String url, String header, Map map, Callback callback){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                FormBody.Builder builder = new FormBody.Builder();
-                for(Object k : map.keySet()){
-                    builder.add((String) k,(String) map.get(k));
-                }
-
-                OkHttpClient client=new OkHttpClient();
-                final Request request=new Request.Builder()
-                        .url(IP + url)
-                        .post(builder.build())
-                        .build();
-                Call call=client.newCall(request);
-                call.enqueue(callback);
-            }
-        }).start();
-
+    //异步执行GET方法
+    public static void GET(String url, okhttp3.Callback callback) {
+        LogUtil.d("GET", IP+url);
+        Request request = new Request.Builder()
+                .url(IP + url)
+                .build();
+        client.newCall(request).enqueue(callback);
     }
+
+    //异步执行POST方法
+    public static void POST(RequestBody requestBody, String url, okhttp3.Callback callback){
+        Request request = new Request.Builder()
+                .url(IP + url)
+                .post(requestBody)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
+    //是否存在
+    public static void isExist(Class cls, String key, String value, okhttp3.Callback callback){
+        String  url = null;
+        String path = "is_registered";
+        if(cls == User.class){
+            url = "/user/" + path;
+        }else if(cls == Certification.class){
+            url = "/certification/" + path;
+        }else if(cls == Post.class){
+            url = "/post/" + path;
+        }else if(cls == Label.class){
+            url = "/label/" + path;
+        }
+        url = url + "?" + key + "=" + value;
+        LogUtil.d("isExist", url);
+        GET(url, callback);
+    }
+
+    //验证用户
+    public static void verify(String account, String password, okhttp3.Callback callback){
+        String url = "/user/verify";
+        url = url + "?" + "account=" + account + "&password=" + password;
+        LogUtil.d("verify", url);
+        GET(url, callback);
+    }
+
+    //插入
+    public static void insert(Object object, Callback callback){
+        Class cls = object.getClass();
+        String  url = null;
+        String  path = "register";
+        if(cls == User.class){
+            url = "/user/" + path;
+        }else if(cls == Certification.class){
+            url = "/certification/" + path;
+        }else if(cls == Post.class){
+            url = "/post/" + path;
+        }else if(cls == Label.class){
+            url = "/label/" + path;
+        }
+        String json = gson.toJson(object);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        LogUtil.d("insert", url);
+        POST(requestBody, url, callback);
+    }
+
+    //更新密码
+    public static void resetPwd(String account, String password, Callback callback){
+        String  url = "/user/reset_pwd";
+
+        JsonObject jsonObject = new JsonObject();
+
+        jsonObject.addProperty("account", account);
+        jsonObject.addProperty("password", password);
+
+        String json = gson.toJson(jsonObject);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        LogUtil.d("resetPwd", url);
+        POST(requestBody, url, callback);
+    }
+
+    //更新
+    public static void update(Object object, Callback callback){
+        Class cls = object.getClass();
+        String  url = null;
+        JsonObject jsonObject = new JsonObject();
+        String json = null;
+        String  path = "update";
+        if(cls == User.class){
+            url = "/user/" + path;
+           //json = gson.toJson(object);
+            User user = (User) object;
+            jsonObject.addProperty("account", user.getAccount());
+            jsonObject.addProperty("avatar", user.getAvatar());
+            jsonObject.addProperty("nickname", user.getNickname());
+            jsonObject.addProperty("gender", user.getGender());
+            jsonObject.addProperty("location", user.getLocation());
+            jsonObject.addProperty("introduction", user.getIntroduction());
+            json = gson.toJson(jsonObject);
+        }else if(cls == Certification.class){
+            url = "/certification/" + path;
+        }else if(cls == Post.class){
+            url = "/post/" + path;
+        }else if(cls == Label.class){
+            url = "/label/" + path;
+        }
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        LogUtil.d("update", url + json);
+        POST(requestBody, url, callback);
+    }
+
+
 }

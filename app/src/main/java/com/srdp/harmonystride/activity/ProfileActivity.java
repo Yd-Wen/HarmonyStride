@@ -2,7 +2,12 @@ package com.srdp.harmonystride.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,13 +15,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.User;
+import com.srdp.harmonystride.util.OSSClientUtil;
+import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
 import org.litepal.LitePal;
@@ -26,6 +37,12 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends BaseActivity {
+    //Glide请求图片选项配置
+    private RequestOptions requestOptions = RequestOptions
+            .circleCropTransform()//圆形剪裁
+            .diskCacheStrategy(DiskCacheStrategy.NONE);//不做磁盘缓存
+    //.skipMemoryCache(true);//不做内存缓存
+
     private AppBarLayout appBarLayout;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private ImageView backgroundIv;
@@ -44,44 +61,15 @@ public class ProfileActivity extends BaseActivity {
     private FloatingActionButton floatingActionButton;
 
     private User curUser;
-    private boolean update = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        baseContext = this;
-
-        setActivityResultLauncher(
-                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // 处理返回的数据
-                        Intent data = result.getData();
-                        // 进行你的操作
-                        if(data.getBooleanExtra("update", false)){
-                            //如果用户更新数据，重新初始化
-                            initDatas();
-                            loadUserInfo();
-                            update = true;
-                        }
-                    }
-                })
-        );
-
-        //初始化数据
-        initDatas();
         //初始化视图
         initViews();
         //初始化事件
         initEvents();
-    }
-
-    private void initDatas(){
-        //读取当前用户
-        Intent intent = getIntent();
-        List<User> users = LitePal.where("account = ?", intent.getStringExtra("account")).find(User.class);
-        curUser = users.get(0);
     }
 
     private void initViews(){
@@ -130,9 +118,6 @@ public class ProfileActivity extends BaseActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent resutltIntent = new Intent();
-                resutltIntent.putExtra("update", update);
-                setResult(Activity.RESULT_OK, resutltIntent);
                 finish();
             }
         });
@@ -140,20 +125,20 @@ public class ProfileActivity extends BaseActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(baseContext, ProfileEditActivity.class);
-                intent.putExtra("account", curUser.getAccount());
-                navigateForResult(intent);
+                navigateTo(ProfileEditActivity.class);
             }
         });
 
     }
 
     private void loadUserInfo(){
-        //显示当前用户信息
-        if(!StringUtil.isEmpty(curUser.getAvatar())){ //头像资源路径不为空
-            //TODO:从阿里云OSS读取并设置当前用户的头像
-            setUserAvatar(avatarCiv);
-            setUserAvatar(avatarToolbarCiv);
+        //读取当前用户
+        List<User> users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
+        curUser = users.get(0);
+        //下载头像
+        if(!StringUtil.isEmpty(curUser.getAvatar())){
+            Glide.with(this).load("https://harmonystride-bucket." + curUser.getAvatar()).apply(requestOptions).into(avatarCiv);
+            Glide.with(this).load("https://harmonystride-bucket." + curUser.getAvatar()).apply(requestOptions).into(avatarToolbarCiv);
         }
         //显示昵称
         nicknameTv.setText(curUser.getNickname());
@@ -198,12 +183,6 @@ public class ProfileActivity extends BaseActivity {
         //显示定位
         locationTv.setText(curUser.getLocation());
     }
-
-    //TODO:从阿里云OSS读取并设置当前用户的头像
-    private void setUserAvatar(CircleImageView circleImageView){
-
-    }
-
 
     @Override
     protected void onStart() {

@@ -2,6 +2,8 @@
     <string name="harmony_stride">与你同行</string>
 
     <string name="privacy_tip">隐私政策授权提示</string>
+    <string name="tip">提示</string>
+    <string name="tip_confirm">确定</string>
     <string name="privacy_agree">同意协议</string>
     <string name="privacy_disagree">放弃使用</string>
 
@@ -33,6 +35,7 @@
     <string name="certify">已认证</string>
     <string name="no_certify">未认证</string>
     <string name="setting">设置</string>
+    <string name="logout">退出</string>
 
     <!--用户相关-->
     <string name="user">用户</string>
@@ -62,6 +65,10 @@
     <!--帖子相关-->
     <string name="post">帖子</string>
     <string name="content">帖子内容：xxxxxxxxxxxxxxxxxxxx</string>
+
+    <!--图片相关-->
+    <string name="take_photo">拍照</string>
+    <string name="select_from_album">相册</string>
 
 
 </resources>

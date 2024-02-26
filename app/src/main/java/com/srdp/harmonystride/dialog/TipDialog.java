@@ -1,10 +1,6 @@
 package com.srdp.harmonystride.dialog;
 
-import static com.mob.MobSDK.submitPolicyGrantResult;
-
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -14,46 +10,45 @@ import android.widget.TextView;
 
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.activity.LoginActivity;
-import com.srdp.harmonystride.activity.MainActivity;
-import com.srdp.harmonystride.activity.WelcomeActivity;
 import com.srdp.harmonystride.util.ScreenSizeUtil;
-import com.srdp.harmonystride.util.SharedPreferenceUtil;
 
-public class PrivacyDialog extends BaseDialog{
-
+public class TipDialog extends BaseDialog{
     private TextView contentTv;
+    private String content;
 
-    public PrivacyDialog(Context context) {
-        super(context);
-        setContentView(View.inflate(MyApplication.getContext(), R.layout.dialog_privacy, null));
-        //初始化视图
-        initViews();
-        //初始化事件
-        initEvents();
-
-        show();
+    /**
+     * 自定义Dialog监听器
+     */
+    public interface OnDismissListener {
+        /**
+         * 回调函数，用于在Dialog的监听事件触发后刷新Activity的UI显示
+         */
+        public void onDismiss(Boolean isConfirm);
     }
 
-    public TextView getContentTv() {
-        return contentTv;
+    private TipDialog.OnDismissListener onDismissListener;
+
+    public TipDialog(Context context, String content, OnDismissListener onDismissListener) {
+        super(context);
+        this.onDismissListener = onDismissListener;
+        this.content = content;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //设置透明背景
-        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //屏蔽返回键
-        setCancelable(false);
+        setContentView(View.inflate(MyApplication.getContext(), R.layout.dialog_tip, null));
+        //初始化视图
+        initViews();
+        //初始化事件
+        initEvents();
     }
 
     private void initViews(){
-        contentTv = findViewById(R.id.tv_dialog_content);
+        contentTv = findViewById(R.id.tv_content);
+        contentTv.setText(content);
         setCancelBtn(findViewById(R.id.btn_dialog_cancel));
         setConfirmBtn(findViewById(R.id.btn_dialog_confirm));
-
         //设置布局
         Window dialogWindow = this.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
@@ -67,19 +62,18 @@ public class PrivacyDialog extends BaseDialog{
         getCancelBtn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                onDismissListener.onDismiss(false);
                 dismiss();
-                System.exit(0);
             }
         });
 
         getConfirmBtn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                onDismissListener.onDismiss(true);
                 dismiss();
-                SharedPreferenceUtil.setParam("privacy_agree", true);
-                ((WelcomeActivity) baseContext).navigateTo(LoginActivity.class);
-                ((WelcomeActivity) baseContext).finish();
             }
         });
     }
+
 }
