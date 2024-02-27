@@ -34,6 +34,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.dialog.TipDialog;
@@ -55,6 +58,8 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity {
+    //消息接收监听器
+    private EMMessageListener msgListener;
     //Glide请求图片选项配置
     private RequestOptions requestOptions = RequestOptions
             .circleCropTransform()//圆形剪裁
@@ -85,6 +90,8 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //加载会话
+        EMClient.getInstance().chatManager().loadAllConversations();
         //初始化视图
         initViews();
         //初始化事件
@@ -155,6 +162,8 @@ public class MainActivity extends BaseActivity {
                                     finish();
                                     //下次开屏页结束后进入登录页
                                     SharedPreferenceUtil.setParam("is_login", false);
+                                    //登出IM
+                                    EMClient.getInstance().logout(true);
                                 }
                             }
                         }).show();
@@ -205,6 +214,17 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        msgListener = new EMMessageListener() {
+            // 收到消息，遍历消息队列，解析和显示。
+            @Override
+            public void onMessageReceived(List<EMMessage> messages) {
+                for(EMMessage msg:messages){
+                    LogUtil.e("msg", msg.toString());
+                }
+            }
+        };
+        // 注册消息监听
+        EMClient.getInstance().chatManager().addMessageListener(msgListener);
     }
 
     private void loadUserInfo(){
@@ -230,6 +250,13 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         //初始化滑动工具
         scrollUtil = new ScrollUtil(bottomNavigationView, homeFragment.getView().findViewById(R.id.recycler_view));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 解注册消息监听
+        EMClient.getInstance().chatManager().removeMessageListener(msgListener);
     }
 
     //获取工具栏菜单

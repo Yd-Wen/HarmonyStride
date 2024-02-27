@@ -31,14 +31,12 @@ public class WelcomeActivity extends BaseActivity {
          * 回传用户隐私授权结果
          * @param isGranted     用户是否同意隐私协议
          */
+        //短信验证授权
         submitPolicyGrantResult(true);
         //初始化环信IM SDK
         EMOptions options = new EMOptions();
         options.setAppKey("1161240210157052#harmonystride");
         EMClient.getInstance().init(MyApplication.getContext(), options);
-
-        //加载会话
-        EMClient.getInstance().chatManager().loadAllConversations();
 
         //展示隐私内容
         checkPrivacy();

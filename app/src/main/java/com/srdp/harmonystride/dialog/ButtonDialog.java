@@ -41,8 +41,6 @@ public class ButtonDialog extends BaseDialog{
     private static final int OPEN_ALBUM_CODE = 100;
     //打开摄像头请求码
     private static final int OPEN_CAMERA_CODE = 200;
-    //图片剪裁请求码
-    public static final int PICTURE_CROPPING_CODE = 300;
 
     private Button takePhotoBtn;
     private Button selectFormAlbumBtn;

@@ -39,12 +39,13 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class RegisterActivity extends BaseActivity {
-    public static final int REGISTER_SUCCESS = 1; //注册成功
-    public static final int REGISTER_IM_SUCCESS = 2; //注册IM成功
-    private static final int EXIST = 3; //账号已存在
-    public static final int NOT_EXIST = 4; //账号不存在
-    private static final int MESSAGE_GET_SUCCESS = 5; //短信发送成功
-    private static final int MESSAGE_GET_ERROR = 6; //短信发送失败
+    private static final int REGISTER_SUCCESS = 1; //注册成功
+    private static final int REGISTER_IM_SUCCESS = 2; //注册IM成功
+    private static final int GET_SYSTEM_MESSAGE_SUCCESS = 3; //获取系统消息成功
+    private static final int EXIST = 4; //账号已存在
+    public static final int NOT_EXIST = 5; //账号不存在
+    private static final int MESSAGE_GET_SUCCESS = 6; //短信发送成功
+    private static final int MESSAGE_GET_ERROR = 7; //短信发送失败
 
     private Toolbar toolbar;
     private EditText accountEt;
@@ -64,6 +65,9 @@ public class RegisterActivity extends BaseActivity {
                     registerIM();
                     break;
                 case REGISTER_IM_SUCCESS:
+                    getSystemMessage();
+                    break;
+                case GET_SYSTEM_MESSAGE_SUCCESS:
                     //返回登录页
                     Intent resutltIntent = new Intent();
                     resutltIntent.putExtra("account", accountEt.getText().toString())
@@ -268,6 +272,33 @@ public class RegisterActivity extends BaseActivity {
                     handler.sendMessage(message);
                 }else {
                     LogUtil.e("register error", String.valueOf(response.code()));
+                }
+            }
+        });
+    }
+
+    private void getSystemMessage(){
+        //发送系统消息
+        HTTPUtil.sendSystemMessage(accountEt.getText().toString(), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e("send system message", "error");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d("send system message", "success");
+                try {
+                    String responseBody = response.body().string();
+                    Result result = new Gson().fromJson(responseBody, Result.class);
+                    if(result.getCode() == 1){
+                        Message message = new Message();
+                        message.what = GET_SYSTEM_MESSAGE_SUCCESS;
+                        handler.sendMessage(message);
+                        LogUtil.d("send system message", result.getData().toString());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });

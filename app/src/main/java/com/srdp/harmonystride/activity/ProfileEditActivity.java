@@ -46,10 +46,6 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class ProfileEditActivity extends BaseActivity {
-    //外部存储权限请求码
-    private static final int REQUEST_EXTERNAL_STORAGE_CODE = 901;
-    //相机权限请求码
-    private static final int REQUEST_CAMERA_CODE = 902;
     //打开相册请求码
     private static final int OPEN_ALBUM_CODE = 100;
     //打开摄像头请求码
@@ -64,7 +60,6 @@ public class ProfileEditActivity extends BaseActivity {
 
     private static final int UPDATE_SUCCESS = 1; //更新成功
     private static final String USER_DIR = "user/";
-    private File file; //定义拍照后存放图片的文件位置和名称，使用完毕后可以方便删除
 
     private Toolbar toolbar;
     private CircleImageView avatarCiv;

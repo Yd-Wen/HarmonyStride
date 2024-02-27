@@ -6,15 +6,19 @@ import com.google.gson.JsonObject;
 import com.srdp.harmonystride.entity.Certification;
 import com.srdp.harmonystride.entity.Label;
 import com.srdp.harmonystride.entity.Post;
+import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
 
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class HTTPUtil {
     public static final OkHttpClient client = new OkHttpClient();
@@ -133,5 +137,11 @@ public class HTTPUtil {
         POST(requestBody, url, callback);
     }
 
+    public static void sendSystemMessage(String username, okhttp3.Callback callback){
+        String url = "/message/system";
+        url = url + "?" + "username=" + username ;
+        LogUtil.d("send system message", url);
+        GET(url, callback);
+    }
 
 }

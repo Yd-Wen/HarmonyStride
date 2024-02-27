@@ -8,7 +8,6 @@
         android:id="@+id/btn_select_from_album"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen5"
         android:background="@drawable/selector_shape_button_white"
         android:textAppearance="@style/TitleAppearance"
         android:text="@string/select_from_album"/>
@@ -17,6 +16,7 @@
         android:id="@+id/btn_take_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen5"
         android:background="@drawable/selector_shape_button_white"
         android:textAppearance="@style/TitleAppearance"
         android:text="@string/take_photo"/>

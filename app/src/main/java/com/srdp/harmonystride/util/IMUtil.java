@@ -20,7 +20,7 @@ public class IMUtil {
 
     public static final String OrgName = "1161240210157052";
     public static final String AppName = "harmonystride";
-    public static final String AppToken = "YWMtnSeCSNSmEe6dHSGpCpJUD-An2JkeUz4ehKSnb4LxwEy8Cd9ub-1ADIkw-ZRhFWEqAgMAAAGN5X3-hQAAAAB5JJMfS004XOWTBqzeUO-ItZ_mcWeAeEAX2PJ0OWK6LQ";
+    public static final String AppToken = "YWMti-4XGNUYEe6vHL80eYtIj-An2JkeUz4ehKSnb4LxwEy8Cd9ub-1ADIkw-ZRhFWEqAgMAAAGN6Gip5wAAAAAqgt5avGjUblzdRWh1ZojVfEJzIeOF_uvV1n3dwMByWQ";
     public static final String Authorization = "Bearer " + AppToken;
     //public static final String Expiration = "";
 
@@ -61,6 +61,21 @@ public class IMUtil {
         POST(requestBody, url, callback);
     }
 
+    public static void getUserToken(String username, okhttp3.Callback callback){
+        //请求路径
+        String  url = Host + "/" + OrgName + "/" + AppName + "/token";
+        //获取请求体
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("grant_type", "inherit");
+        jsonObject.addProperty("username", username);
+        jsonObject.addProperty("autoCreateUser", false);
+        jsonObject.addProperty("ttl", 0);
+        String json = gson.toJson(jsonObject);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        //发起请求
+        POST(requestBody, url, callback);
+
+    }
 
 
 }

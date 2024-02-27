@@ -32,6 +32,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import com.srdp.harmonystride.entity.User;
+import com.srdp.harmonystride.util.IMUtil;
 import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
@@ -39,8 +40,10 @@ import com.srdp.harmonystride.util.StringUtil;
 import org.litepal.LitePal;
 
 public class LoginActivity extends BaseActivity {
-    public static final int NOT_EXIST = 0; //用户不存在
-    public static final int EXIST = 1; //用户存在
+    private static final int GET_IM_USER_TOKEN_SUCCESS = 0; //获取IM用户Token成功
+    private static final int LOGIN_IM_SUCCESS = 1; //登录IM成功
+    private static final int NOT_EXIST = 2; //用户不存在
+    private static final int EXIST = 3; //用户存在
 
     private User curUser;
 
@@ -56,11 +59,17 @@ public class LoginActivity extends BaseActivity {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
+                case GET_IM_USER_TOKEN_SUCCESS:
+                    loginIM(msg.obj.toString());
+                    break;
+                case LOGIN_IM_SUCCESS:
+                    login();
+                    break;
                 case NOT_EXIST:
                     showToast("账号或密码错误");
                     break;
                 case EXIST:
-                    login();
+                    getIMUserToken();
                     break;
                 default:
                     break;
@@ -181,6 +190,57 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    //获取IM用户的TOKEN
+    private void getIMUserToken(){
+        IMUtil.getUserToken(accountEt.getText().toString(), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e("get user " + accountEt.getText().toString() + " token", "error");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d("get user " + accountEt.getText().toString() + " token", "success");
+                if(response.code() == 200){
+                    //获取请求体
+                    String responseBody = response.body().string();
+                    //转换为json对象
+                    JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+                    //传递消息
+                    Message message = new Message();
+                    message.what = GET_IM_USER_TOKEN_SUCCESS;
+                    message.obj = jsonObject.get("access_token").getAsString();
+                    handler.sendMessage(message);
+                    LogUtil.d("get user token success", message.obj.toString());
+                }else {
+                    LogUtil.e("register error", String.valueOf(response.code()));
+                }
+            }
+        });
+    }
+
+    //登录IM用户
+    private void loginIM(String token){
+        //登录IM
+        EMClient.getInstance().loginWithToken(accountEt.getText().toString(), token, new EMCallBack() {
+            // 登录成功回调
+            @Override
+            public void onSuccess() {
+                LogUtil.d("login IM", "success");
+                Message message = new Message();
+                message.what = LOGIN_IM_SUCCESS;
+                handler.sendMessage(message);
+            }
+
+            // 登录失败回调，包含错误信息
+            @Override
+            public void onError(int code, String error) {
+                LogUtil.e("login IM", code + "-" + error);
+            }
+        });
+
     }
 
     //登录，更新本地数据，记录配置信息
