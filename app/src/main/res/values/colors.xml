@@ -37,4 +37,8 @@
 
     <color name="editTextBackground">#FFFFFF</color>
 
+    <color name="colorMessageBackground">#EFEAEA</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+
 </resources>

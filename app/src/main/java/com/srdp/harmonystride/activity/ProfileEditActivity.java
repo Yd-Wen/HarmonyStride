@@ -106,6 +106,7 @@ public class ProfileEditActivity extends BaseActivity {
     private void initViews(){
         toolbar = findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(null);
 
         avatarCiv = findViewById(R.id.civ_avatar);
         nicknameTv = findViewById(R.id.tv_nickname);
@@ -115,7 +116,7 @@ public class ProfileEditActivity extends BaseActivity {
 
         //获取头像
         if(!StringUtil.isEmpty(curUser.getAvatar())){ //头像资源路径不为空
-            Glide.with(this).load("https://harmonystride-bucket." + curUser.getAvatar()).apply(requestOptions).into(avatarCiv);
+            Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(requestOptions).into(avatarCiv);
         }
         nicknameTv.setText(curUser.getNickname());
         genderTv.setText(curUser.getGender());
@@ -124,6 +125,17 @@ public class ProfileEditActivity extends BaseActivity {
     }
 
     private void initEvents(){
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isUpdate){
+                    update();
+                }else {
+                    finish();
+                }
+            }
+        });
+
         avatarCiv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -254,30 +266,6 @@ public class ProfileEditActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    //获取工具栏菜单
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_close, menu);
-        return true;
-    }
-
-    //为工具栏菜单绑定单击事件监听器
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.close:
-                if(isUpdate){
-                    update();
-                }else {
-                    finish();
-                }
-                break;
-            default:
-                break;
-        }
-        return true;
     }
 
     @Override

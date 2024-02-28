@@ -20,8 +20,10 @@
     <dimen name="dimen10">10dp</dimen>
     <dimen name="dimen20">20dp</dimen>
     <dimen name="dimen30">30dp</dimen>
+    <dimen name="dimen40">40dp</dimen>
     <dimen name="dimen50">50dp</dimen>
     <dimen name="dimen60">60dp</dimen>
+    <dimen name="dimen80">80dp</dimen>
     <dimen name="dimen100">100dp</dimen>
     <dimen name="dimen200">200dp</dimen>
     <dimen name="dimen250">250dp</dimen>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.ChatActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionBarSize"
+        app:navigationIcon="@drawable/back"
+        android:background="@color/colorPrimary">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_toolbar_avatar"
+                android:layout_width="@dimen/dimen40"
+                android:layout_height="@dimen/dimen40"
+                app:civ_border_color="@color/colorCircleImageBorder"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/default_avatar" />
+
+            <TextView
+                android:id="@+id/tv_toolbar_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="@dimen/dimen5"
+                android:gravity="center_vertical"
+                android:textAppearance="@style/TitleAppearance" />
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorMessageBackground"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/dimen10"
+        android:paddingHorizontal="@dimen/dimen10"
+        android:orientation="horizontal"
+        android:background="@color/colorMessageBackground">
+
+        <EditText
+            android:id="@+id/et_message"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dimen40"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="@dimen/dimen5"
+            android:paddingHorizontal="@dimen/dimen10"
+            android:inputType="text"
+            android:textAppearance="@style/TextAppearance"
+            android:background="@drawable/shape_edit_text" />
+
+        <ImageButton
+            android:id="@+id/ib_more_type_message"
+            android:layout_width="@dimen/dimen30"
+            android:layout_height="@dimen/dimen30"
+            android:layout_gravity="center"
+            android:background="@drawable/more_type_message" />
+
+        <ImageButton
+            android:id="@+id/ib_send_message"
+            android:layout_width="@dimen/dimen30"
+            android:layout_height="@dimen/dimen30"
+            android:layout_gravity="center"
+            android:background="@drawable/send_message" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lineHeight"
+        android:background="@color/colorDividingLine"/>
+
+    <LinearLayout
+        android:id="@+id/ll_more_type_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/dimen10"
+        android:paddingHorizontal="@dimen/dimen30"
+        android:orientation="horizontal"
+        android:background="@color/colorMessageBackground">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/ib_album"
+                android:layout_width="@dimen/dimen60"
+                android:layout_height="@dimen/dimen60"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_image_button"
+                android:src="@drawable/album"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen5"
+                android:gravity="center"
+                android:background="@color/colorMessageBackground"
+                android:textAppearance="@style/TextAppearance"
+                android:text="@string/message_album"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/ib_camera"
+                android:layout_width="@dimen/dimen60"
+                android:layout_height="@dimen/dimen60"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_image_button"
+                android:src="@drawable/camera"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen5"
+                android:gravity="center"
+                android:background="@color/colorMessageBackground"
+                android:textAppearance="@style/TextAppearance"
+                android:text="@string/message_camera"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/ib_position"
+                android:layout_width="@dimen/dimen60"
+                android:layout_height="@dimen/dimen60"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_image_button"
+                android:src="@drawable/position"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen5"
+                android:gravity="center"
+                android:background="@color/colorMessageBackground"
+                android:textAppearance="@style/TextAppearance"
+                android:text="@string/message_position"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

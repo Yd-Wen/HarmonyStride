@@ -2,32 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.srdp.harmonystride">
-
     <!-- IM SDK required start -->
     <!-- 允许程序振动，用于本地通知设置振动 -->
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- 访问网络权限 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 麦克风权限，用于语音消息时录制语音，不使用录制语音可以移除 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <!-- 相机权限，用于图片消息时拍摄图片，不使用拍照可以移除 -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <!-- 获取运营商信息，用于获取网络状态 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!-- 获取读存储权限，用于附件等的获取 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <!-- 访问 GPS 定位，用于定位消息，如果不用定位相关可以移除 -->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 访问网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 麦克风权限，用于语音消息时录制语音，不使用录制语音可以移除 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 相机权限，用于图片消息时拍摄图片，不使用拍照可以移除 -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 获取运营商信息，用于获取网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 获取读存储权限，用于附件等的获取 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 访问 GPS 定位，用于定位消息，如果不用定位相关可以移除 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <!-- 允许程序在手机屏幕关闭后后台进程仍然运行 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- IM SDK required end -->
-
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 允许程序在手机屏幕关闭后后台进程仍然运行 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- IM SDK required end -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name="com.srdp.harmonystride.MyApplication"
@@ -38,11 +27,13 @@
         android:label="@string/harmony_stride"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-        <!-- 声明 SDK 所需的 service 的核心功能-->
+        <activity
+            android:name=".activity.ChatActivity"
+            android:exported="false" />
+        <!-- 声明 SDK 所需的 service 的核心功能 -->
         <service
             android:name="com.hyphenate.chat.EMChatService"
             android:exported="true" />
@@ -50,6 +41,7 @@
             android:name="com.hyphenate.chat.EMJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.srdp.harmonystride.fileprovider"
@@ -59,10 +51,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity
             android:name=".activity.ProfileEditActivity"
             android:exported="true"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.ProfileActivity"
             android:exported="true"

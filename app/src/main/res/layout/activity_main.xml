@@ -31,8 +31,14 @@
                     app:layout_scrollFlags="scroll|enterAlways"
                     android:background="@color/colorPrimary"
                     app:navigationIcon="@drawable/menu"
-                    app:popupTheme="@style/MenuStyle"
-                    app:titleTextAppearance="@style/TitleAppearance" />
+                    app:popupTheme="@style/MenuStyle">
+                    <TextView
+                        android:id="@+id/tv_toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textAppearance="@style/TitleAppearance" />
+                </androidx.appcompat.widget.Toolbar>
 
             </com.google.android.material.appbar.AppBarLayout>
 

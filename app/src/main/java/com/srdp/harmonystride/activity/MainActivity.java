@@ -45,6 +45,7 @@ import com.srdp.harmonystride.fragment.HomeFragment;
 import com.srdp.harmonystride.fragment.MessageFragment;
 import com.srdp.harmonystride.fragment.StatusFragment;
 import com.srdp.harmonystride.util.HTTPUtil;
+import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.OSSClientUtil;
 import com.srdp.harmonystride.util.ScrollUtil;
@@ -58,16 +59,15 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity {
-    //消息接收监听器
-    private EMMessageListener msgListener;
     //Glide请求图片选项配置
     private RequestOptions requestOptions = RequestOptions
             .circleCropTransform()//圆形剪裁
             .diskCacheStrategy(DiskCacheStrategy.NONE);//不做磁盘缓存
-            //.skipMemoryCache(true);//不做内存缓存
+    //.skipMemoryCache(true);//不做内存缓存
 
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
+    private TextView titleTv;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private CircleImageView avatarCiv;
@@ -90,8 +90,14 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //加载会话
-        EMClient.getInstance().chatManager().loadAllConversations();
+//        // 创建一条文本消息，`content` 为消息文字内容。
+//// `conversationId` 为消息接收方，单聊时为对端用户 ID、群聊时为群组 ID，聊天室时为聊天室 ID。
+//        EMMessage message = EMMessage.createTextSendMessage("hello", "18379856278");
+//// 会话类型：单聊为 EMMessage.ChatType.Chat，群聊为 EMMessage.ChatType.GroupChat, 聊天室为EMMessage.ChatType.ChatRoom，默认为单聊。
+//        message.setChatType(EMMessage.ChatType.Chat);
+//// 发送消息。
+//        EMClient.getInstance().chatManager().sendMessage(message);
+
         //初始化视图
         initViews();
         //初始化事件
@@ -110,7 +116,12 @@ public class MainActivity extends BaseActivity {
         //获取工具栏
         appBarLayout = findViewById(R.id.appbar_layout);
         toolbar = findViewById(R.id.tool_bar);
+        titleTv = findViewById(R.id.tv_toolbar_title);
         setSupportActionBar(toolbar);
+        //删除标题
+        getSupportActionBar().setTitle(null);
+        //设置新标题
+        titleTv.setText(R.string.home);
         //为工具栏设置菜单溢出图标
         Drawable overflowIcon = ContextCompat.getDrawable(this, R.drawable.sort);
         toolbar.setOverflowIcon(overflowIcon);
@@ -213,18 +224,6 @@ public class MainActivity extends BaseActivity {
                 return true;
             }
         });
-
-        msgListener = new EMMessageListener() {
-            // 收到消息，遍历消息队列，解析和显示。
-            @Override
-            public void onMessageReceived(List<EMMessage> messages) {
-                for(EMMessage msg:messages){
-                    LogUtil.e("msg", msg.toString());
-                }
-            }
-        };
-        // 注册消息监听
-        EMClient.getInstance().chatManager().addMessageListener(msgListener);
     }
 
     private void loadUserInfo(){
@@ -233,8 +232,7 @@ public class MainActivity extends BaseActivity {
         curUser = Users.get(0);
         //显示当前用户信息
         if(!StringUtil.isEmpty(curUser.getAvatar())){ //头像资源路径不为空
-            Glide.with(this).load("https://harmonystride-bucket." + curUser.getAvatar()).apply(requestOptions).into(avatarCiv);
-
+            Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(requestOptions).into(avatarCiv);
         }
         nicknameTv.setText(curUser.getNickname());
     }
@@ -252,13 +250,6 @@ public class MainActivity extends BaseActivity {
         scrollUtil = new ScrollUtil(bottomNavigationView, homeFragment.getView().findViewById(R.id.recycler_view));
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // 解注册消息监听
-        EMClient.getInstance().chatManager().removeMessageListener(msgListener);
-    }
-
     //获取工具栏菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -271,10 +262,12 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.edit:
-                Toast.makeText(this, "edit", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.close:
-                Toast.makeText(this, "close", Toast.LENGTH_SHORT).show();
+                //TODO：测试消息发送
+                Intent intent = new Intent(MyApplication.getContext(), ChatActivity.class);
+                intent.putExtra("account", "18911637274");
+                intent.putExtra("avatar", "oss-cn-hangzhou.aliyuncs.com/img/user/18911637274/1708925719872.png");
+                intent.putExtra("nickname", "yyz");
+                navigateTo(intent);
                 break;
             default:
                 break;
@@ -307,7 +300,7 @@ public class MainActivity extends BaseActivity {
                 fragmentTransaction.show(tgtFragment);
             }
             //设置工具栏和底部导航栏
-            getSupportActionBar().setTitle(title);
+            titleTv.setText(title);
             bottomNavigationView.getMenu().findItem(R.id.home).setIcon(R.drawable.home);
             bottomNavigationView.getMenu().findItem(R.id.home).setTitle(R.string.home);
 

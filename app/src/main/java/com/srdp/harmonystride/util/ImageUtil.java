@@ -49,4 +49,13 @@ public class ImageUtil {
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, null, null);
         return Uri.parse(path);
     }
+
+    //获取网络图片路径
+    public static String getImagePath(String avatarPath){
+        //oss Bucket名称
+        final String BUCKET_NAME = "harmonystride-bucket";
+        String IP = "https://" + BUCKET_NAME + ".";
+        return IP + avatarPath;
+    }
+
 }

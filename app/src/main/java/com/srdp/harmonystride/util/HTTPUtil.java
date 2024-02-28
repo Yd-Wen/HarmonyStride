@@ -137,6 +137,14 @@ public class HTTPUtil {
         POST(requestBody, url, callback);
     }
 
+    public static void getUserByAccount(String account, okhttp3.Callback callback){
+        String url = "/user/find";
+        url = url + "?" + "account=" + account;
+        LogUtil.d("get user by account", url);
+        GET(url, callback);
+    }
+
+    //发送系统消息
     public static void sendSystemMessage(String username, okhttp3.Callback callback){
         String url = "/message/system";
         url = url + "?" + "username=" + username ;

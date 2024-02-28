@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorMessageBackground">
+
+    <TextView
+        android:id="@+id/tv_message_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginVertical="@dimen/dimen5"
+        android:textAppearance="@style/TipBlackAppearance" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/dimen10"
+        android:paddingEnd="@dimen/dimen50">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_avatar"
+            android:layout_width="@dimen/dimen50"
+            android:layout_height="@dimen/dimen50"
+            app:civ_border_color="@color/colorCircleImageBorder"
+            android:src="@drawable/default_avatar"/>
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen5"
+            android:paddingStart="@dimen/dimen20"
+            android:paddingEnd="@dimen/dimen10"
+            android:paddingVertical="@dimen/dimen10"
+            android:layout_toEndOf="@+id/civ_avatar"
+            android:background="@drawable/message_left"
+            android:textAppearance="@style/TextAppearance" />
+    </RelativeLayout>
+</LinearLayout>

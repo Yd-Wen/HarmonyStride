@@ -13,8 +13,14 @@
         android:layout_height="@dimen/actionBarSize"
         android:background="@color/colorPrimary"
         app:popupTheme="@style/MenuStyle"
-        app:titleTextAppearance="@style/TitleAppearance"
-        app:title="@string/profile_edit"/>
+        app:navigationIcon="@drawable/back">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/TitleAppearance"
+            android:text="@string/profile_edit"/>
+    </androidx.appcompat.widget.Toolbar>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_avatar"

@@ -1,21 +1,12 @@
 package com.srdp.harmonystride.activity;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
@@ -26,7 +17,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.User;
-import com.srdp.harmonystride.util.OSSClientUtil;
+import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
@@ -48,7 +39,7 @@ public class ProfileActivity extends BaseActivity {
     private ImageView backgroundIv;
     private Toolbar toolbar;
     private CircleImageView avatarToolbarCiv;
-    private TextView nicknameToolbarCiv;
+    private TextView nicknameToolbarTv;
 
     private CircleImageView avatarCiv;
     private TextView nicknameTv;
@@ -80,9 +71,10 @@ public class ProfileActivity extends BaseActivity {
         toolbar = findViewById(R.id.tool_bar);
         //不要忘记设置工具栏
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(null);
 
         avatarToolbarCiv = findViewById(R.id.civ_toolbar_avatar);
-        nicknameToolbarCiv = findViewById(R.id.tv_toolbar_nickname);
+        nicknameToolbarTv = findViewById(R.id.tv_toolbar_nickname);
 
         avatarCiv = findViewById(R.id.civ_avatar);
         nicknameTv = findViewById(R.id.tv_nickname);
@@ -106,11 +98,11 @@ public class ProfileActivity extends BaseActivity {
                 if(Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()){
                     //折叠状态
                     avatarToolbarCiv.setVisibility(View.VISIBLE);
-                    nicknameToolbarCiv.setVisibility(View.VISIBLE);
+                    nicknameToolbarTv.setVisibility(View.VISIBLE);
                 }else {
                     //展开状态
                     avatarToolbarCiv.setVisibility(View.GONE);
-                    nicknameToolbarCiv.setVisibility(View.GONE);
+                    nicknameToolbarTv.setVisibility(View.GONE);
                 }
             }
         });
@@ -137,12 +129,12 @@ public class ProfileActivity extends BaseActivity {
         curUser = users.get(0);
         //下载头像
         if(!StringUtil.isEmpty(curUser.getAvatar())){
-            Glide.with(this).load("https://harmonystride-bucket." + curUser.getAvatar()).apply(requestOptions).into(avatarCiv);
-            Glide.with(this).load("https://harmonystride-bucket." + curUser.getAvatar()).apply(requestOptions).into(avatarToolbarCiv);
+            Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(requestOptions).into(avatarCiv);
+            Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(requestOptions).into(avatarToolbarCiv);
         }
         //显示昵称
         nicknameTv.setText(curUser.getNickname());
-        nicknameToolbarCiv.setText(curUser.getNickname());
+        nicknameToolbarTv.setText(curUser.getNickname());
         //显示简介
         introductionTv.setText(curUser.getIntroduction());
         //显示认证信息

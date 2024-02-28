@@ -42,8 +42,8 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/civ_toolbar_avatar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/dimen40"
+                        android:layout_height="@dimen/dimen40"
                         app:civ_border_color="@color/colorCircleImageBorder"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/default_avatar" />
@@ -52,7 +52,7 @@
                         android:id="@+id/tv_toolbar_nickname"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:paddingStart="@dimen/dimen5"
+                        android:paddingHorizontal="@dimen/dimen5"
                         android:gravity="center_vertical"
                         android:textAppearance="@style/TextToolbarAppearance"/>
 
