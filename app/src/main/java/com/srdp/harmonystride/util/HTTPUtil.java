@@ -22,9 +22,7 @@ import okhttp3.Response;
 
 public class HTTPUtil {
     public static final OkHttpClient client = new OkHttpClient();
-    //ublic static final String IP = "http://47.98.123.162:8080"; //服务器IP地址
-    //public static final String IP = "http://192.168.43.69:8080"; //服务器IP地址
-    public static final String IP = "http://10.152.222.247:8080"; //服务器IP地址
+    public static final String IP = "http://10.142.222.230:8080"; //服务器IP地址
     public static final Gson gson = new Gson();
 
     //异步执行GET方法

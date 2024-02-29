@@ -239,6 +239,11 @@ public class LoginActivity extends BaseActivity {
             public void onError(int code, String error) {
                 LogUtil.e("login IM", code + "-" + error);
             }
+
+            @Override
+            public void onProgress(int progress, String status) {
+                LogUtil.d("login IM", "login...");
+            }
         });
 
     }

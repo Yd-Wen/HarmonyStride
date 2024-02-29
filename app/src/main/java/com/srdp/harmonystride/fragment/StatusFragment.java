@@ -1,5 +1,9 @@
 package com.srdp.harmonystride.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +12,13 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.easeui.constants.EaseConstant;
+import com.hyphenate.easeui.modules.conversation.EaseConversationListFragment;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.activity.ChatActivity;
 
 public class StatusFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -24,12 +34,6 @@ public class StatusFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //recyclerView.scrollToPosition(0);
     }
 
 }

@@ -98,6 +98,9 @@ public class MainActivity extends BaseActivity {
 //// 发送消息。
 //        EMClient.getInstance().chatManager().sendMessage(message);
 
+        //注册消息监听
+        EMClient.getInstance().chatManager().addMessageListener(MyApplication.messamgeListener);
+
         //初始化视图
         initViews();
         //初始化事件
@@ -248,6 +251,13 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         //初始化滑动工具
         scrollUtil = new ScrollUtil(bottomNavigationView, homeFragment.getView().findViewById(R.id.recycler_view));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //记得在不需要的时候移除listener，如在activity的onDestroy()时
+        EMClient.getInstance().chatManager().removeMessageListener(MyApplication.messamgeListener);
     }
 
     //获取工具栏菜单
