@@ -1,21 +1,13 @@
 package com.srdp.harmonystride.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -25,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.alibaba.sdk.android.oss.OSS;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -90,13 +81,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        // 创建一条文本消息，`content` 为消息文字内容。
-//// `conversationId` 为消息接收方，单聊时为对端用户 ID、群聊时为群组 ID，聊天室时为聊天室 ID。
-//        EMMessage message = EMMessage.createTextSendMessage("hello", "18379856278");
-//// 会话类型：单聊为 EMMessage.ChatType.Chat，群聊为 EMMessage.ChatType.GroupChat, 聊天室为EMMessage.ChatType.ChatRoom，默认为单聊。
-//        message.setChatType(EMMessage.ChatType.Chat);
-//// 发送消息。
-//        EMClient.getInstance().chatManager().sendMessage(message);
 
         //注册消息监听
         EMClient.getInstance().chatManager().addMessageListener(MyApplication.messamgeListener);
@@ -161,7 +145,7 @@ public class MainActivity extends BaseActivity {
                         navigateTo(ProfileActivity.class);
                         break;
                     case R.id.certify:
-                        showToast(getString(R.string.certify));
+                        navigateTo(CertificationActivity.class);
                         break;
                     case R.id.setting:
                         showToast(getString(R.string.setting));

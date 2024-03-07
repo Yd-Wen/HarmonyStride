@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,12 +18,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMUserInfo;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.dialog.ButtonDialog;
-import com.srdp.harmonystride.dialog.CheckBoxDialog;
+import com.srdp.harmonystride.dialog.RadioButtonDialog;
 import com.srdp.harmonystride.dialog.EditTextDialog;
 import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
@@ -38,7 +33,6 @@ import com.srdp.harmonystride.util.StringUtil;
 
 import org.litepal.LitePal;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -165,11 +159,15 @@ public class ProfileEditActivity extends BaseActivity {
         genderTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new CheckBoxDialog(ProfileEditActivity.this, new CheckBoxDialog.OnDismissListener(){
+                new RadioButtonDialog(ProfileEditActivity.this, RadioButtonDialog.EDIT_TYPE_GENDER, genderTv.getText().toString(), new RadioButtonDialog.OnDismissListener(){
                     @Override
                     public void onDismiss(Boolean update, String data) {
                         //更新数据
                         if(update){
+                            //更新本地数据库
+                            User user = new User();
+                            user.setGender(data);
+                            user.updateAll("account = ?", curUser.getAccount());
                             genderTv.setText(data);
                             isUpdate = true;
                         }

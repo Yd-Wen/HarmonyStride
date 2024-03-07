@@ -22,8 +22,8 @@ import okhttp3.Response;
 
 public class HTTPUtil {
     public static final OkHttpClient client = new OkHttpClient();
-    //public static final String IP = "http://10.142.222.230:8080"; //服务器IP地址
-    public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
+    //public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
+    public static final String IP = "http://10.152.222.184:8080"; //服务器IP地址
     public static final Gson gson = new Gson();
 
     //异步执行GET方法
@@ -148,6 +148,14 @@ public class HTTPUtil {
         String url = "/message/system";
         url = url + "?" + "username=" + username ;
         LogUtil.d("send system message", url);
+        GET(url, callback);
+    }
+
+    //验证并获取认证信息
+    public static void getCertify(int uid, okhttp3.Callback callback){
+        String url = "/certification/find";
+        url = url + "?" + "uid=" + uid ;
+        LogUtil.d("verify", url);
         GET(url, callback);
     }
 

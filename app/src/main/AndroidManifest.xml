@@ -31,9 +31,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activity.ChatActivity"
+            android:name=".activity.CertificationActivity"
             android:exported="false" />
-        <!-- 设置环信应用的 AppKey -->
+        <activity
+            android:name=".activity.ChatActivity"
+            android:exported="false" /> <!-- 设置环信应用的 AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
             android:value="1161240210157052#harmonystride" /> <!-- 声明 SDK 所需的 service 的核心功能 -->

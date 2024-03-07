@@ -255,6 +255,7 @@ public class LoginActivity extends BaseActivity {
             curUser.save();
         }
         //写入配置信息
+        SharedPreferenceUtil.setParam("current_uid", curUser.getId());
         SharedPreferenceUtil.setParam("current_account", curUser.getAccount());
         SharedPreferenceUtil.setParam("current_password", curUser.getPassword());
         SharedPreferenceUtil.setParam("password_remember", rememberPwdCb.isChecked());

@@ -46,7 +46,8 @@
                         android:layout_height="@dimen/dimen40"
                         app:civ_border_color="@color/colorCircleImageBorder"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/default_avatar" />
+                        android:src="@drawable/default_avatar"
+                        android:foreground="@drawable/avatar_stroke_default"/>
 
                     <TextView
                         android:id="@+id/tv_toolbar_nickname"
@@ -76,7 +77,8 @@
                     app:civ_border_color="@color/colorCircleImageBorder"
                     app:civ_border_width="@dimen/dimen2"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/default_avatar" />
+                    android:src="@drawable/default_avatar"
+                    android:foreground="@drawable/avatar_stroke_default"/>
 
                 <TextView
                     android:id="@+id/tv_nickname"

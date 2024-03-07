@@ -2,41 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ProfileEditActivity">
+    android:orientation="vertical"
+    tools:context=".activity.CertificationActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:popupTheme="@style/MenuStyle"
-        app:navigationIcon="@drawable/back">
+        app:navigationIcon="@drawable/back"
+        android:background="@color/colorPrimary">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAppearance="@style/TitleAppearance"
-            android:text="@string/profile_edit"/>
-    </androidx.appcompat.widget.Toolbar>
+            android:text="@string/user_certify"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/civ_avatar"
-        android:layout_width="@dimen/dimen100"
-        android:layout_height="@dimen/dimen100"
-        android:layout_marginTop="@dimen/dimen30"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/default_avatar"
-        android:foreground="@drawable/avatar_stroke_default"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen5"
-        android:layout_gravity="center_horizontal"
-        android:textAppearance="@style/TipBlackAppearance"
-        android:text="@string/avatar_edit" />
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -61,16 +46,84 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:gravity="center_vertical"
                     android:textAppearance="@style/TextAppearance"
-                    android:text="@string/nickname"/>
+                    android:text="@string/certify_type"/>
                 <TextView
-                    android:id="@+id/tv_nickname"
+                    android:id="@+id/tv_certify_type"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:drawableEnd="@drawable/go"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextEditProfileAppearance" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen50"
+                android:layout_marginVertical="@dimen/dimen10"
+                android:layout_marginHorizontal="@dimen/dimen5">
+                <TextView
+                    android:id="@+id/tv_certify_number_type"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance"
+                    android:text="@string/certify_disabled_number"/>
+                <TextView
+                    android:id="@+id/tv_certify_number"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
                     android:drawableEnd="@drawable/go"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextEditProfileAppearance" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/dimen10"
+                android:layout_marginHorizontal="@dimen/dimen5">
+
+                <TextView
+                    android:id="@+id/tv_certify_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen50"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance"
+                    android:text="@string/certify_disabled_image"/>
+                <ImageView
+                    android:id="@+id/iv_certify_image"
+                    android:layout_width="@dimen/dimen200"
+                    android:layout_height="@dimen/dimen100"
+                    android:layout_gravity="center"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/upload_image" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen50"
+                android:layout_marginVertical="@dimen/dimen10"
+                android:layout_marginHorizontal="@dimen/dimen5">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance"
+                    android:text="@string/certify_status"/>
+                <TextView
+                    android:id="@+id/tv_certify_status"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
                     android:gravity="center_vertical"
                     android:textAppearance="@style/TextEditProfileAppearance" />
             </LinearLayout>
@@ -83,68 +136,30 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:gravity="center_vertical"
                     android:textAppearance="@style/TextAppearance"
-                    android:text="@string/gender"/>
+                    android:text="@string/certify_info"/>
                 <TextView
-                    android:id="@+id/tv_gender"
+                    android:id="@+id/tv_certify_info"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:drawableEnd="@drawable/go"
-                    android:gravity="center_vertical"
-                    android:textAppearance="@style/TextEditProfileAppearance"
-                    android:text="@string/gender_unknown"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen50"
-                android:layout_marginVertical="@dimen/dimen10"
-                android:layout_marginHorizontal="@dimen/dimen5">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:textAppearance="@style/TextAppearance"
-                    android:text="@string/location"/>
-                <TextView
-                    android:id="@+id/tv_location"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:drawableEnd="@drawable/go"
-                    android:gravity="center_vertical"
-                    android:textAppearance="@style/TextEditProfileAppearance"
-                    android:text="@string/location_unknown"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen50"
-                android:layout_marginVertical="@dimen/dimen10"
-                android:layout_marginHorizontal="@dimen/dimen5">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:textAppearance="@style/TextAppearance"
-                    android:text="@string/introduction"/>
-                <TextView
-                    android:id="@+id/tv_introduction"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:drawableEnd="@drawable/go"
+                    android:layout_weight="7"
                     android:gravity="center_vertical"
                     android:textAppearance="@style/TextEditProfileAppearance"
                     android:singleLine="true"
-                    android:ellipsize="middle"
-                    android:text="@string/introduction_default"/>
+                    android:ellipsize="middle" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_submit"
+                android:layout_width="@dimen/dimen100"
+                android:layout_height="@dimen/dimen50"
+                android:layout_marginTop="@dimen/dimen30"
+                android:layout_gravity="center"
+                android:background="@drawable/selector_shape_button_blue"
+                android:textAppearance="@style/TextAppearance"
+                android:text="@string/edit_confirm"/>
 
         </LinearLayout>
 

@@ -7,10 +7,19 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import androidx.appcompat.content.res.AppCompatResources;
+
+import com.srdp.harmonystride.MyApplication;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class ImageUtil {
+    // 将图片资源转换成drawable
+    public static Drawable getDrawableFromResourceId(int resourceId) {
+        return AppCompatResources.getDrawable(MyApplication.getContext(), resourceId);
+    }
+
     // 将drawable 图像转化成二进制字节
     public static byte[] drawableToByteArray(Drawable drawable) {
         if (drawable != null) {

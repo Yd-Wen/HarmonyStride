@@ -28,9 +28,9 @@
 
     <color name="progressBackground">#FFFFFF</color>
 
-    <color name="colorFormBackground">#CDCBCB</color>
+    <color name="colorFormBackground">#E7E7E7</color>
 
-    <color name="colorCircleImageBorder">#FFFFFF</color>
+    <color name="colorCircleImageBorder">#00FFFFFF</color>
     <color name="colorCircleImageBackground">#EBEBEB</color>
 
     <color name="colorProfileItemBackground">#2AA4DC</color>

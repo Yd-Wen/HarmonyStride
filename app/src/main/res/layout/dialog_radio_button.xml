@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,41 +10,62 @@
     android:padding="@dimen/dimen10">
 
     <TextView
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen10"
-        android:textAppearance="@style/TitleAppearance"
-        android:text="@string/gender_edit"/>
+        android:textAppearance="@style/TitleAppearance" />
 
     <RadioGroup
-        android:id="@+id/rg_gender_edit"
+        android:id="@+id/rg_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen30">
+        android:layout_marginTop="@dimen/dimen30"
+        android:orientation="vertical">
         <RadioButton
-            android:id="@+id/rb_gender_unknown"
+            android:id="@+id/rb_content_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/dimen30"
+            android:layout_marginVertical="@dimen/dimen2"
+            android:paddingHorizontal="@dimen/dimen30"
             android:paddingVertical="@dimen/dimen10"
-            android:textAppearance="@style/TextAppearance"
-            android:text="@string/gender_unknown"/>
+            android:button="@null"
+            android:background="@drawable/selector_shape_radio_button"
+            android:drawablePadding="@dimen/dimen5"
+            android:textAppearance="@style/TextAppearance" />
         <RadioButton
-            android:id="@+id/rb_gender_male"
+            android:id="@+id/rb_content_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/dimen30"
+            android:layout_marginVertical="@dimen/dimen2"
+            android:paddingHorizontal="@dimen/dimen30"
             android:paddingVertical="@dimen/dimen10"
-            android:textAppearance="@style/TextAppearance"
-            android:text="@string/gender_male"/>
+            android:button="@null"
+            android:background="@drawable/selector_shape_radio_button"
+            android:drawablePadding="@dimen/dimen5"
+            android:textAppearance="@style/TextAppearance" />
         <RadioButton
-            android:id="@+id/rb_gender_female"
+            android:id="@+id/rb_content_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/dimen30"
+            android:layout_marginVertical="@dimen/dimen2"
+            android:paddingHorizontal="@dimen/dimen30"
             android:paddingVertical="@dimen/dimen10"
-            android:textAppearance="@style/TextAppearance"
-            android:text="@string/gender_female"/>
+            android:button="@null"
+            android:background="@drawable/selector_shape_radio_button"
+            android:drawablePadding="@dimen/dimen5"
+            android:textAppearance="@style/TextAppearance" />
+        <RadioButton
+            android:id="@+id/rb_content_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/dimen2"
+            android:paddingHorizontal="@dimen/dimen30"
+            android:paddingVertical="@dimen/dimen10"
+            android:button="@null"
+            android:background="@drawable/selector_shape_radio_button"
+            android:drawablePadding="@dimen/dimen5"
+            android:textAppearance="@style/TextAppearance" />
     </RadioGroup>
 
     <LinearLayout

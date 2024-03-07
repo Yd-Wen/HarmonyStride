@@ -43,6 +43,7 @@
     <string name="certify_disabled">残疾人</string>
     <string name="certify_volunteer">志愿者</string>
     <string name="certify_employer">用人单位</string>
+    <string name="certify_admin">管理员</string>
     <string name="gender_unknown">保密</string>
     <string name="gender_male">男</string>
     <string name="gender_female">女</string>
@@ -75,5 +76,22 @@
     <string name="message_camera">相机</string>
     <string name="message_position">位置</string>
 
+    <!--认证相关-->
+    <string name="user_certify">认证</string>
+    <string name="certify_edit">选择认证类型</string>
+    <string name="certify_type">类型</string>
+    <string name="certify_disabled_number">残疾证号</string>
+    <string name="certify_volunteer_number">身份证号</string>
+    <string name="certify_employer_number">信用代码</string>
+    <string name="certify_admin_number">身份证号</string>
+    <string name="certify_disabled_image">残疾证</string>
+    <string name="certify_volunteer_image">身份证</string>
+    <string name="certify_employer_image">营业执照</string>
+    <string name="certify_admin_image">身份证</string>
+    <string name="certify_status">当前状态</string>
+    <string name="certify_status_agree">通过</string>
+    <string name="certify_status_disagree">不通过</string>
+    <string name="certify_status_reviewing">审核中</string>
+    <string name="certify_info">审核意见</string>
 
 </resources>
