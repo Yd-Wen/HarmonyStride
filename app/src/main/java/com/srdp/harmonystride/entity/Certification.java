@@ -3,8 +3,8 @@ package com.srdp.harmonystride.entity;
 public class Certification {
     //private int cid; //序号
     private int uid; //用户ID，非空唯一
-    private String number; //证件号码，非空唯一
     private String type; //认证内容，可选{"志愿者""残疾人""用人单位"“管理员”}
+    private String number; //证件号码，非空唯一
     private String imageUrl; //照片路径，非空唯一
     private String status; //审核状态 {"待审核""不通过""通过"}，默认待审核
     private String info; //审核信息 非空，默认空字符串，默认值待审核

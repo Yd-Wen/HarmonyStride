@@ -250,10 +250,6 @@ public class LoginActivity extends BaseActivity {
 
     //登录，更新本地数据，记录配置信息
     private void login(){
-        //写入SQLite本地数据库
-        if(!LitePal.isExist(User.class, "account = ?", curUser.getAccount())){
-            curUser.save();
-        }
         //写入配置信息
         SharedPreferenceUtil.setParam("current_uid", curUser.getId());
         SharedPreferenceUtil.setParam("current_account", curUser.getAccount());
@@ -261,6 +257,10 @@ public class LoginActivity extends BaseActivity {
         SharedPreferenceUtil.setParam("password_remember", rememberPwdCb.isChecked());
         //下次开屏页结束后进入主页
         SharedPreferenceUtil.setParam("is_login", true);
+        //写入SQLite本地数据库
+        if(!LitePal.isExist(User.class, "account = ?", curUser.getAccount())){
+            curUser.save();
+        }
 
         //跳转到主页
         navigateTo(MainActivity.class);

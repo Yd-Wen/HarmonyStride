@@ -20,6 +20,7 @@ import androidx.core.content.FileProvider;
 
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.activity.CertificationActivity;
 import com.srdp.harmonystride.activity.ProfileEditActivity;
 import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.ScreenSizeUtil;
@@ -102,13 +103,19 @@ public class ButtonDialog extends BaseDialog{
     private void requestExternalPermission(){
         if(!EasyPermissions.hasPermissions(baseContext, paramExternal)){
             //无权限 则进行权限请求
-            EasyPermissions.requestPermissions((ProfileEditActivity)baseContext, "请求存储权限", REQUEST_EXTERNAL_STORAGE_CODE, paramExternal);
+            if(baseContext instanceof ProfileEditActivity){
+                EasyPermissions.requestPermissions((ProfileEditActivity)baseContext, "请求存储权限", REQUEST_EXTERNAL_STORAGE_CODE, paramExternal);
+            }else if(baseContext instanceof CertificationActivity){
+                EasyPermissions.requestPermissions((CertificationActivity)baseContext, "请求存储权限", REQUEST_EXTERNAL_STORAGE_CODE, paramExternal);
+            }
         }else {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_PICK);
             intent.setType("image/*");
             if (baseContext instanceof ProfileEditActivity) {
                 ((ProfileEditActivity) baseContext).startActivityForResult(intent, OPEN_ALBUM_CODE);
+            }else if(baseContext instanceof CertificationActivity){
+                ((CertificationActivity) baseContext).startActivityForResult(intent, OPEN_ALBUM_CODE);
             }
         }
     }
@@ -118,13 +125,19 @@ public class ButtonDialog extends BaseDialog{
     private void requestCameraPermission(){
         if(!EasyPermissions.hasPermissions(baseContext, paramCamera)){
             //无权限 则进行权限请求
-            EasyPermissions.requestPermissions((ProfileEditActivity)baseContext, "请求相机权限", REQUEST_EXTERNAL_STORAGE_CODE, paramCamera);
+            if(baseContext instanceof ProfileEditActivity){
+                EasyPermissions.requestPermissions((ProfileEditActivity)baseContext, "请求相机权限", REQUEST_EXTERNAL_STORAGE_CODE, paramCamera);
+            }else if(baseContext instanceof CertificationActivity){
+                EasyPermissions.requestPermissions((CertificationActivity)baseContext, "请求相机权限", REQUEST_EXTERNAL_STORAGE_CODE, paramCamera);
+            }
         }else {
             //启动相机
             //Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (baseContext instanceof ProfileEditActivity) {
                 ((ProfileEditActivity) baseContext).startActivityForResult(intent, OPEN_CAMERA_CODE);
+            }else if(baseContext instanceof CertificationActivity){
+                ((CertificationActivity) baseContext).startActivityForResult(intent, OPEN_CAMERA_CODE);
             }
         }
     }

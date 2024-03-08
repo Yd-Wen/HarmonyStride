@@ -43,20 +43,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class ProfileEditActivity extends BaseActivity {
-    //打开相册请求码
-    private static final int OPEN_ALBUM_CODE = 100;
-    //打开摄像头请求码
-    private static final int OPEN_CAMERA_CODE = 200;
-    //图片剪裁请求码
-    public static final int PICTURE_CROPPING_CODE = 300;
-    //Glide请求图片选项配置
-    private RequestOptions requestOptions = RequestOptions
-            .circleCropTransform()//圆形剪裁
-            .diskCacheStrategy(DiskCacheStrategy.NONE);//不做磁盘缓存
-            //.skipMemoryCache(true);//不做内存缓存
-
     private static final int UPDATE_SUCCESS = 1; //更新成功
-    private static final String USER_DIR = "user/";
 
     private Toolbar toolbar;
     private CircleImageView avatarCiv;
@@ -113,7 +100,7 @@ public class ProfileEditActivity extends BaseActivity {
 
         //获取头像
         if(!StringUtil.isEmpty(curUser.getAvatar())){ //头像资源路径不为空
-            Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(requestOptions).into(avatarCiv);
+            Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(ImageUtil.requestOptions).into(avatarCiv);
         }
         nicknameTv.setText(curUser.getNickname());
         genderTv.setText(curUser.getGender());
@@ -143,11 +130,17 @@ public class ProfileEditActivity extends BaseActivity {
         nicknameTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new EditTextDialog(ProfileEditActivity.this, "nickname", new EditTextDialog.OnDismissListener() {
+                new EditTextDialog(ProfileEditActivity.this, EditTextDialog.EDIT_TYPE_NICKNAME, curUser.getNickname(), new EditTextDialog.OnDismissListener() {
                     @Override
                     public void onDismiss(Boolean update, String data) {
                         //更新数据
                         if(update){
+                            //更新本地数据库
+                            User user = new User();
+                            //修改昵称
+                            user.setNickname(data);
+                            user.updateAll("account = ?", curUser.getAccount());
+                            //显示新数据
                             nicknameTv.setText(data);
                             isUpdate = true;
                         }
@@ -186,11 +179,17 @@ public class ProfileEditActivity extends BaseActivity {
         introductionTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new EditTextDialog(ProfileEditActivity.this, "introduction", new EditTextDialog.OnDismissListener() {
+                new EditTextDialog(ProfileEditActivity.this, EditTextDialog.EDIT_TYPE_INTRODUCTION, curUser.getIntroduction(), new EditTextDialog.OnDismissListener() {
                     @Override
                     public void onDismiss(Boolean update, String data) {
                         //更新数据
                         if(update){
+                            //更新本地数据库
+                            User user = new User();
+                            //修改签名
+                            user.setIntroduction(data);
+                            user.updateAll("account = ?", curUser.getAccount());
+                            //显示新数据
                             introductionTv.setText(data);
                             isUpdate = true;
                         }
@@ -198,46 +197,6 @@ public class ProfileEditActivity extends BaseActivity {
                 }).show();
             }
         });
-    }
-
-    //上传用户头像到OSS
-    private void upload(Bitmap image){
-        //删除线程
-        Thread deleteImg = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OSSClientUtil.getInstance().deleteImage(curUser.getAvatar());
-            }
-        });
-        //上传线程
-        Thread uploadImg = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //上传
-                String imageUrl = OSSClientUtil.getInstance().uploadImage(ImageUtil.bitmapToByteArray(image), USER_DIR + curUser.getAccount() + "/");
-
-                if(imageUrl != null){
-                    //更新本地数据库
-                    User user = new User();
-                    user.setAvatar(imageUrl);
-                    user.updateAll("account = ?", curUser.getAccount());
-                }
-            }
-        });
-
-        if(!StringUtil.isEmpty(curUser.getAvatar())){
-            deleteImg.start();
-            try {
-                // 等待第一个线程执行完毕
-                deleteImg.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            uploadImg.start();
-        }else {
-            uploadImg.start();
-        }
-
     }
 
     //更新服务端
@@ -274,27 +233,32 @@ public class ProfileEditActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
             switch (requestCode){
-                case OPEN_ALBUM_CODE:
+                case ImageUtil.OPEN_ALBUM_CODE:
                     //打开相册返回
                     Uri imageUri = Objects.requireNonNull(data).getData();
                     //图片剪裁
-                    pictureCropping(imageUri);
+                    ImageUtil.pictureCropping(this, imageUri);
                     break;
-                case OPEN_CAMERA_CODE:
+                case ImageUtil.OPEN_CAMERA_CODE:
                     Bundle extras = data.getExtras();
                     Bitmap bitmap = (Bitmap) extras.get("data");
-                    pictureCropping(ImageUtil.getImageUri(this, bitmap));//开始裁减图片
+                    ImageUtil.pictureCropping(this, ImageUtil.getImageUri(this, bitmap));//开始裁减图片
                     break;
-                case PICTURE_CROPPING_CODE:
+                case ImageUtil.PICTURE_CROPPING_CODE:
                     //图片剪裁返回
                     Bundle bundle = data.getExtras();
                     if (bundle != null) {
                         //在这里获得了剪裁后的Bitmap对象，可以用于上传
                         Bitmap image = bundle.getParcelable("data");
                         //设置到ImageView上
-                        Glide.with(this).load(image).apply(requestOptions).into(avatarCiv);
+                        Glide.with(this).load(image).apply(ImageUtil.requestOptions).into(avatarCiv);
                         //上传头像
-                        upload(image);
+                        String imageUrl = ImageUtil.USER_PATH + System.currentTimeMillis() + ".png";
+                        ImageUtil.upload(curUser.getAvatar(), image, imageUrl);
+                        //更新本地数据库
+                        User user = new User();
+                        user.setAvatar(imageUrl);
+                        user.updateAll("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString());
                         //修改更新标识
                         isUpdate = true;
                     }
@@ -304,29 +268,5 @@ public class ProfileEditActivity extends BaseActivity {
             }
         }
     }
-
-    /**
-     * 图片剪裁
-     * @param uri 图片uri
-     */
-    private void pictureCropping(Uri uri) {
-        // 调用系统中自带的图片剪裁
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        // 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
-        intent.putExtra("crop", "true");
-        // aspectX aspectY 是宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        // outputX outputY 是裁剪图片宽高
-        intent.putExtra("outputX", 300);
-        intent.putExtra("outputY", 300);
-        //支持缩放
-        intent.putExtra("scale", true);
-        // 返回裁剪后的数据
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, PICTURE_CROPPING_CODE);
-    }
-
 
 }

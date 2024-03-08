@@ -1,6 +1,7 @@
 package com.srdp.harmonystride.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -9,12 +10,37 @@ import android.provider.MediaStore;
 
 import androidx.appcompat.content.res.AppCompatResources;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.srdp.harmonystride.MyApplication;
+import com.srdp.harmonystride.activity.CertificationActivity;
+import com.srdp.harmonystride.activity.ProfileEditActivity;
+import com.srdp.harmonystride.entity.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class ImageUtil {
+    //打开相册请求码
+    public static final int OPEN_ALBUM_CODE = 100;
+    //打开摄像头请求码
+    public static final int OPEN_CAMERA_CODE = 200;
+    //图片剪裁请求码
+    public static final int PICTURE_CROPPING_CODE = 300;
+    //Glide请求图片选项配置
+    public static final RequestOptions requestOptions = RequestOptions
+            .circleCropTransform()//圆形剪裁
+            .diskCacheStrategy(DiskCacheStrategy.NONE);//不做磁盘缓存
+    //.skipMemoryCache(true);//不做内存缓存
+
+    public static final int IMAGE_TYPE_USER = 601;
+    public static final int IMAGE_TYPE_CERTIFCATION = 602;
+    public static final int IMAGE_TYPE_POST = 603;
+
+    public static String USER_PATH = "user/" + SharedPreferenceUtil.getParam("current_account", "").toString() + "/";
+    public static String CERTIFICATION_PATH = "certification/" + SharedPreferenceUtil.getParam("current_account", "").toString() + "/";
+    public static String POST_PATH = "post/" + SharedPreferenceUtil.getParam("current_account", "").toString() + "/";
+
     // 将图片资源转换成drawable
     public static Drawable getDrawableFromResourceId(int resourceId) {
         return AppCompatResources.getDrawable(MyApplication.getContext(), resourceId);
@@ -63,8 +89,78 @@ public class ImageUtil {
     public static String getImagePath(String avatarPath){
         //oss Bucket名称
         final String BUCKET_NAME = "harmonystride-bucket";
-        String IP = "https://" + BUCKET_NAME + ".";
+        final String ENDPOINT = "oss-cn-hangzhou.aliyuncs.com";
+        final String ROOT = "img/";
+        String IP = "https://" + BUCKET_NAME + "." + ENDPOINT + "/" +ROOT;
         return IP + avatarPath;
+    }
+
+    /**
+     * 图片剪裁
+     * @param uri 图片uri
+     */
+    public static void pictureCropping(Context context, Uri uri) {
+        // 调用系统中自带的图片剪裁
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        // 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
+        intent.putExtra("crop", "true");
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", 300);
+        intent.putExtra("outputY", 300);
+        //支持缩放
+        intent.putExtra("scale", true);
+        // 返回裁剪后的数据
+        intent.putExtra("return-data", true);
+
+        if(context instanceof ProfileEditActivity){
+            ((ProfileEditActivity)context).startActivityForResult(intent, PICTURE_CROPPING_CODE);
+        }else if(context instanceof CertificationActivity){
+            ((CertificationActivity)context).startActivityForResult(intent, PICTURE_CROPPING_CODE);
+        }
+
+    }
+
+    //上传用户头像到OSS
+    /**
+     * 图片上传
+     * @param preImageUrl 待删除的图片URL
+     * @param curImage 待上传的图片
+     */
+    public static void upload(String preImageUrl, Bitmap curImage, String imageUrl){
+        //删除线程
+        Thread deleteImg = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OSSClientUtil.getInstance().deleteImage(preImageUrl);
+            }
+        });
+
+        //上传线程
+        Thread uploadImg = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //上传
+                OSSClientUtil.getInstance().uploadImage(ImageUtil.bitmapToByteArray(curImage), imageUrl);
+            }
+        });
+
+        if(!StringUtil.isEmpty(preImageUrl)){
+            deleteImg.start();
+            try {
+                // 等待第一个线程执行完毕
+                deleteImg.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            uploadImg.start();
+        }else {
+            uploadImg.start();
+        }
+
     }
 
 }

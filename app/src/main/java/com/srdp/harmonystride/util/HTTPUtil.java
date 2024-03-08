@@ -23,7 +23,8 @@ import okhttp3.Response;
 public class HTTPUtil {
     public static final OkHttpClient client = new OkHttpClient();
     //public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
-    public static final String IP = "http://10.152.222.184:8080"; //服务器IP地址
+    //public static final String IP = "http://10.152.222.184:8080"; //服务器IP地址
+    public static final String IP = "http://10.152.223.138:8080"; //服务器IP地址
     public static final Gson gson = new Gson();
 
     //异步执行GET方法
@@ -125,6 +126,12 @@ public class HTTPUtil {
             json = gson.toJson(jsonObject);
         }else if(cls == Certification.class){
             url = "/certification/" + path;
+            Certification certification = (Certification) object;
+            jsonObject.addProperty("uid", certification.getUid());
+            jsonObject.addProperty("type", certification.getType());
+            jsonObject.addProperty("number", certification.getNumber());
+            jsonObject.addProperty("imageurl", certification.getImageUrl());
+            json = gson.toJson(jsonObject);
         }else if(cls == Post.class){
             url = "/post/" + path;
         }else if(cls == Label.class){

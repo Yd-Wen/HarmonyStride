@@ -20,12 +20,15 @@ import org.litepal.LitePal;
 import java.util.List;
 
 public class EditTextDialog extends BaseDialog {
+    public static final int EDIT_TYPE_NICKNAME = 1;
+    public static final int EDIT_TYPE_INTRODUCTION = 2;
+    public static final int EDIT_TYPE_CERTIFY_NUMBER = 3;
+
     private TextView titleTv;
     private EditText contentEt;
-    private String editKey;
-    private String content;
 
-    private User curUser;
+    private int type;
+    private String curContent;
 
     /**
      * 自定义Dialog监听器
@@ -39,9 +42,10 @@ public class EditTextDialog extends BaseDialog {
 
     private OnDismissListener onDismissListener;
 
-    public EditTextDialog(Context context, String editKey, OnDismissListener onDismissListener) {
+    public EditTextDialog(Context context, int type, String curContent, OnDismissListener onDismissListener) {
         super(context);
-        this.editKey = editKey;
+        this.type = type;
+        this.curContent = curContent;
         this.onDismissListener = onDismissListener;
     }
 
@@ -50,20 +54,12 @@ public class EditTextDialog extends BaseDialog {
         super.onCreate(savedInstanceState);
 
         setContentView(View.inflate(MyApplication.getContext(), R.layout.dialog_edit_text, null));
-        //初始化数据
-        initDatas();
         //初始化视图
         initViews();
         //初始化事件
         initEvents();
         //加载数据
         loadDatas();
-    }
-
-    private void initDatas(){
-        //读取当前用户
-        List<User> users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
-        curUser = users.get(0);
     }
 
     private void initViews(){
@@ -93,17 +89,7 @@ public class EditTextDialog extends BaseDialog {
             @Override
             public void onClick(View view) {
                 String newContent = contentEt.getText().toString().trim();
-                if(!newContent.equals(content)){
-                    //更新本地数据库
-                    User user = new User();
-                    if(editKey.equals("nickname")){
-                        //修改昵称
-                        user.setNickname(newContent);
-                    }else {
-                        //修改签名
-                        user.setIntroduction(newContent);
-                    }
-                    user.updateAll("account = ?", curUser.getAccount());
+                if(!newContent.equals(curContent)){
                     //回调方法
                     onDismissListener.onDismiss(true, newContent);
                 }else {
@@ -116,16 +102,24 @@ public class EditTextDialog extends BaseDialog {
     }
 
     private void loadDatas(){
-        if(editKey.equals("nickname")){
-            titleTv.setText(R.string.nickname_edit);
-            contentEt.setHint(R.string.nickname_edit_hint);
-            content = curUser.getNickname();
-            contentEt.setText(content);
-        }else if(editKey.equals("introduction")) {
-            titleTv.setText(R.string.introduction_edit);
-            contentEt.setHint(R.string.introduction_edit_hint);
-            content = curUser.getIntroduction();
-            contentEt.setText(content);
+        switch (type){
+            case EDIT_TYPE_NICKNAME:
+                titleTv.setText(R.string.nickname_edit);
+                contentEt.setHint(R.string.nickname_edit_hint);
+                contentEt.setText(curContent);
+                break;
+            case EDIT_TYPE_INTRODUCTION:
+                titleTv.setText(R.string.introduction_edit);
+                contentEt.setHint(R.string.introduction_edit_hint);
+                contentEt.setText(curContent);
+                break;
+            case EDIT_TYPE_CERTIFY_NUMBER:
+                titleTv.setText(R.string.certify_number_edit);
+                contentEt.setHint(R.string.certify_number_edit_hint);
+                contentEt.setText(curContent);
+                break;
+            default:
+                break;
         }
     }
 

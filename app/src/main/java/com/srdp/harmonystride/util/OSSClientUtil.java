@@ -11,7 +11,6 @@ import com.alibaba.sdk.android.oss.common.OSSLog;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSFederationCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSFederationToken;
-import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.alibaba.sdk.android.oss.common.utils.DateUtil;
 import com.alibaba.sdk.android.oss.model.DeleteObjectRequest;
 import com.alibaba.sdk.android.oss.model.GetObjectRequest;
@@ -25,22 +24,14 @@ import com.google.gson.JsonParser;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.entity.Result;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -55,7 +46,7 @@ public class OSSClientUtil {
     private static String ACCESS_KEY_SECRET = "2ibHwtugTQDeK55o5r1u4EYFcA37YjuDDpy4i5mWYbdy";
     //oss Bucket名称
     private static final String BUCKET_NAME = "harmonystride-bucket";
-    private static final String DIR = "img/";
+    private static final String ROOT = "img/";
     // 从STS服务获取的安全令牌（SecurityToken）
     private static String SECURITY_TOKEN= "CAISoAJ1q6Ft5B2yfSjIr5fBKs7GtJdDhYi7bWXp0UYwXv4fubPlrjz2IHhMf3hsAesatPs3mW1R7f8flqJIRoReREvCUcZr8syyGLYy0NOT1fau5Jko1beiewHKeRyZsebWZ+LmNqS/Ht6md1HDkAJq3LL+bk/Mdle5MJqP+/EFA9MMRVv6FxIkYu1bPQx/ssQXGGLMPPK2SH7Qj3HXEVBjt3gw6yl24r/txdaHuFiMzg/6w/UQoILgOYS+bsVheZ1iWNS4wKs0VNKYjXABsUYWrfYs1fUeom+bhLzHXQkNuSfhGvHP79hiIDV+YqUHAKNepJD+76Yg4reCy9ysl0wSZbwICn+GGZrZwMLeHeSvJ80lb7f3NmjAycyf7nx2Dqer7RgagAEK6wpnIPfYdVuCzwYn/Vf2OdHj7zaFyyygVlNEmq1UzAdnUlxp3YK2VeLa46OTybQqcHEK9jR/b4+3bKj5Kgo4fxVE2kMgLi8CvukTtZQoOYY1Fh7U7M/twu454v3qtSAtMzF45NLKvDI4NV9xrwtGWIELZU0JLlhf8lLjaoz8BiAA";
     //凭证过期时间
@@ -136,12 +127,9 @@ public class OSSClientUtil {
         ossClient = new OSSClient(MyApplication.getContext(), ENDPOINT, credentialProvider);
     }
 
-    public static String uploadImage(byte[] imageData, String subDir){
-
-        String imageUrl = null;
-
+    public static void uploadImage(byte[] imageData, String subPath){
         // 生成object key
-        String objectKey =DIR + subDir + System.currentTimeMillis() + ".png";
+        String objectKey = ROOT + subPath;
 
         // 设置上传参数
         ObjectMetadata metadata = new ObjectMetadata();
@@ -153,8 +141,6 @@ public class OSSClientUtil {
         try {
             PutObjectResult putResult = ossClient.putObject(putObjectRequest);
             Log.d(TAG, "uploadImage: " + putResult.getETag());
-            // 返回上传后图片所在的路径
-            imageUrl = ENDPOINT + "/" + objectKey;
         } catch (ClientException e) {
             // 客户端异常，例如网络异常等
             e.printStackTrace();
@@ -165,7 +151,6 @@ public class OSSClientUtil {
             Log.e("HostId", e.getHostId());
             Log.e("RawMessage", e.getRawMessage());
         }
-        return imageUrl;
     }
 
     public static byte[] downloadImage(String imageUrl) {
@@ -210,8 +195,9 @@ public class OSSClientUtil {
     public static boolean deleteImage(String imageUrl) {
 
         // 生成object key
-        String objectKey = imageUrl.replace(ENDPOINT+ "/", "");
-        System.out.println("objectKey: " + objectKey);
+        //String objectKey = imageUrl.replace(ENDPOINT+ "/", "");
+        //System.out.println("objectKey: " + objectKey);
+        String objectKey = ROOT + imageUrl;
 
         DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(BUCKET_NAME, objectKey);
 

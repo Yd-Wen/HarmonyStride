@@ -80,6 +80,8 @@
     <string name="user_certify">认证</string>
     <string name="certify_edit">选择认证类型</string>
     <string name="certify_type">类型</string>
+    <string name="certify_number_edit">证件号</string>
+    <string name="certify_number_edit_hint">输入证件号</string>
     <string name="certify_disabled_number">残疾证号</string>
     <string name="certify_volunteer_number">身份证号</string>
     <string name="certify_employer_number">信用代码</string>
@@ -91,7 +93,8 @@
     <string name="certify_status">当前状态</string>
     <string name="certify_status_agree">通过</string>
     <string name="certify_status_disagree">不通过</string>
-    <string name="certify_status_reviewing">审核中</string>
+    <string name="certify_status_reviewing">待审核</string>
     <string name="certify_info">审核意见</string>
+    <string name="certify_info_default">审核中</string>
 
 </resources>
