@@ -12,6 +12,8 @@
     <dimen name="paddingHeader">80dp</dimen>
 
     <dimen name="titleSize">24sp</dimen>
+    <dimen name="titlePostBriefSize">20sp</dimen>
+    <dimen name="titleNicknameSize">18sp</dimen>
     <dimen name="textSize">18sp</dimen>
     <dimen name="hintSize">12sp</dimen>
 
@@ -25,6 +27,7 @@
     <dimen name="dimen60">60dp</dimen>
     <dimen name="dimen80">80dp</dimen>
     <dimen name="dimen100">100dp</dimen>
+    <dimen name="dimen150">150dp</dimen>
     <dimen name="dimen200">200dp</dimen>
     <dimen name="dimen250">250dp</dimen>
     <dimen name="dimen300">300dp</dimen>

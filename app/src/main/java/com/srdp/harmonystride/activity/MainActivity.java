@@ -184,7 +184,7 @@ public class MainActivity extends BaseActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast(getString(R.string.post));
+                navigateTo(PostingActivity.class);
             }
         });
 
@@ -256,12 +256,7 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.edit:
-                //TODO：测试消息发送
-                Intent intent = new Intent(MyApplication.getContext(), ChatActivity.class);
-                intent.putExtra("account", "18911637274");
-                intent.putExtra("avatar", "oss-cn-hangzhou.aliyuncs.com/img/user/18911637274/1708925719872.png");
-                intent.putExtra("nickname", "yyz");
-                navigateTo(intent);
+                //TODO：null
                 break;
             default:
                 break;

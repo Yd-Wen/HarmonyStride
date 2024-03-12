@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:id="@+id/ll_post_brief_page"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dimen5">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_avatar"
+                android:layout_width="@dimen/dimen50"
+                android:layout_height="@dimen/dimen50"
+                app:civ_border_color="@color/colorCircleImageBorder"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/default_avatar"
+                android:foreground="@drawable/avatar_stroke_default"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_user_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dimen30"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TitleNicknameAppearance" />
+                <TextView
+                    android:id="@+id/tv_post_datatime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dimen20"
+                    android:paddingTop="@dimen/dimen2"
+                    android:textAppearance="@style/TipBlackAppearance" />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/iv_more"
+                android:layout_width="@dimen/dimen30"
+                android:layout_height="match_parent"
+                android:src="@drawable/more"/>
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_post_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen30"
+            android:textAppearance="@style/TitlePostBriefAppearance"
+            android:lines="1"
+            android:ellipsize="end" />
+        <TextView
+            android:id="@+id/tv_post_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen30"
+            android:textAppearance="@style/TextAppearance"
+            android:lines="1"
+            android:ellipsize="end"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/iv_post_image"
+                android:layout_width="@dimen/dimen200"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/welcome"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen50"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_post_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/selector_shape_tag"
+                android:padding="@dimen/dimen5"
+                android:drawableEnd="@drawable/tag"
+                android:drawablePadding="@dimen/dimen5"
+                android:textAppearance="@style/TextAppearance"
+                android:text="@string/post_label_volunteer" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/iv_post_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/post_comment"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+

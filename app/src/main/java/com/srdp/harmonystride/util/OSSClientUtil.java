@@ -32,11 +32,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class OSSClientUtil {
+//    private static interface onUpload{
+//
+//    }
+
     private static final String TAG = "OSSClientUtil";
     //oss访问地址
     private static final String ENDPOINT = "oss-cn-hangzhou.aliyuncs.com";
@@ -127,7 +132,7 @@ public class OSSClientUtil {
         ossClient = new OSSClient(MyApplication.getContext(), ENDPOINT, credentialProvider);
     }
 
-    public static void uploadImage(byte[] imageData, String subPath){
+    public static void uploadImage(byte[] imageData, String subPath, ImageUtil.OnUploadImage onUploadImage){
         // 生成object key
         String objectKey = ROOT + subPath;
 
@@ -140,7 +145,11 @@ public class OSSClientUtil {
 
         try {
             PutObjectResult putResult = ossClient.putObject(putObjectRequest);
-            Log.d(TAG, "uploadImage: " + putResult.getETag());
+            if(putResult.getStatusCode() == 200 && onUploadImage != null){
+                onUploadImage.onUpload(true);
+            }
+            LogUtil.d(TAG, "uploadImage: " + putResult.getETag());
+            LogUtil.d("result", putResult.toString());
         } catch (ClientException e) {
             // 客户端异常，例如网络异常等
             e.printStackTrace();
@@ -151,6 +160,8 @@ public class OSSClientUtil {
             Log.e("HostId", e.getHostId());
             Log.e("RawMessage", e.getRawMessage());
         }
+
+
     }
 
     public static byte[] downloadImage(String imageUrl) {

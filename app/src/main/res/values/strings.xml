@@ -97,4 +97,18 @@
     <string name="certify_info">审核意见</string>
     <string name="certify_info_default">审核中</string>
 
+    <!--  帖子相关  -->
+    <string name="post_posting">发布帖子</string>
+    <string name="post_post">发布</string>
+    <string name="post_title_hint">标题（必填）</string>
+    <string name="post_content">请输入发布内容</string>
+    <string name="post_label">选择标签</string>
+    <string name="post_label_volunteer">志愿</string>
+    <string name="post_label_job">求职</string>
+    <string name="post_label_help">求助</string>
+    <string name="post_label_recruitment">招聘</string>
+
+    <string name="post_comment_count_default">0</string>
+
+
 </resources>

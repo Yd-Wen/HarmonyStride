@@ -275,6 +275,7 @@ public class CertificationActivity extends BaseActivity {
     }
 
     private void update(){
+        certification.setStatus("待审核");
         HTTPUtil.update(certification, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -302,7 +303,7 @@ public class CertificationActivity extends BaseActivity {
         //加载认证信息
         certifyTypeTv.setText(certification.getType());
         certifyNumberTv.setText(certification.getNumber());
-        Glide.with(this).load(ImageUtil.getImagePath(certification.getImageUrl())).apply(ImageUtil.requestOptions).into(certifyImageIv);
+        Glide.with(this).load(ImageUtil.getImagePath(certification.getImageUrl())).centerCrop().into(certifyImageIv);
         certifyStatusTv.setText(certification.getStatus());
         certifyInfoTv.setText(certification.getInfo());
         switch (certification.getType()){
@@ -346,13 +347,15 @@ public class CertificationActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.edit:
-                //TODO：修改认证
-                //提交按钮可见
-                submitBtn.setVisibility(View.VISIBLE);
-                //编辑状态可点击
-                certifyTypeTv.setClickable(true);
-                certifyNumberTv.setClickable(true);
-                certifyImageIv.setClickable(true);
+                if(!certification.getStatus().equals("通过")){
+                    //修改认证
+                    //提交按钮可见
+                    submitBtn.setVisibility(View.VISIBLE);
+                    //编辑状态可点击
+                    certifyTypeTv.setClickable(true);
+                    certifyNumberTv.setClickable(true);
+                    certifyImageIv.setClickable(true);
+                }
                 break;
             default:
                 break;
@@ -369,13 +372,13 @@ public class CertificationActivity extends BaseActivity {
                     //打开相册返回
                     Uri imageUri = Objects.requireNonNull(data).getData();
                     //图片剪裁
-                    ImageUtil.pictureCropping(this, imageUri);
+                    ImageUtil.pictureCropping(this, imageUri, 3, 2);
                     break;
                 case ImageUtil.OPEN_CAMERA_CODE:
                     Bundle extras = data.getExtras();
                     Bitmap bitmap = (Bitmap) extras.get("data");
                     //图片剪裁
-                    ImageUtil.pictureCropping(this, ImageUtil.getImageUri(this, bitmap));//开始裁减图片
+                    ImageUtil.pictureCropping(this, ImageUtil.getImageUri(this, bitmap), 3, 2);//开始裁减图片
                     break;
                 case ImageUtil.PICTURE_CROPPING_CODE:
                     //图片剪裁返回
@@ -384,10 +387,10 @@ public class CertificationActivity extends BaseActivity {
                         //在这里获得了剪裁后的Bitmap对象，可以用于上传
                         Bitmap image = bundle.getParcelable("data");
                         //设置到ImageView上
-                        Glide.with(this).load(image).apply(ImageUtil.requestOptions).into(certifyImageIv);
+                        Glide.with(this).load(image).centerCrop().into(certifyImageIv);
                         //上传头像
                         String imageUrl = ImageUtil.CERTIFICATION_PATH + System.currentTimeMillis() + ".png";
-                        ImageUtil.upload(certification.getImageUrl(), image, imageUrl);
+                        ImageUtil.upload(certification.getImageUrl(), image, imageUrl, null);
                         certification.setImageUrl(imageUrl);
                     }
                     break;

@@ -1,6 +1,25 @@
 package com.srdp.harmonystride.util;
 
 public class StringUtil {
+    public static String removeHtmlTags(String str){
+        // Step 1: Remove all HTML tags except <b> and <i>
+        str = str.replaceAll("(?i)<(?!/?(b|i)\\b)[^>]+>", "");
+
+        // Step 2: Preserve content inside <b> tags
+        str = str.replaceAll("(?i)<b>(.*?)</b>", "$1");
+
+        // Step 3: Preserve content inside <i> tags
+        str = str.replaceAll("(?i)<i>(.*?)</i>", "$1");
+
+        // Step 4: Remove all remaining HTML tags
+        str = str.replaceAll("<[^>]+>", "");
+
+        // Step 5: Restore preserved content
+        //str = str.replaceAll("###B_START###", "<b>").replaceAll("###B_END###", "</b>");
+        //str = str.replaceAll("###I_START###", "<i>").replaceAll("###I_END###", "</i>");
+        return str;
+    }
+
     /**
      * Check if the given string is an 11-digit phone number.
      *

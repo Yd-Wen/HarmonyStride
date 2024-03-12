@@ -52,7 +52,7 @@ public class PostActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         imageView = findViewById(R.id.image_view);
-        textView = findViewById(R.id.content_tv);
+        //textView = findViewById(R.id.content_tv);
     }
 
     private void initEvents(){

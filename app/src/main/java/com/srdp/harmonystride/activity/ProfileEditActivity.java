@@ -15,8 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.dialog.ButtonDialog;
@@ -27,7 +25,6 @@ import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.LogUtil;
-import com.srdp.harmonystride.util.OSSClientUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
@@ -100,7 +97,7 @@ public class ProfileEditActivity extends BaseActivity {
 
         //获取头像
         if(!StringUtil.isEmpty(curUser.getAvatar())){ //头像资源路径不为空
-            Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(ImageUtil.requestOptions).into(avatarCiv);
+            Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(ImageUtil.requestOptionsWithCircle).into(avatarCiv);
         }
         nicknameTv.setText(curUser.getNickname());
         genderTv.setText(curUser.getGender());
@@ -237,12 +234,12 @@ public class ProfileEditActivity extends BaseActivity {
                     //打开相册返回
                     Uri imageUri = Objects.requireNonNull(data).getData();
                     //图片剪裁
-                    ImageUtil.pictureCropping(this, imageUri);
+                    ImageUtil.pictureCropping(this, imageUri, 1, 1);
                     break;
                 case ImageUtil.OPEN_CAMERA_CODE:
                     Bundle extras = data.getExtras();
                     Bitmap bitmap = (Bitmap) extras.get("data");
-                    ImageUtil.pictureCropping(this, ImageUtil.getImageUri(this, bitmap));//开始裁减图片
+                    ImageUtil.pictureCropping(this, ImageUtil.getImageUri(this, bitmap), 1, 1);//开始裁减图片
                     break;
                 case ImageUtil.PICTURE_CROPPING_CODE:
                     //图片剪裁返回
@@ -251,10 +248,10 @@ public class ProfileEditActivity extends BaseActivity {
                         //在这里获得了剪裁后的Bitmap对象，可以用于上传
                         Bitmap image = bundle.getParcelable("data");
                         //设置到ImageView上
-                        Glide.with(this).load(image).apply(ImageUtil.requestOptions).into(avatarCiv);
+                        Glide.with(this).load(image).apply(ImageUtil.requestOptionsWithCircle).into(avatarCiv);
                         //上传头像
                         String imageUrl = ImageUtil.USER_PATH + System.currentTimeMillis() + ".png";
-                        ImageUtil.upload(curUser.getAvatar(), image, imageUrl);
+                        ImageUtil.upload(curUser.getAvatar(), image, imageUrl, null);
                         //更新本地数据库
                         User user = new User();
                         user.setAvatar(imageUrl);

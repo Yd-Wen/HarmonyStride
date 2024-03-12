@@ -12,19 +12,21 @@ import com.srdp.harmonystride.entity.User;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.BufferedSink;
 
 public class HTTPUtil {
     public static final OkHttpClient client = new OkHttpClient();
-    //public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
-    //public static final String IP = "http://10.152.222.184:8080"; //服务器IP地址
-    public static final String IP = "http://10.152.223.138:8080"; //服务器IP地址
+    public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
+    //public static final String IP = "http://10.142.223.141:8080";
     public static final Gson gson = new Gson();
 
     //异步执行GET方法
@@ -43,6 +45,26 @@ public class HTTPUtil {
                 .post(requestBody)
                 .build();
         client.newCall(request).enqueue(callback);
+    }
+
+    //异步执行POST方法
+    public static void POST(RequestBody requestBody, Boolean noIP, String ipUrl, okhttp3.Callback callback){
+        if(noIP){
+            Request request = new Request.Builder()
+                    .url("http://192.168.43.92:8080" + ipUrl)
+                    .post(requestBody)
+                    .build();
+            client.newCall(request).enqueue(callback);
+        }
+    }
+
+    public static void POST(Map<String, Object> map, String url, okhttp3.Callback callback){
+        FormBody.Builder builder = new FormBody.Builder();
+        for(String i : map.keySet()){
+            builder.add(i, (String) map.get(i));
+        }
+        RequestBody requestBody = builder.build();
+        POST(requestBody, true, url, callback);
     }
 
     //是否存在
@@ -131,6 +153,7 @@ public class HTTPUtil {
             jsonObject.addProperty("type", certification.getType());
             jsonObject.addProperty("number", certification.getNumber());
             jsonObject.addProperty("imageurl", certification.getImageUrl());
+            jsonObject.addProperty("status", certification.getStatus());
             json = gson.toJson(jsonObject);
         }else if(cls == Post.class){
             url = "/post/" + path;

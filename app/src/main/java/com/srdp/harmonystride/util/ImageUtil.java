@@ -1,5 +1,6 @@
 package com.srdp.harmonystride.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,10 +29,15 @@ public class ImageUtil {
     //图片剪裁请求码
     public static final int PICTURE_CROPPING_CODE = 300;
     //Glide请求图片选项配置
-    public static final RequestOptions requestOptions = RequestOptions
+    public static final RequestOptions requestOptionsWithCircle = RequestOptions
             .circleCropTransform()//圆形剪裁
             .diskCacheStrategy(DiskCacheStrategy.NONE);//不做磁盘缓存
     //.skipMemoryCache(true);//不做内存缓存
+
+    //上传成功的回调接口
+    public interface OnUploadImage{
+        void onUpload(Boolean isUpload);
+    }
 
     public static final int IMAGE_TYPE_USER = 601;
     public static final int IMAGE_TYPE_CERTIFCATION = 602;
@@ -99,28 +105,25 @@ public class ImageUtil {
      * 图片剪裁
      * @param uri 图片uri
      */
-    public static void pictureCropping(Context context, Uri uri) {
+    public static void pictureCropping(Context context, Uri uri, int aspectX, int aspectY) {
         // 调用系统中自带的图片剪裁
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         // 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
         intent.putExtra("crop", "true");
         // aspectX aspectY 是宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
+        intent.putExtra("aspectX", aspectX);
+        intent.putExtra("aspectY", aspectY);
         // outputX outputY 是裁剪图片宽高
-        intent.putExtra("outputX", 300);
-        intent.putExtra("outputY", 300);
+        intent.putExtra("outputX", aspectX * 100);
+        intent.putExtra("outputY", aspectY * 100);
         //支持缩放
         intent.putExtra("scale", true);
         // 返回裁剪后的数据
         intent.putExtra("return-data", true);
 
-        if(context instanceof ProfileEditActivity){
-            ((ProfileEditActivity)context).startActivityForResult(intent, PICTURE_CROPPING_CODE);
-        }else if(context instanceof CertificationActivity){
-            ((CertificationActivity)context).startActivityForResult(intent, PICTURE_CROPPING_CODE);
-        }
+        Activity activity = (Activity) context;
+        activity.startActivityForResult(intent, PICTURE_CROPPING_CODE);
 
     }
 
@@ -130,7 +133,7 @@ public class ImageUtil {
      * @param preImageUrl 待删除的图片URL
      * @param curImage 待上传的图片
      */
-    public static void upload(String preImageUrl, Bitmap curImage, String imageUrl){
+    public static void upload(String preImageUrl, Bitmap curImage, String imageUrl, OnUploadImage onUploadImage){
         //删除线程
         Thread deleteImg = new Thread(new Runnable() {
             @Override
@@ -144,7 +147,7 @@ public class ImageUtil {
             @Override
             public void run() {
                 //上传
-                OSSClientUtil.getInstance().uploadImage(ImageUtil.bitmapToByteArray(curImage), imageUrl);
+                OSSClientUtil.getInstance().uploadImage(ImageUtil.bitmapToByteArray(curImage), imageUrl, onUploadImage);
             }
         });
 

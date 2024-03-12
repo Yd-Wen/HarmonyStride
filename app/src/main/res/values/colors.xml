@@ -4,7 +4,7 @@
 
     <color name="colorPrimaryDark">#FF008EFF</color>
     <color name="colorPrimary">#FF00B0FF</color>
-    <color name="colorAccent">#FFFF00</color>
+    <color name="colorAccent">#FF9100</color>
 
     <color name="colorText">#323131</color>
     <color name="colorTitle">#000000</color>
@@ -19,6 +19,8 @@
     <color name="colorBtnWhite">#FFFFFF</color>
     <color name="colorBtnWhitePressed">#B6B6D8</color>
     <color name="colorBtnGrey">#B6B6D8</color>
+    <color name="colorBtnTiny">#E7E7E7</color>
+    <color name="colorBtnTinyBorder">#969696</color>
 
     <color name="colorDialogBackground">#FFFFFF</color>
 
@@ -34,6 +36,9 @@
     <color name="colorCircleImageBackground">#EBEBEB</color>
 
     <color name="colorProfileItemBackground">#2AA4DC</color>
+
+    <color name="colorTagBackground">#99BCBBBB</color>
+    <color name="colorTagSelectedBackground">#662AA4DC</color>
 
     <color name="editTextBackground">#FFFFFF</color>
 

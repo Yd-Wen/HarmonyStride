@@ -16,11 +16,13 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.modules.conversation.EaseConversationListFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.activity.ChatActivity;
 
 public class StatusFragment extends Fragment {
+    private SmartRefreshLayout smartRefreshLayout;
     private RecyclerView recyclerView;
 
     @Override

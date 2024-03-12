@@ -46,8 +46,11 @@ public class ButtonDialog extends BaseDialog{
     private Button takePhotoBtn;
     private Button selectFormAlbumBtn;
 
+    private Activity activity;
+
     public ButtonDialog(Context context) {
         super(context);
+        activity = (Activity) baseContext;
     }
 
     @Override
@@ -102,21 +105,13 @@ public class ButtonDialog extends BaseDialog{
     @AfterPermissionGranted(REQUEST_EXTERNAL_STORAGE_CODE)
     private void requestExternalPermission(){
         if(!EasyPermissions.hasPermissions(baseContext, paramExternal)){
-            //无权限 则进行权限请求
-            if(baseContext instanceof ProfileEditActivity){
-                EasyPermissions.requestPermissions((ProfileEditActivity)baseContext, "请求存储权限", REQUEST_EXTERNAL_STORAGE_CODE, paramExternal);
-            }else if(baseContext instanceof CertificationActivity){
-                EasyPermissions.requestPermissions((CertificationActivity)baseContext, "请求存储权限", REQUEST_EXTERNAL_STORAGE_CODE, paramExternal);
-            }
+        //无权限 则进行权限请求
+            EasyPermissions.requestPermissions(activity, "请求存储权限", REQUEST_EXTERNAL_STORAGE_CODE, paramExternal);
         }else {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_PICK);
             intent.setType("image/*");
-            if (baseContext instanceof ProfileEditActivity) {
-                ((ProfileEditActivity) baseContext).startActivityForResult(intent, OPEN_ALBUM_CODE);
-            }else if(baseContext instanceof CertificationActivity){
-                ((CertificationActivity) baseContext).startActivityForResult(intent, OPEN_ALBUM_CODE);
-            }
+            activity.startActivityForResult(intent, OPEN_ALBUM_CODE);
         }
     }
 
@@ -125,20 +120,12 @@ public class ButtonDialog extends BaseDialog{
     private void requestCameraPermission(){
         if(!EasyPermissions.hasPermissions(baseContext, paramCamera)){
             //无权限 则进行权限请求
-            if(baseContext instanceof ProfileEditActivity){
-                EasyPermissions.requestPermissions((ProfileEditActivity)baseContext, "请求相机权限", REQUEST_EXTERNAL_STORAGE_CODE, paramCamera);
-            }else if(baseContext instanceof CertificationActivity){
-                EasyPermissions.requestPermissions((CertificationActivity)baseContext, "请求相机权限", REQUEST_EXTERNAL_STORAGE_CODE, paramCamera);
-            }
+            EasyPermissions.requestPermissions(activity, "请求相机权限", REQUEST_EXTERNAL_STORAGE_CODE, paramCamera);
         }else {
             //启动相机
             //Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (baseContext instanceof ProfileEditActivity) {
-                ((ProfileEditActivity) baseContext).startActivityForResult(intent, OPEN_CAMERA_CODE);
-            }else if(baseContext instanceof CertificationActivity){
-                ((CertificationActivity) baseContext).startActivityForResult(intent, OPEN_CAMERA_CODE);
-            }
+            activity.startActivityForResult(intent, OPEN_CAMERA_CODE);
         }
     }
 
