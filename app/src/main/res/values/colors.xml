@@ -46,4 +46,6 @@
 
     <color name="colorWhite">#FFFFFF</color>
 
+    <color name="colorCardBorder">#99969696</color>
+
 </resources>

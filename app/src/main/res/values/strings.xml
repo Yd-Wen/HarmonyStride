@@ -63,9 +63,8 @@
     <string name="introduction_edit_hint">输入新签名</string>
     <string name="gender_edit">选择性别</string>
 
-    <!--帖子相关-->
-    <string name="post">帖子</string>
-    <string name="content">帖子内容：xxxxxxxxxxxxxxxxxxxx</string>
+    <string name="focus">关注</string>
+
 
     <!--图片相关-->
     <string name="take_photo">拍照</string>
@@ -98,6 +97,8 @@
     <string name="certify_info_default">审核中</string>
 
     <!--  帖子相关  -->
+    <string name="post">帖子</string>
+    <string name="content">帖子内容：xxxxxxxxxxxxxxxxxxxx</string>
     <string name="post_posting">发布帖子</string>
     <string name="post_post">发布</string>
     <string name="post_title_hint">标题（必填）</string>
@@ -110,5 +111,9 @@
 
     <string name="post_comment_count_default">0</string>
 
+    <!-- 评论相关 -->
+    <string name="comment_hint">我有话要说</string>
+    <string name="comment_all">全部评论</string>
+    <string name="comment_owner">只看楼主</string>
 
 </resources>

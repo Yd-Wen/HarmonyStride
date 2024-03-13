@@ -26,7 +26,6 @@ import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.util.HTTPUtil;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -172,7 +171,7 @@ public class LoginActivity extends BaseActivity {
                     JsonObject data = jsonObject.getAsJsonObject("data");
                     //注意不要用toString，否则引号会保留到字符串
                     curUser = new User(accountEt.getText().toString(), passwordEt.getText().toString());
-                    curUser.setId(data.get("id").getAsInt());
+                    curUser.setUid(data.get("id").getAsInt());
                     curUser.setAvatar(data.get("avatar").getAsString());
                     curUser.setNickname(data.get("nickname").getAsString());
                     curUser.setCertify(data.get("certify").getAsString());
@@ -251,7 +250,7 @@ public class LoginActivity extends BaseActivity {
     //登录，更新本地数据，记录配置信息
     private void login(){
         //写入配置信息
-        SharedPreferenceUtil.setParam("current_uid", curUser.getId());
+        SharedPreferenceUtil.setParam("current_uid", curUser.getUid());
         SharedPreferenceUtil.setParam("current_account", curUser.getAccount());
         SharedPreferenceUtil.setParam("current_password", curUser.getPassword());
         SharedPreferenceUtil.setParam("password_remember", rememberPwdCb.isChecked());

@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,10 +21,9 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.adapter.MyEntityAdapter;
 import com.srdp.harmonystride.adapter.PostBriefAdapter;
-import com.srdp.harmonystride.entity.MyEntity;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
@@ -35,7 +33,6 @@ import com.srdp.harmonystride.util.TimeUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.litepal.LitePal;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -55,7 +52,6 @@ public class HomeFragment extends Fragment{
 
 
     private View view;
-    //private SwipeRefreshLayout swipeRefreshLayout;
     private SmartRefreshLayout smartRefreshLayout;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
@@ -101,7 +97,7 @@ public class HomeFragment extends Fragment{
     }
 
     private void requestDatas(String time, Boolean isLoadMore){
-        //TODO:发送请求，获取帖子简略页列表，包括Post列表和User列表
+        //发送请求，获取帖子简略页列表，包括Post列表和User列表
         String label = "";
         Map<String, Object> params = new HashMap<>();
         params.put("time", time);
@@ -152,11 +148,6 @@ public class HomeFragment extends Fragment{
         smartRefreshLayout = view.findViewById(R.id.smart_refresh_layout);
         recyclerView = view.findViewById(R.id.recycler_view);
         floatingActionButton = getActivity().findViewById(R.id.floating_action_btn);
-
-        //设置进度条的颜色
-        //swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        //设置进度条的背景颜色
-        //swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.progressBackground);
         //初始化滑动工具
         scrollUtil = new ScrollUtil(getActivity().findViewById(R.id.bottom_navigation_view), recyclerView);
     }
@@ -174,7 +165,6 @@ public class HomeFragment extends Fragment{
         smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                //TODO:加载更多
                 String time = postList.get(postList.size()-1).getDatetime();
                 requestDatas(time, true);
             }
@@ -204,10 +194,10 @@ public class HomeFragment extends Fragment{
                 // 当滑动停止时
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     // 恢复图片加载
-                    Glide.with(getActivity().getApplicationContext()).resumeRequests();
+                    Glide.with(MyApplication.getContext()).resumeRequests();
                 } else {
                     // 暂停图片加载
-                    Glide.with(getActivity().getApplicationContext()).pauseRequests();
+                    Glide.with(MyApplication.getContext()).pauseRequests();
                 }
             }
         });
@@ -231,10 +221,6 @@ public class HomeFragment extends Fragment{
     }
 
     public void refresh(){
-        //smartRefreshLayout.setRefreshing(true);
-        //smartRefreshLayout.getRefreshHeader().autoOpen(1000, 0.5f, false);
-        //smartRefreshLayout.autoRefresh(0, 3000, 0.5f, true);
-        //smartRefreshLayout.autoRefresh(1000);
         requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
     }
 

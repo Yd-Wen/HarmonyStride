@@ -8,7 +8,6 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.HttpAuthHandler;
 import android.widget.TextView;
 
 
@@ -30,10 +29,7 @@ import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.ImageUtil;
 
-import org.litepal.LitePal;
-
 import java.io.IOException;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
@@ -147,7 +143,7 @@ public class ChatActivity extends BaseActivity {
                     JsonObject data = jsonObject.getAsJsonObject("data");
                     //注意不要用toString，否则引号会保留到字符串
                     curUser = new User();
-                    curUser.setId(data.get("id").getAsInt());
+                    curUser.setUid(data.get("id").getAsInt());
                     curUser.setAccount(data.get("id").getAsString());
                     curUser.setAvatar(data.get("avatar").getAsString());
                     curUser.setNickname(data.get("nickname").getAsString());

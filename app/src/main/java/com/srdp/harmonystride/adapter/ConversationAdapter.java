@@ -62,8 +62,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                 int position = viewHolder.getAdapterPosition();
                 Conversation conversation = conversationList.get(position);
                 Intent intent = new Intent(mContext, PostActivity.class);
-                intent.putExtra(PostActivity.POST_NAME, conversation.getAvatar());
-                intent.putExtra(PostActivity.POST_IMAGE, conversation.getNickname());
+                //intent.putExtra(PostActivity.POST_NAME, conversation.getAvatar());
+                //intent.putExtra(PostActivity.POST_IMAGE, conversation.getNickname());
                 mContext.startActivity(intent);
             }
         });

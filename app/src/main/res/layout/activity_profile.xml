@@ -87,6 +87,13 @@
                     android:layout_marginEnd="@dimen/dimen100"
                     android:gravity="center_vertical"
                     android:textAppearance="@style/TitleProfileAppearance"/>
+                <TextView
+                    android:id="@+id/tv_introduction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dimen100"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TitleProfileAppearance"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -139,33 +146,33 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:behavior_overlapTop="15dp">
 
-        <LinearLayout
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/smart_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="5dp"
-                app:cardCornerRadius="4dp">
-                <TextView
-                    android:id="@+id/tv_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="30dp" />
+            android:layout_height="wrap_content"
+            app:srlAccentColor="@color/colorAccent"
+            app:srlPrimaryColor="@color/colorPrimary"
+            app:srlReboundDuration="300"
+            app:srlDragRate="0.5"
+            app:srlHeaderMaxDragRate="1.5"
+            app:srlFooterMaxDragRate="1.5"
+            app:srlHeaderHeight="@dimen/dimen100"
+            app:srlFooterHeight="@dimen/dimen50"
+            app:srlEnableLoadMore="true">
 
-                <TextView
-                    android:id="@+id/tv_introduction"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dimen100"
-                    android:gravity="center_vertical"
-                    android:textAppearance="@style/TextProfileAppearance" />
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
+            <com.scwang.smart.refresh.header.BezierRadarHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.scwang.smart.refresh.footer.BallPulseFooter
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -1,6 +1,8 @@
 package com.srdp.harmonystride.entity;
 
-public class Post {
+import java.io.Serializable;
+
+public class Post implements Serializable {
     private int pid; //序号
     private int owner; //发布人（uid），非空唯一
     private String datetime; //发布时间，非空

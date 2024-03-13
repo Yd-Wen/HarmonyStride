@@ -10,7 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -33,7 +33,55 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/actionBarSize"
                 app:navigationIcon="@drawable/back"
-                app:layout_collapseMode="pin"/>
+                app:layout_collapseMode="pin">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_toolbar_avatar"
+                        android:layout_width="@dimen/dimen40"
+                        android:layout_height="@dimen/dimen40"
+                        app:civ_border_color="@color/colorCircleImageBorder"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/default_avatar"
+                        android:foreground="@drawable/avatar_stroke_default"/>
+
+                    <TextView
+                        android:id="@+id/tv_toolbar_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="@dimen/dimen5"
+                        android:gravity="center_vertical"
+                        android:textAppearance="@style/TextToolbarAppearance"/>
+
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen50"
+                android:padding="@dimen/dimen10"
+                android:orientation="horizontal">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_avatar"
+                    android:layout_width="@dimen/dimen50"
+                    android:layout_height="@dimen/dimen50"
+                    app:civ_border_color="@color/colorCircleImageBorder"
+                    app:civ_border_width="@dimen/dimen2"
+                    android:src="@drawable/default_avatar"
+                    android:foreground="@drawable/avatar_stroke_default"/>
+                <TextView
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="@dimen/dimen10"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="@dimen/dimen10"
+                    android:textAppearance="@style/TextProfileAppearance" />
+            </LinearLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -44,44 +92,104 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:behavior_overlapTop="15dp">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <androidx.cardview.widget.CardView
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/dimen20"
+                android:padding="@dimen/dimen10"
+                android:orientation="vertical"
+                android:background="@drawable/shape_card">
+
+                <TextView
+                    android:id="@+id/tv_post_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TitleAppearance"
+                    android:text="不同"/>
+
+                <WebView
+                    android:id="@+id/wv_post_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen2"
+                android:layout_marginTop="@dimen/dimen5"
+                android:background="@color/colorDividingLine"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="5dp"
-                app:cardCornerRadius="4dp">
-                <RelativeLayout
+                android:paddingHorizontal="@dimen/dimen20"
+                app:layout_collapseMode="pin"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dimen5"
+                    android:text="@string/comment_all"
+                    android:textAppearance="@style/TextAppearance"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dimen5"
+                    android:text="@string/comment_owner"
+                    android:textAppearance="@style/TextAppearance"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_comment"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen80"
-                    android:padding="@dimen/dimen10">
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/civ_avatar"
-                        android:layout_width="@dimen/dimen50"
-                        android:layout_height="@dimen/dimen50"
-                        android:layout_centerVertical="true"
-                        app:civ_border_color="@color/colorCircleImageBorder"
-                        app:civ_border_width="@dimen/dimen2"
-                        android:src="@drawable/default_avatar"
-                        android:foreground="@drawable/avatar_stroke_default"/>
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_action_btn"
+        android:id="@+id/fab_apply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@id/appbar_layout"
         app:layout_anchorGravity="bottom|end"
         android:layout_margin="@dimen/floatingActionButtonMargin"
-        android:src="@drawable/comment"/>
+        android:src="@drawable/application"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:paddingHorizontal="@dimen/dimen10"
+        android:orientation="horizontal"
+        android:background="@color/colorBtnTiny">
+
+        <EditText
+            android:layout_width="@dimen/dimen200"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen5"
+            android:padding="@dimen/dimen10"
+            android:background="@drawable/shape_edit_text"
+            android:hint="@string/comment_hint"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/post_comment"/>
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

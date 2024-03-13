@@ -85,10 +85,20 @@ public class MainActivity extends BaseActivity {
         //注册消息监听
         EMClient.getInstance().chatManager().addMessageListener(MyApplication.messamgeListener);
 
+        //初始化数据
+        initDatas();
         //初始化视图
         initViews();
         //初始化事件
         initEvents();
+        //加载数据
+        loadUserInfo();
+    }
+
+    private void initDatas(){
+        //通过账户名从本地数据库读取当前用户信息
+        List<User> Users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
+        curUser = Users.get(0);
     }
 
     public void initViews(){
@@ -142,7 +152,10 @@ public class MainActivity extends BaseActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.profile:
-                        navigateTo(ProfileActivity.class);
+                        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                        intent.putExtra("is_self", true);
+                        intent.putExtra("user_id", curUser.getUid());
+                        navigateTo(intent);
                         break;
                     case R.id.certify:
                         navigateTo(CertificationActivity.class);
@@ -214,20 +227,11 @@ public class MainActivity extends BaseActivity {
     }
 
     private void loadUserInfo(){
-        //通过账户名从本地数据库读取当前用户信息
-        List<User> Users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
-        curUser = Users.get(0);
         //显示当前用户信息
         if(!StringUtil.isEmpty(curUser.getAvatar())){ //头像资源路径不为空
             Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(requestOptions).into(avatarCiv);
         }
         nicknameTv.setText(curUser.getNickname());
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        loadUserInfo();
     }
 
     @Override

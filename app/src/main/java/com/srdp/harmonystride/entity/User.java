@@ -5,7 +5,7 @@ import org.litepal.crud.LitePalSupport;
 
 public class User extends LitePalSupport {
     @Column(unique = true, nullable = false)
-    private int id; //账号（手机号），非空唯一
+    private int uid; //账号（手机号），非空唯一
 
     @Column(unique = true, nullable = false)
     private String account; //账号（手机号），非空唯一
@@ -58,12 +58,12 @@ public class User extends LitePalSupport {
         this.focus = focus;
     }
 
-    public int getId() {
-        return id;
+    public int getUid() {
+        return uid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 
     public String getAccount() {
@@ -141,7 +141,7 @@ public class User extends LitePalSupport {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + uid +
                 ", account='" + account + '\'' +
                 ", password='" + password + '\'' +
                 ", avatar='" + avatar + '\'' +
@@ -152,5 +152,20 @@ public class User extends LitePalSupport {
                 ", introduction='" + introduction + '\'' +
                 ", focus='" + focus + '\'' +
                 '}';
+    }
+
+    public void copyFromUser(User user){
+        this.uid = user.getUid();
+        this.account = user.getAccount();
+        this.password = user.getPassword();
+        this.avatar = user.getAvatar();
+        this.nickname = user.getNickname();
+        this.certify = user.getCertify();
+        this.gender = user.getGender();
+        this.location = user.getLocation();
+        this.introduction = user.getIntroduction();
+        this.focus = user.getFocus();
+
+
     }
 }

@@ -18,22 +18,19 @@ import com.srdp.harmonystride.activity.PostActivity;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.ImageUtil;
+import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class PostBriefAdapter extends RecyclerView.Adapter<PostBriefAdapter.ViewHolder>{
+public class PostVisitAdapter extends RecyclerView.Adapter<PostVisitAdapter.ViewHolder>{
     private Context mContext;
     private List<Post> postList;
-    private List<User> userList;
+    private User user;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout postBriefPageLinearLayout;
+        LinearLayout postVisitPageLinearLayout;
 
-        CircleImageView userAvatarCiv;
-        TextView userNicknameTv;
         TextView postDatetimeTv;
         ImageView moreIv;
 
@@ -48,10 +45,8 @@ public class PostBriefAdapter extends RecyclerView.Adapter<PostBriefAdapter.View
 
         public ViewHolder(View view) {
             super(view);
-            postBriefPageLinearLayout = view.findViewById(R.id.ll_post_brief_page);
+            postVisitPageLinearLayout = view.findViewById(R.id.ll_post_visit_page);
 
-            userAvatarCiv = view.findViewById(R.id.civ_avatar);
-            userNicknameTv = view.findViewById(R.id.tv_user_nickname);
             postDatetimeTv = view.findViewById(R.id.tv_post_datatime);
             moreIv = view.findViewById(R.id.iv_more);
 
@@ -65,9 +60,10 @@ public class PostBriefAdapter extends RecyclerView.Adapter<PostBriefAdapter.View
         }
     }
 
-    public PostBriefAdapter(List<Post> postList, List<User> userList){
+    public PostVisitAdapter(List<Post> postList, User user){
         this.postList = postList;
-        this.userList = userList;
+        this.user = user;
+        LogUtil.e("user", user.toString());
     }
 
     @NonNull
@@ -76,17 +72,17 @@ public class PostBriefAdapter extends RecyclerView.Adapter<PostBriefAdapter.View
         if (mContext == null) {
             mContext = parent.getContext();
         }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.content_post_brief_page, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.content_post_visit_page, parent, false);
         final ViewHolder viewHolder = new ViewHolder(view);
         //点击事件监听器
-        viewHolder.postBriefPageLinearLayout.setOnClickListener(new View.OnClickListener() {
+        viewHolder.postVisitPageLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = viewHolder.getAdapterPosition();
                 Post post = postList.get(position);
-                User user = userList.get(position);
                 Intent intent = new Intent(mContext, PostActivity.class);
                 //TODO:传递数据进入帖子详情页
+
                 intent.putExtra("user_id", user.getUid());
                 intent.putExtra("user_avatar", user.getAvatar());
                 intent.putExtra("user_nickname", user.getNickname());
@@ -101,13 +97,7 @@ public class PostBriefAdapter extends RecyclerView.Adapter<PostBriefAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //绑定数据
         Post post = postList.get(position);
-        User user = userList.get(position);
 
-        Glide.with(mContext)
-                .load(ImageUtil.getImagePath(user.getAvatar()))
-                .error(R.drawable.load_error)
-                .into(holder.userAvatarCiv);
-        holder.userNicknameTv.setText(user.getNickname());
         holder.postDatetimeTv.setText(post.getDatetime());
 
         holder.postTitleTv.setText(post.getTitle());
@@ -126,10 +116,9 @@ public class PostBriefAdapter extends RecyclerView.Adapter<PostBriefAdapter.View
     }
 
     @Override
-    public void onViewRecycled(@NonNull PostBriefAdapter.ViewHolder holder) {
+    public void onViewRecycled(@NonNull PostVisitAdapter.ViewHolder holder) {
         super.onViewRecycled(holder);
         // 在 onViewRecycled 中取消加载请求
-        Glide.with(mContext).clear(holder.userAvatarCiv);
         Glide.with(mContext).clear(holder.postImageIv);
     }
 
