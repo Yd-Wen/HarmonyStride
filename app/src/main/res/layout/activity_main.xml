@@ -1,87 +1,26 @@
-<androidx.drawerlayout.widget.DrawerLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.MainActivity">
 
-    <!-- 主要内容 -->
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:orientation="vertical"
+    <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appbar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/tool_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/actionBarSize"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    android:background="@color/colorPrimary"
-                    app:navigationIcon="@drawable/menu"
-                    app:popupTheme="@style/MenuStyle">
-                    <TextView
-                        android:id="@+id/tv_toolbar_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textAppearance="@style/TitleAppearance" />
-                </androidx.appcompat.widget.Toolbar>
-
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <FrameLayout
-                android:id="@+id/fragment_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/floating_action_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/floatingActionButtonMargin"
-                android:src="@drawable/add"/>
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-        <View
+            android:layout_weight="1"/>
+    <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/lineHeight"
             android:background="@color/colorDividingLine"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottomNavigationSize"
+        android:background="@color/colorMenuBackground"
+        app:menu="@menu/menu_bottom_navigation" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation_view"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/bottomNavigationSize"
-            android:background="@color/colorMenuBackground"
-            app:menu="@menu/menu_bottom_navigation" />
-
-
-    </LinearLayout>
-
-    <!-- 抽屉内容 -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view"
-        android:layout_width="@dimen/drawerWidth"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/navigation_header"
-        app:menu="@menu/menu_drawer" />
-
-
-
-</androidx.drawerlayout.widget.DrawerLayout>
+</LinearLayout>

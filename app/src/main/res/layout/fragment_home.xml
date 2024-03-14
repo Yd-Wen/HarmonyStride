@@ -1,39 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".fragment.HomeFragment">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.HomeFragment"
+    android:id="@+id/drawer_layout"
+    app:behavior_overlapTop="@dimen/dimen20">
 
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
-        android:id="@+id/smart_refresh_layout"
+    <!-- 主要内容 -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srlAccentColor="@color/colorAccent"
-        app:srlPrimaryColor="@color/colorPrimary"
-        app:srlReboundDuration="300"
-        app:srlDragRate="0.5"
-        app:srlHeaderMaxDragRate="1.5"
-        app:srlFooterMaxDragRate="1.5"
-        app:srlHeaderHeight="@dimen/dimen100"
-        app:srlFooterHeight="@dimen/dimen50"
-        app:srlEnableLoadMore="true">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <com.scwang.smart.refresh.header.BezierRadarHeader
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="@dimen/dimen200">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="@color/colorPrimary"
+                android:fitsSystemWindows="true">
+
+                <ImageView
+                    android:id="@+id/image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax"
+                    android:fitsSystemWindows="true"/>
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/tool_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/actionBarSize"
+                    app:layout_collapseMode="pin">
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/civ_toolbar_avatar"
+                                android:layout_width="@dimen/dimen40"
+                                android:layout_height="@dimen/dimen40"
+                                app:civ_border_color="@color/colorCircleImageBorder"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/default_avatar"
+                                android:foreground="@drawable/avatar_stroke_default"/>
+
+                            <TextView
+                                android:id="@+id/tv_toolbar_nickname"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:paddingHorizontal="@dimen/dimen5"
+                                android:gravity="center_vertical"
+                                android:textAppearance="@style/TextToolbarAppearance"/>
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_toolbar_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textAppearance="@style/TitleAppearance"
+                            android:text="@string/home"/>
+                    </FrameLayout>
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:behavior_overlapTop="@dimen/dimen20">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/dimen5"
+                android:paddingHorizontal="@dimen/dimen20"
+                android:background="@drawable/shape_top_card"
+                android:text="筛选"/>
+            <com.scwang.smart.refresh.layout.SmartRefreshLayout
+                android:id="@+id/smart_refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srlAccentColor="@color/colorAccent"
+                app:srlPrimaryColor="@color/colorPrimary"
+                app:srlReboundDuration="300"
+                app:srlDragRate="0.5"
+                app:srlHeaderMaxDragRate="1.5"
+                app:srlFooterMaxDragRate="1.5"
+                app:srlHeaderHeight="@dimen/dimen100"
+                app:srlFooterHeight="@dimen/dimen50"
+                app:srlEnableLoadMore="true">
 
-        <com.scwang.smart.refresh.footer.BallPulseFooter
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+                <pl.droidsonroids.gif.GifImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen50"
+                    android:src="@drawable/loading"
+                    android:scaleType="center"
+                    app:layout_srlSpinnerStyle="Scale"
+                    app:layout_srlBackgroundColor="@android:color/transparent"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-</FrameLayout>
+                <com.scwang.smart.refresh.footer.BallPulseFooter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_action_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/floatingActionButtonMargin"
+            android:src="@drawable/add"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- 抽屉内容 -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="@dimen/drawerWidth"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/navigation_header"
+        app:menu="@menu/menu_drawer" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

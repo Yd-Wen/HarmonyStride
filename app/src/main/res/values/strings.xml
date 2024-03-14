@@ -27,6 +27,9 @@
     <string name="message">消息</string>
     <string name="back">返回</string>
     <string name="edit">编辑</string>
+    <string name="filter">筛选</string>
+    <string name="search">搜索</string>
+    <string name="search_hint">输入关键字搜索</string>
     <string name="more">更多</string>
     <string name="close">关闭</string>
     <string name="sort">排序</string>
@@ -115,5 +118,19 @@
     <string name="comment_hint">我有话要说</string>
     <string name="comment_all">全部评论</string>
     <string name="comment_owner">只看楼主</string>
+
+    <!--  刷新相关  -->
+    <string name="refresh_header_pulldown">下拉以刷新</string>
+    <string name="refresh_header_refreshing">正在刷新</string>
+    <string name="refresh_header_loading">正在加载</string>
+    <string name="refresh_header_release">释放立即刷新</string>
+    <string name="refresh_header_finish">刷新完成</string>
+
+    <!--  加载相关  -->
+    <string name="load_footer_pulling">上拉加载更多</string>
+    <string name="load_footer_release">释放立即加载</string>
+    <string name="load_footer_refreshing">正在刷新</string>
+    <string name="load_footer_loading">正在加载</string>
+    <string name="load_footer_finish">加载完成</string>
 
 </resources>

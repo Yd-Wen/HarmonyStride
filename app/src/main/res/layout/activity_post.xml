@@ -62,7 +62,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen50"
+                android:layout_gravity="center_vertical"
                 android:padding="@dimen/dimen10"
                 android:orientation="horizontal">
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:behavior_overlapTop="15dp">
+        app:behavior_overlapTop="@dimen/dimen20">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

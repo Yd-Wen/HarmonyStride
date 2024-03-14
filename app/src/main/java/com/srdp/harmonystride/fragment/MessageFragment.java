@@ -16,21 +16,9 @@ import com.srdp.harmonystride.activity.ChatActivity;
 public class MessageFragment extends EaseConversationListFragment {
     private IMmsgBroadcast iMmsgBroadcast;
     public static final String BROADCAST_ACTION_DISC = "com.srdp.harmonystride.fragment.IMmsgBroadcast";
-    //    private RecyclerView recyclerView;
-//
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        View view;
-//        view = inflater.inflate(R.layout.fragment_status, container, false);
-//
-//        //获取布局
-//        recyclerView = view.findViewById(R.id.recycler_view);
-//
-//        // Inflate the layout for this fragment
-//        return view;
-//    }
-//
+
+
+
     @Override
     public void onResume() {
         super.onResume();

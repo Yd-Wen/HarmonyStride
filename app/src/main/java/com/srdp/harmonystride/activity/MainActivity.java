@@ -25,9 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
-import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMMessage;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.dialog.TipDialog;
@@ -35,10 +33,7 @@ import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.fragment.HomeFragment;
 import com.srdp.harmonystride.fragment.MessageFragment;
 import com.srdp.harmonystride.fragment.StatusFragment;
-import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.ImageUtil;
-import com.srdp.harmonystride.util.LogUtil;
-import com.srdp.harmonystride.util.OSSClientUtil;
 import com.srdp.harmonystride.util.ScrollUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
@@ -50,28 +45,11 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity {
-    //Glide请求图片选项配置
-    private RequestOptions requestOptions = RequestOptions
-            .circleCropTransform()//圆形剪裁
-            .diskCacheStrategy(DiskCacheStrategy.NONE);//不做磁盘缓存
-    //.skipMemoryCache(true);//不做内存缓存
-
-    private AppBarLayout appBarLayout;
-    private Toolbar toolbar;
-    private TextView titleTv;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private CircleImageView avatarCiv;
-    private TextView nicknameTv;
-
-    private User curUser; //当前用户
-
     private HomeFragment homeFragment;
     private StatusFragment statusFragment;
     private MessageFragment messageFragment;
     private Fragment curFragment;
 
-    private FloatingActionButton floatingActionButton;
     private BottomNavigationView bottomNavigationView;
 
     private ScrollUtil scrollUtil; // 滑动工具
@@ -85,43 +63,14 @@ public class MainActivity extends BaseActivity {
         //注册消息监听
         EMClient.getInstance().chatManager().addMessageListener(MyApplication.messamgeListener);
 
-        //初始化数据
-        initDatas();
         //初始化视图
         initViews();
         //初始化事件
         initEvents();
-        //加载数据
-        loadUserInfo();
     }
 
-    private void initDatas(){
-        //通过账户名从本地数据库读取当前用户信息
-        List<User> Users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
-        curUser = Users.get(0);
-    }
 
     public void initViews(){
-        //获取drawerLayout
-        drawerLayout = findViewById(R.id.drawer_layout);
-        //获取滑动导航栏
-        navigationView = findViewById(R.id.navigation_view);
-        //获取header内部控件
-        avatarCiv = navigationView.getHeaderView(0).findViewById(R.id.civ_avatar);
-        nicknameTv = navigationView.getHeaderView(0).findViewById(R.id.tv_nickname);
-
-        //获取工具栏
-        appBarLayout = findViewById(R.id.appbar_layout);
-        toolbar = findViewById(R.id.tool_bar);
-        titleTv = findViewById(R.id.tv_toolbar_title);
-        setSupportActionBar(toolbar);
-        //删除标题
-        getSupportActionBar().setTitle(null);
-        //设置新标题
-        titleTv.setText(R.string.home);
-        //为工具栏设置菜单溢出图标
-        Drawable overflowIcon = ContextCompat.getDrawable(this, R.drawable.sort);
-        toolbar.setOverflowIcon(overflowIcon);
 
         //获取碎片
         homeFragment = new HomeFragment();
@@ -137,76 +86,18 @@ public class MainActivity extends BaseActivity {
         fragmentTransaction.add(R.id.fragment_container, homeFragment);
         fragmentTransaction.commit();
 
-        //获取悬浮按钮
-        floatingActionButton = findViewById(R.id.floating_action_btn);
-
         //获取底部导航栏
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 
     }
 
     private void initEvents(){
-        //滑动菜单单击事件监听器
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.profile:
-                        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                        intent.putExtra("is_self", true);
-                        intent.putExtra("user_id", curUser.getUid());
-                        navigateTo(intent);
-                        break;
-                    case R.id.certify:
-                        navigateTo(CertificationActivity.class);
-                        break;
-                    case R.id.setting:
-                        showToast(getString(R.string.setting));
-                        break;
-                    case R.id.logout:
-                        drawerLayout.closeDrawers();
-                        new TipDialog(MainActivity.this, "是否退出登录？", new TipDialog.OnDismissListener() {
-                            @Override
-                            public void onDismiss(Boolean isConfirm) {
-                                if(isConfirm){
-                                    navigateTo(LoginActivity.class);
-                                    finish();
-                                    //下次开屏页结束后进入登录页
-                                    SharedPreferenceUtil.setParam("is_login", false);
-                                    //登出IM
-                                    EMClient.getInstance().logout(true);
-                                }
-                            }
-                        }).show();
-                        break;
-                    default: break;
-                }
-                return true;
-            }
-        });
-
-        //工具栏导航图标事件监听器
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
-
-        //悬浮按钮单击事件监听器
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigateTo(PostingActivity.class);
-            }
-        });
-
         //底部导航栏单击事件监听器
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 //显示toolbar
-                appBarLayout.setExpanded(true, true);
+                //statusFragment.appBarLayout.setExpanded(true, true);
                 //替换碎片
                 switch (item.getItemId()){
                     case R.id.home:
@@ -224,14 +115,6 @@ public class MainActivity extends BaseActivity {
                 return true;
             }
         });
-    }
-
-    private void loadUserInfo(){
-        //显示当前用户信息
-        if(!StringUtil.isEmpty(curUser.getAvatar())){ //头像资源路径不为空
-            Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(requestOptions).into(avatarCiv);
-        }
-        nicknameTv.setText(curUser.getNickname());
     }
 
     @Override
@@ -259,7 +142,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.edit:
+            case R.id.more:
                 //TODO：null
                 break;
             default:
@@ -293,7 +176,6 @@ public class MainActivity extends BaseActivity {
                 fragmentTransaction.show(tgtFragment);
             }
             //设置工具栏和底部导航栏
-            titleTv.setText(title);
             bottomNavigationView.getMenu().findItem(R.id.home).setIcon(R.drawable.home);
             bottomNavigationView.getMenu().findItem(R.id.home).setTitle(R.string.home);
 
