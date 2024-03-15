@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tag">
+        <item>全部</item>
+        <item>志愿</item>
+        <item>求职</item>
+        <item>求助</item>
+        <item>招聘</item>
+    </string-array>
+</resources>

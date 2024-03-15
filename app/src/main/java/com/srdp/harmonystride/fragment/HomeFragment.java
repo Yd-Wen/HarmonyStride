@@ -1,6 +1,7 @@
 package com.srdp.harmonystride.fragment;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,10 +28,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.hyphenate.chat.EMClient;
-import com.scwang.smart.refresh.header.BezierRadarHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
@@ -36,38 +37,27 @@ import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.activity.CertificationActivity;
 import com.srdp.harmonystride.activity.LoginActivity;
-import com.srdp.harmonystride.activity.MainActivity;
-import com.srdp.harmonystride.activity.PostActivity;
 import com.srdp.harmonystride.activity.PostingActivity;
 import com.srdp.harmonystride.activity.ProfileActivity;
+import com.srdp.harmonystride.activity.SearchActivity;
 import com.srdp.harmonystride.adapter.PostBriefAdapter;
 import com.srdp.harmonystride.dialog.TipDialog;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.User;
-import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.ImageUtil;
-import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.ScrollUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.TimeUtil;
 import com.srdp.harmonystride.util.ToastUtil;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.litepal.LitePal;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class HomeFragment extends Fragment{
     private static final int LOADMORE_SUCCESS = 1; //请求刷新数据
@@ -84,21 +74,27 @@ public class HomeFragment extends Fragment{
     private CircleImageView avatarCiv;
     private TextView nicknameTv;
 
-    private User curUser; //当前用户
-
     private FloatingActionButton floatingActionButton;
 
-    private ToastUtil toastUtil;
+    private ImageView searchIv;
+
+    private RadioGroup tagRg;
+    private RadioButton tagAllRb;
+    private RadioButton tagVolunteerRb;
+    private RadioButton tagJobRb;
+    private RadioButton tagHelpRb;
+    private RadioButton tagRecruitmentRb;
 
     private SmartRefreshLayout smartRefreshLayout;
     private RecyclerView recyclerView;
 
+    private ToastUtil toastUtil;
     private ScrollUtil scrollUtil; // 滑动工具
     private static final int SCROLL_THRESHOLD = 1000; // 设置滑动阈值
 
     private List<Post> postList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
-
+    private User curUser; //当前用户
     private PostBriefAdapter postBriefAdapter;
 
     private final Handler handler = new Handler(Looper.getMainLooper()){
@@ -243,6 +239,14 @@ public class HomeFragment extends Fragment{
 
         floatingActionButton = view.findViewById(R.id.floating_action_btn);
 
+        searchIv = view.findViewById(R.id.iv_search);
+        tagRg = view.findViewById(R.id.rg_label);
+        tagAllRb = view.findViewById(R.id.rb_label_a);
+        tagVolunteerRb = view.findViewById(R.id.rb_label_v);
+        tagJobRb = view.findViewById(R.id.rb_label_j);
+        tagHelpRb = view.findViewById(R.id.rb_label_h);
+        tagRecruitmentRb = view.findViewById(R.id.rb_label_r);
+
         //获取布局
         smartRefreshLayout = view.findViewById(R.id.smart_refresh_layout);
         recyclerView = view.findViewById(R.id.recycler_view);
@@ -267,6 +271,13 @@ public class HomeFragment extends Fragment{
                     toolbarNicknameTv.setVisibility(View.GONE);
                     titleTv.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        toolbarAvatarCiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
             }
         });
 
@@ -311,20 +322,59 @@ public class HomeFragment extends Fragment{
             }
         });
 
-        //工具栏导航图标事件监听器
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
-
         //悬浮按钮单击事件监听器
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), PostingActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        //搜索框
+        searchIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //筛选
+        tagRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int id) {
+
+                tagAllRb.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                tagVolunteerRb.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                tagJobRb.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                tagHelpRb.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                tagRecruitmentRb.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                switch (id){
+                    case R.id.rb_label_a:
+                        //tagAllRb.getPaint().setFakeBoldText(true);
+                        tagAllRb.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        break;
+                    case R.id.rb_label_v:
+                        tagVolunteerRb.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        break;
+                    case R.id.rb_label_j:
+                        tagJobRb.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        break;
+                    case R.id.rb_label_h:
+                        tagHelpRb.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        break;
+                    case R.id.rb_label_r:
+                        tagRecruitmentRb.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        break;
+                    default:
+                        break;
+                }
+                RadioButton radioButton = view.findViewById(id);
+                if(radioButton != null){
+                    //TODO:筛选
+
+                }
             }
         });
 
@@ -377,13 +427,6 @@ public class HomeFragment extends Fragment{
             }
         });
 
-        toolbarAvatarCiv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
-
         //设置布局管理器
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -412,10 +455,10 @@ public class HomeFragment extends Fragment{
         }
     }
 
-    public void refresh(){
-        smartRefreshLayout.autoRefresh();
-        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
-    }
+//    public void refresh(){
+//        smartRefreshLayout.autoRefresh();
+//        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
+//    }
 
 
 }

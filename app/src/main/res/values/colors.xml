@@ -11,6 +11,7 @@
     <color name="colorHint">#929292</color>
     <color name="colorWarning">#FF1100</color>
     <color name="colorToolbarTitle">#FFFFFF</color>
+    <color name="colorToolbarGreyBackground">#E7E7E7</color>
 
     <color name="colorBtnOrange">#D3FF9800</color>
     <color name="colorBtnOrangePressed">#FF3D00</color>

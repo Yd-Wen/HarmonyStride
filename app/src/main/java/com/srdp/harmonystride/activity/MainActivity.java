@@ -132,24 +132,24 @@ public class MainActivity extends BaseActivity {
     }
 
     //获取工具栏菜单
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu){
+//        getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
+//        return true;
+//    }
 
     //为工具栏菜单绑定单击事件监听器
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.more:
-                //TODO：null
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item){
+//        switch (item.getItemId()){
+//            case R.id.more:
+//                //TODO：null
+//                break;
+//            default:
+//                break;
+//        }
+//        return true;
+//    }
 
 
     private void onHandleItemClick(Fragment tgtFragment, int title){
@@ -162,7 +162,7 @@ public class MainActivity extends BaseActivity {
                 //回到顶部
                 if(scrollUtil.getScrollOffset() >= SCROLL_THRESHOLD) scrollUtil.scrollToTop();
                 //刷新
-                else homeFragment.refresh();
+                //else homeFragment.refresh();
             }
         }else {
             //隐藏当前fragment

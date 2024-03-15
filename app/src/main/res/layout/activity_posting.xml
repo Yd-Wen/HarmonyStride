@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionBarSize"
         app:navigationIcon="@drawable/close"
-        android:background="@color/colorBtnTiny">
+        android:background="@color/colorToolbarGreyBackground">
 
         <TextView
             android:layout_width="wrap_content"
@@ -174,7 +174,6 @@
                         android:drawablePadding="@dimen/dimen5"
                         android:button="@null"
                         android:background="@drawable/selector_shape_tag"/>
-
                 </RadioGroup>
             </LinearLayout>
         </HorizontalScrollView>

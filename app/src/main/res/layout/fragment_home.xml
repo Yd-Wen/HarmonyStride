@@ -41,39 +41,52 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/actionBarSize"
                     app:layout_collapseMode="pin">
-                    <FrameLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <FrameLayout
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/civ_toolbar_avatar"
-                                android:layout_width="@dimen/dimen40"
-                                android:layout_height="@dimen/dimen40"
-                                app:civ_border_color="@color/colorCircleImageBorder"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/default_avatar"
-                                android:foreground="@drawable/avatar_stroke_default"/>
-
-                            <TextView
-                                android:id="@+id/tv_toolbar_nickname"
-                                android:layout_width="wrap_content"
+                            android:layout_weight="1">
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:paddingHorizontal="@dimen/dimen5"
-                                android:gravity="center_vertical"
-                                android:textAppearance="@style/TextToolbarAppearance"/>
-                        </LinearLayout>
-                        <TextView
-                            android:id="@+id/tv_toolbar_title"
+                                android:orientation="horizontal">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:id="@+id/civ_toolbar_avatar"
+                                    android:layout_width="@dimen/dimen40"
+                                    android:layout_height="@dimen/dimen40"
+                                    app:civ_border_color="@color/colorCircleImageBorder"
+                                    android:layout_gravity="center_vertical"
+                                    android:src="@drawable/default_avatar"
+                                    android:foreground="@drawable/avatar_stroke_default"/>
+
+                                <TextView
+                                    android:id="@+id/tv_toolbar_nickname"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingHorizontal="@dimen/dimen5"
+                                    android:gravity="center_vertical"
+                                    android:textAppearance="@style/TextToolbarAppearance"/>
+                            </LinearLayout>
+                            <TextView
+                                android:id="@+id/tv_toolbar_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:textAppearance="@style/TitleAppearance"
+                                android:text="@string/home"/>
+                        </FrameLayout>
+                        <ImageView
+                            android:id="@+id/iv_search"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:textAppearance="@style/TitleAppearance"
-                            android:text="@string/home"/>
-                    </FrameLayout>
+                            android:layout_marginEnd="@dimen/dimen10"
+                            android:src="@drawable/search"/>
+                    </LinearLayout>
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -84,13 +97,82 @@
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:behavior_overlapTop="@dimen/dimen20">
-            <TextView
+
+            <RadioGroup
+                android:id="@+id/rg_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/dimen5"
-                android:paddingHorizontal="@dimen/dimen20"
-                android:background="@drawable/shape_top_card"
-                android:text="筛选"/>
+                android:background="@color/colorPrimary"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/rb_label_a"
+                    android:checked="true"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="@dimen/dimen10"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/dimen5"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance"
+                    android:textStyle="bold"
+                    android:text="@string/post_label_all"
+                    android:button="@null"
+                    android:background="@drawable/selector_shape_table"/>
+                <RadioButton
+                    android:id="@+id/rb_label_v"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="@dimen/dimen10"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/dimen5"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance"
+                    android:text="@string/post_label_volunteer"
+                    android:button="@null"
+                    android:background="@drawable/selector_shape_table"/>
+                <RadioButton
+                    android:id="@+id/rb_label_j"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="@dimen/dimen10"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/dimen5"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance"
+                    android:text="@string/post_label_job"
+                    android:button="@null"
+                    android:background="@drawable/selector_shape_table"/>
+                <RadioButton
+                    android:id="@+id/rb_label_h"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="@dimen/dimen10"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/dimen5"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance"
+                    android:text="@string/post_label_help"
+                    android:button="@null"
+                    android:background="@drawable/selector_shape_table"/>
+                <RadioButton
+                    android:id="@+id/rb_label_r"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="@dimen/dimen10"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/dimen5"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance"
+                    android:text="@string/post_label_recruitment"
+                    android:button="@null"
+                    android:background="@drawable/selector_shape_table"/>
+            </RadioGroup>
+
             <com.scwang.smart.refresh.layout.SmartRefreshLayout
                 android:id="@+id/smart_refresh_layout"
                 android:layout_width="match_parent"
