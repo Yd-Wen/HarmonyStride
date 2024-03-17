@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorToolbarGreyBackground"
+    tools:context=".activity.PostSettingActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionBarSize"
+        app:navigationIcon="@drawable/close"
+        android:background="@color/colorToolbarGreyBackground">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/TitleAppearance"
+            android:text="@string/post_setting"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <Switch
+        android:id="@+id/sw_apply_allow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen50"
+        android:paddingHorizontal="@dimen/dimen10"
+        android:background="@color/colorWhite"
+        android:textAppearance="@style/TextAppearance"
+        android:text="@string/apply_manage"
+        android:textOn="@string/apply_allow_true"
+        android:textOff="@string/apply_allow_false"
+        android:thumbTint="@color/selector_color_switch_thumb"
+        android:trackTint="@color/selector_color_switch_track"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen1"
+        android:background="@color/colorDividingLine"/>
+
+    <TextView
+        android:id="@+id/tv_apply_find"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen50"
+        android:paddingHorizontal="@dimen/dimen10"
+        android:background="@color/colorWhite"
+        android:drawableEnd="@drawable/go"
+        android:gravity="center_vertical"
+        android:textAppearance="@style/TextAppearance"
+        android:text="@string/apply_find"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen5"
+        android:background="@color/colorDividingLine"/>
+
+    <TextView
+        android:id="@+id/tv_post_delete"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen50"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:textAppearance="@style/TextRedAppearance"
+        android:text="@string/post_delete"/>
+
+</LinearLayout>

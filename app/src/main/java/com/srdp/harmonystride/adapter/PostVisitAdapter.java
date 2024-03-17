@@ -101,7 +101,7 @@ public class PostVisitAdapter extends RecyclerView.Adapter<PostVisitAdapter.View
         holder.postDatetimeTv.setText(post.getDatetime());
 
         holder.postTitleTv.setText(post.getTitle());
-        holder.postContentTv.setText(StringUtil.removeHtmlTags(post.getContent()));
+        holder.postContentTv.setText(post.getContentWithoutHtmlTags());
 
         if(post.getImages() == null){
             holder.postImageIv.setVisibility(View.GONE);

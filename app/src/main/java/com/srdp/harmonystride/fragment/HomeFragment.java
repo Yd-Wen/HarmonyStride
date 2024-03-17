@@ -28,6 +28,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hyphenate.chat.EMClient;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -44,20 +46,30 @@ import com.srdp.harmonystride.adapter.PostBriefAdapter;
 import com.srdp.harmonystride.dialog.TipDialog;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.User;
+import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.ImageUtil;
+import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.ScrollUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.TimeUtil;
 import com.srdp.harmonystride.util.ToastUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.litepal.LitePal;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class HomeFragment extends Fragment{
     private static final int LOADMORE_SUCCESS = 1; //请求刷新数据
@@ -95,6 +107,7 @@ public class HomeFragment extends Fragment{
     private List<Post> postList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
     private User curUser; //当前用户
+    private String curTag; //当前标签
     private PostBriefAdapter postBriefAdapter;
 
     private final Handler handler = new Handler(Looper.getMainLooper()){
@@ -127,9 +140,9 @@ public class HomeFragment extends Fragment{
         //加载用户数据
         loadUserInfo();
         //初始化事件
-        initActions();
+        initEvents();
         //请求数据
-        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
+        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), curTag,false);
         // Inflate the layout for this fragment
         return view;
     }
@@ -139,81 +152,81 @@ public class HomeFragment extends Fragment{
         List<User> Users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
         curUser = Users.get(0);
         toastUtil = new ToastUtil(MyApplication.getContext());
+        curTag = getString(R.string.post_label_all);
     }
 
-//    private void requestDatas(String time, Boolean isLoadMore){
-//        //发送请求，获取帖子简略页列表，包括Post列表和User列表
-//        String label = "";
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("time", time);
-//        params.put("label", label);
-//        HTTPUtil.POST(params, "/post/browse", new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                LogUtil.e("browse post", "error");
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                LogUtil.d("browse post", "success");
-//                try {
-//                    JSONObject jsonObject = new JSONObject(response.body().string());
-//                    String postS = jsonObject.getJSONObject("data").getString("postList");
-//                    String userS = jsonObject.getJSONObject("data").getString("userList");
-//                    Gson gson = new Gson();
-//                    List<Post> postL = gson.fromJson(postS, new TypeToken<List<Post>>(){}.getType());
-//                    List<User> userL = gson.fromJson(userS, new TypeToken<List<User>>(){}.getType());
-//                    //获取新数据
-//                    if(!isLoadMore){
-//                        postList.clear();
-//                        userList.clear();
-//                    }
-//                    for(int i = 0; i < postL.size(); ++i){
-//                        postList.add(postL.get(i));
-//                        userList.add(userL.get(i));
-//                    }
-//                    //传递消息
-//                    Message message = new Message();
-//                    if(isLoadMore){
-//                        message.what = LOADMORE_SUCCESS;
-//                    }else {
-//                        message.what = REFRESH_SUCCESS;
-//                    }
-//                    handler.sendMessage(message);
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//    }
-
-    private void requestDatas(String time, Boolean isLoadMore){
-        //暂停一秒
-
-        if(!isLoadMore){
-            postList.clear();
-            userList.clear();
-        }
+    private void requestDatas(String time, String label, Boolean isLoadMore){
         //发送请求，获取帖子简略页列表，包括Post列表和User列表
-        Post post = new Post(1, 1, "2024-01-01", "title", "content", "志愿", null, 1, "1");
-        for(int i = 0; i < 10; i++){
-            postList.add(post);
-        }
-        User user = new User("account", "password", null, "nickname", "0", "保密", "", "系统原装签名：与你同行", "0");
-        for(int i = 0; i < 10; i++){
-            userList.add(user);
-        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("time", time);
+        params.put("label", label);
+        HTTPUtil.POST(params, "/post/browse", new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e("browse post", "error" + e);
+            }
 
-        //传递消息
-        Message message = new Message();
-        if(isLoadMore){
-            message.what = LOADMORE_SUCCESS;
-        }else {
-            message.what = REFRESH_SUCCESS;
-        }
-        handler.sendMessage(message);
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d("browse post", "success");
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    String postS = jsonObject.getJSONObject("data").getString("postList");
+                    String userS = jsonObject.getJSONObject("data").getString("userList");
+                    Gson gson = new Gson();
+                    List<Post> postL = gson.fromJson(postS, new TypeToken<List<Post>>(){}.getType());
+                    List<User> userL = gson.fromJson(userS, new TypeToken<List<User>>(){}.getType());
+                    //获取新数据
+                    if(!isLoadMore){
+                        postList.clear();
+                        userList.clear();
+                    }
+                    for(int i = 0; i < postL.size(); ++i){
+                        postList.add(postL.get(i));
+                        userList.add(userL.get(i));
+                    }
+                    //传递消息
+                    Message message = new Message();
+                    if(isLoadMore){
+                        message.what = LOADMORE_SUCCESS;
+                    }else {
+                        message.what = REFRESH_SUCCESS;
+                    }
+                    handler.sendMessage(message);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
+
+//    private void requestDatas(String time, String curTag, Boolean isLoadMore){
+//        //暂停一秒
+//
+//        if(!isLoadMore){
+//            postList.clear();
+//            userList.clear();
+//        }
+//        //发送请求，获取帖子简略页列表，包括Post列表和User列表
+//        Post post = new Post(1, 1, "2024-01-01", "title", "content", "志愿", null, 1, "1");
+//        for(int i = 0; i < 10; i++){
+//            postList.add(post);
+//        }
+//        User user = new User("account", "password", null, "nickname", "0", "保密", "", "系统原装签名：与你同行", "0");
+//        for(int i = 0; i < 10; i++){
+//            userList.add(user);
+//        }
+//
+//        //传递消息
+//        Message message = new Message();
+//        if(isLoadMore){
+//            message.what = LOADMORE_SUCCESS;
+//        }else {
+//            message.what = REFRESH_SUCCESS;
+//        }
+//        handler.sendMessage(message);
+//    }
 
     private void initViews(){
         //获取drawerLayout
@@ -256,7 +269,7 @@ public class HomeFragment extends Fragment{
 
     }
 
-    private void initActions(){
+    private void initEvents(){
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -281,22 +294,32 @@ public class HomeFragment extends Fragment{
             }
         });
 
+        titleTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
         //滑动菜单单击事件监听器
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.profile:
+                        drawerLayout.closeDrawers();
                         Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
                         profileIntent.putExtra("is_self", true);
                         profileIntent.putExtra("user_id", curUser.getUid());
                         startActivity(profileIntent);
                         break;
                     case R.id.certify:
+                        drawerLayout.closeDrawers();
                         Intent certifyIntent = new Intent(getActivity(), CertificationActivity.class);
                         startActivity(certifyIntent);
                         break;
                     case R.id.setting:
+                        drawerLayout.closeDrawers();
                         toastUtil.showToast(R.string.setting);
                         break;
                     case R.id.logout:
@@ -354,27 +377,29 @@ public class HomeFragment extends Fragment{
                     case R.id.rb_label_a:
                         //tagAllRb.getPaint().setFakeBoldText(true);
                         tagAllRb.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        curTag = getString(R.string.post_label_all);
                         break;
                     case R.id.rb_label_v:
                         tagVolunteerRb.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        curTag = getString(R.string.post_label_volunteer);
                         break;
                     case R.id.rb_label_j:
                         tagJobRb.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        curTag = getString(R.string.post_label_job);
                         break;
                     case R.id.rb_label_h:
                         tagHelpRb.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        curTag = getString(R.string.post_label_help);
                         break;
                     case R.id.rb_label_r:
                         tagRecruitmentRb.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                        curTag = getString(R.string.post_label_recruitment);
                         break;
                     default:
                         break;
                 }
-                RadioButton radioButton = view.findViewById(id);
-                if(radioButton != null){
-                    //TODO:筛选
-
-                }
+                requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), curTag,false);
+                //RadioButton radioButton = view.findViewById(id);
             }
         });
 
@@ -382,7 +407,8 @@ public class HomeFragment extends Fragment{
         smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
+                LogUtil.e("tag", curTag == null?"null":curTag);
+                requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), curTag,false);
             }
         });
         //上滑加载更多
@@ -390,7 +416,7 @@ public class HomeFragment extends Fragment{
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 String time = postList.get(postList.size()-1).getDatetime();
-                requestDatas(time, true);
+                requestDatas(time, curTag, true);
             }
         });
 
@@ -455,7 +481,7 @@ public class HomeFragment extends Fragment{
         }
     }
 
-//    public void refresh(){
+    //    public void refresh(){
 //        smartRefreshLayout.autoRefresh();
 //        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
 //    }

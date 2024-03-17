@@ -97,27 +97,39 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="@dimen/dimen20"
-                android:padding="@dimen/dimen10"
-                android:orientation="vertical"
-                android:background="@drawable/shape_card">
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/ll_post_page"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="@dimen/dimen5"
+                    android:padding="@dimen/dimen10"
+                    android:orientation="vertical"
+                    android:background="@drawable/shape_card">
 
+                    <TextView
+                        android:id="@+id/tv_post_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TitleAppearance"
+                        android:text="不同"/>
+
+                    <WebView
+                        android:id="@+id/wv_post_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
                 <TextView
-                    android:id="@+id/tv_post_title"
+                    android:id="@+id/tv_post_null"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/dimen250"
                     android:textAppearance="@style/TitleAppearance"
-                    android:text="不同"/>
-
-                <WebView
-                    android:id="@+id/wv_post_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
+                    android:gravity="center"
+                    android:text="@string/post_null"/>
+            </FrameLayout>
 
             <View
                 android:layout_width="match_parent"

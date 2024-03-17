@@ -82,6 +82,7 @@ public class PostingActivity extends BaseActivity {
                     break;
                 case POST_ADD_SUCCESS:
                     showToast("帖子发布成功");
+                    finish();
                     break;
                 default:
                     break;

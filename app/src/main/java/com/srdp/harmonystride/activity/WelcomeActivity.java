@@ -113,7 +113,9 @@ public class WelcomeActivity extends BaseActivity {
                     //是否已经登录
                     Boolean isLogin = (Boolean) SharedPreferenceUtil.getParam("is_login", false);
                     if(isLogin){
-                        getIMUserToken();
+                        navigateTo(MainActivity.class);
+                        finish();
+                        //getIMUserToken();
                     }else{
                         navigateTo(LoginActivity.class);
                         finish();

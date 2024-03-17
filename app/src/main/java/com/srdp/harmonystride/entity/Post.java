@@ -1,5 +1,8 @@
 package com.srdp.harmonystride.entity;
 
+import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.util.StringUtil;
+
 import java.io.Serializable;
 
 public class Post implements Serializable {
@@ -114,5 +117,25 @@ public class Post implements Serializable {
                 ", receiver=" + receiver +
                 ", allow='" + allow + '\'' +
                 '}';
+    }
+
+    public void copyFromPost(Post post){
+        this.title = post.title;
+        this.content = post.content;
+        this.label = post.label;
+        this.images = post.images;
+        this.receiver = post.receiver;
+        this.allow = post.allow;
+        this.datetime = post.datetime;
+        this.owner = post.owner;
+        this.pid = post.pid;
+    }
+
+    public String getContentWithoutHtmlTags(){
+        return StringUtil.removeHtmlTags(content);
+    }
+
+    public String getTitleWithApplyHint(){
+        return R.string.apply_post_hint + title;
     }
 }

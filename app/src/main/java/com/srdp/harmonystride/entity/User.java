@@ -165,7 +165,5 @@ public class User extends LitePalSupport {
         this.location = user.getLocation();
         this.introduction = user.getIntroduction();
         this.focus = user.getFocus();
-
-
     }
 }

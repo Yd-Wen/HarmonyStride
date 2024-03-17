@@ -45,6 +45,10 @@
         <item name="android:textColor">@color/colorTitle</item>
         <item name="android:textSize">@dimen/textSize</item>
     </style>
+    <style name="TextRedAppearance" parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@color/colorWarning</item>
+        <item name="android:textSize">@dimen/textSize</item>
+    </style>
 
     <!-- Custom tip appearance -->
     <style name="TipBlackAppearance" parent="@style/Widget.AppCompat.ActionBar.TabText">

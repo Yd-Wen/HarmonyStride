@@ -18,6 +18,7 @@ import com.srdp.harmonystride.activity.PostActivity;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.ImageUtil;
+import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
 import java.util.List;
@@ -90,7 +91,7 @@ public class PostBriefAdapter extends RecyclerView.Adapter<PostBriefAdapter.View
                 intent.putExtra("user_id", user.getUid());
                 intent.putExtra("user_avatar", user.getAvatar());
                 intent.putExtra("user_nickname", user.getNickname());
-                intent.putExtra("post", post);
+                intent.putExtra("post_id", post.getPid());
                 mContext.startActivity(intent);
             }
         });
@@ -111,11 +112,12 @@ public class PostBriefAdapter extends RecyclerView.Adapter<PostBriefAdapter.View
         holder.postDatetimeTv.setText(post.getDatetime());
 
         holder.postTitleTv.setText(post.getTitle());
-        holder.postContentTv.setText(StringUtil.removeHtmlTags(post.getContent()));
+        holder.postContentTv.setText(post.getContentWithoutHtmlTags());
 
-        if(post.getImages() == null){
+        if(StringUtil.isEmpty(post.getImages())){
             holder.postImageIv.setVisibility(View.GONE);
         }else {
+            holder.postImageIv.setVisibility(View.VISIBLE);
             Glide.with(mContext)
                     .load(ImageUtil.getImagePath(post.getImages()))
                     .error(R.drawable.load_error)

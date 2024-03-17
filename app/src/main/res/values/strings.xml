@@ -112,8 +112,10 @@
     <string name="post_label_job">求职</string>
     <string name="post_label_help">求助</string>
     <string name="post_label_recruitment">招聘</string>
-
     <string name="post_comment_count_default">0</string>
+    <string name="post_setting">帖子设置</string>
+    <string name="post_delete">删除帖子</string>
+    <string name="post_null">帖子已删除</string>
 
     <!-- 评论相关 -->
     <string name="comment_hint">我有话要说</string>
@@ -133,5 +135,14 @@
     <string name="load_footer_refreshing">正在刷新</string>
     <string name="load_footer_loading">正在加载</string>
     <string name="load_footer_finish">加载完成</string>
+
+    <!--申请相关-->
+    <string name="apply">申请</string>"
+    <string name="apply_edit">新建申请</string>"
+    <string name="apply_manage">管理申请</string>"
+    <string name="apply_post_hint">申请帖子：</string>"
+    <string name="apply_allow_true">开放申请</string>
+    <string name="apply_allow_false">关闭申请</string>
+    <string name="apply_find">查看申请列表</string>
 
 </resources>

@@ -54,10 +54,37 @@
                 android:spinnerMode="dropdown"
                 android:entries="@array/tag" />
         </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_content"
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/smart_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:srlAccentColor="@color/colorAccent"
+            app:srlPrimaryColor="@color/colorPrimary"
+            app:srlReboundDuration="300"
+            app:srlDragRate="0.5"
+            app:srlHeaderMaxDragRate="1.5"
+            app:srlFooterMaxDragRate="1.5"
+            app:srlHeaderHeight="@dimen/dimen100"
+            app:srlFooterHeight="@dimen/dimen50"
+            app:srlEnableLoadMore="true"
+            app:srlEnableRefresh="false">
+
+            <pl.droidsonroids.gif.GifImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen50"
+                android:src="@drawable/loading"
+                android:scaleType="center"
+                app:layout_srlSpinnerStyle="Scale"
+                app:layout_srlBackgroundColor="@android:color/transparent"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.scwang.smart.refresh.footer.BallPulseFooter
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
     </LinearLayout>
 
 </LinearLayout>

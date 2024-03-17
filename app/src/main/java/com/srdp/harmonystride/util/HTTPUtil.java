@@ -51,7 +51,7 @@ public class HTTPUtil {
     public static void POST(RequestBody requestBody, Boolean noIP, String ipUrl, okhttp3.Callback callback){
         if(noIP){
             Request request = new Request.Builder()
-                    .url("http://10.152.223.30:8080" + ipUrl)
+                    .url("http://10.142.220.111:8080" + ipUrl)
                     .post(requestBody)
                     .build();
             client.newCall(request).enqueue(callback);
