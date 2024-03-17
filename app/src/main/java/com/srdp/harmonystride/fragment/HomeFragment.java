@@ -42,6 +42,7 @@ import com.srdp.harmonystride.activity.LoginActivity;
 import com.srdp.harmonystride.activity.PostingActivity;
 import com.srdp.harmonystride.activity.ProfileActivity;
 import com.srdp.harmonystride.activity.SearchActivity;
+import com.srdp.harmonystride.activity.SettingActivity;
 import com.srdp.harmonystride.adapter.PostBriefAdapter;
 import com.srdp.harmonystride.dialog.TipDialog;
 import com.srdp.harmonystride.entity.Post;
@@ -320,24 +321,8 @@ public class HomeFragment extends Fragment{
                         break;
                     case R.id.setting:
                         drawerLayout.closeDrawers();
-                        toastUtil.showToast(R.string.setting);
-                        break;
-                    case R.id.logout:
-                        drawerLayout.closeDrawers();
-                        new TipDialog(getActivity(), "是否退出登录？", new TipDialog.OnDismissListener() {
-                            @Override
-                            public void onDismiss(Boolean isConfirm) {
-                                if(isConfirm){
-                                    Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-                                    startActivity(loginIntent);
-                                    getActivity().finish();
-                                    //下次开屏页结束后进入登录页
-                                    SharedPreferenceUtil.setParam("is_login", false);
-                                    //登出IM
-                                    EMClient.getInstance().logout(true);
-                                }
-                            }
-                        }).show();
+                        Intent settingIntent = new Intent(getActivity(), SettingActivity.class);
+                        startActivity(settingIntent);
                         break;
                     default: break;
                 }
@@ -470,6 +455,13 @@ public class HomeFragment extends Fragment{
         }
         nicknameTv.setText(curUser.getNickname());
         toolbarNicknameTv.setText(curUser.getNickname());
+        if(curUser.getCertify().equals("0")) {
+            navigationView.getMenu().findItem(R.id.certify).setTitle(R.string.no_certify);
+            navigationView.getMenu().findItem(R.id.certify).setIcon(R.drawable.certifiy);
+        } else {
+            navigationView.getMenu().findItem(R.id.certify).setTitle(R.string.certify);
+            navigationView.getMenu().findItem(R.id.certify).setIcon(R.drawable.certify_null);
+        }
     }
 
 
@@ -480,11 +472,5 @@ public class HomeFragment extends Fragment{
             recyclerView.smoothScrollToPosition(0);
         }
     }
-
-    //    public void refresh(){
-//        smartRefreshLayout.autoRefresh();
-//        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
-//    }
-
 
 }

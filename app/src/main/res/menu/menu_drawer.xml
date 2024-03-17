@@ -14,10 +14,5 @@
             android:id="@+id/setting"
             android:icon="@drawable/setting"
             android:title="@string/setting"/>
-        <item
-            android:id="@+id/logout"
-            android:icon="@drawable/logout"
-            android:title="@string/logout"/>
-
     </group>
 </menu>

@@ -23,6 +23,7 @@ public class EditTextDialog extends BaseDialog {
     public static final int EDIT_TYPE_NICKNAME = 1;
     public static final int EDIT_TYPE_INTRODUCTION = 2;
     public static final int EDIT_TYPE_CERTIFY_NUMBER = 3;
+    public static final int EDIT_TYPE_APPLY_REASON = 4;
 
     private TextView titleTv;
     private EditText contentEt;
@@ -116,6 +117,11 @@ public class EditTextDialog extends BaseDialog {
             case EDIT_TYPE_CERTIFY_NUMBER:
                 titleTv.setText(R.string.certify_number_edit);
                 contentEt.setHint(R.string.certify_number_edit_hint);
+                contentEt.setText(curContent);
+                break;
+            case EDIT_TYPE_APPLY_REASON:
+                titleTv.setText(R.string.apply_reason_edit);
+                contentEt.setHint(R.string.apply_reason_edit_hint);
                 contentEt.setText(curContent);
                 break;
             default:

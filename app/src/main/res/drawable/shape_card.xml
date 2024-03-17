@@ -4,8 +4,4 @@
     <corners android:radius="@dimen/dimen5"/>
     <!-- 填充颜色 -->
     <solid android:color="@color/colorWhite"/>
-    <!-- 边框 -->
-    <stroke
-        android:width="@dimen/dimen1"
-        android:color="@color/colorCardBorder"/>
 </shape>

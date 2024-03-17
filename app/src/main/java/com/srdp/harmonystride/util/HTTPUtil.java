@@ -173,6 +173,19 @@ public class HTTPUtil {
         GET(url, callback);
     }
 
+    public static void deleteUserById(int id, okhttp3.Callback callback){
+        JsonObject jsonObject = new JsonObject();
+
+        String url = "/user/delete";
+        //json = gson.toJson(object);
+        jsonObject.addProperty("id", id);
+        String json = gson.toJson(jsonObject);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+        LogUtil.d("delete", url + json);
+        POST(requestBody, url, callback);
+    }
+
     //发送系统消息
     public static void sendSystemMessage(String username, okhttp3.Callback callback){
         String url = "/message/system";

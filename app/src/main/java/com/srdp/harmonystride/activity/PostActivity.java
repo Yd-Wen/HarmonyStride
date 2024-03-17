@@ -171,6 +171,9 @@ public class PostActivity extends BaseActivity {
         postNullTv = findViewById(R.id.tv_post_null);
 
         applyFab = findViewById(R.id.fab_apply);
+
+        //无法申请自己的帖子
+        if(isSelf) applyFab.setVisibility(View.GONE);
     }
 
     private void initEvents(){
@@ -219,38 +222,18 @@ public class PostActivity extends BaseActivity {
         applyFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isSelf){
-                    if(isAllowApply){
-                        //TODO:查看该帖子的申请列表
-                        Intent intent = new Intent(PostActivity.this, ApplyManageActivity.class);
-                        intent.putExtra("pid", post.getPid());
-                        startActivity(intent);
-                    }else {
-                        //TODO:修改帖子-是否允许申请
-                        new TipDialog(PostActivity.this, "该帖子已关闭申请，是否开放", new TipDialog.OnDismissListener() {
-                            @Override
-                            public void onDismiss(Boolean isConfirm) {
-                                if(isConfirm){
-                                    //TODO:修改post.allow
-                                    openAllowApply();
-                                }
+                if(isAllowApply){
+                    new EditTextDialog(PostActivity.this, EditTextDialog.EDIT_TYPE_APPLY_REASON, "申请理由", new EditTextDialog.OnDismissListener() {
+                        @Override
+                        public void onDismiss(Boolean isUpdate, String data) {
+                            if(isUpdate){
+                                //TODO:提交申请
+                                submitApply(data);
                             }
-                        }).show();
-                    }
+                        }
+                    }).show();
                 }else {
-                    if(isAllowApply){
-                        new EditTextDialog(PostActivity.this, EditTextDialog.EDIT_TYPE_INTRODUCTION, "申请理由", new EditTextDialog.OnDismissListener() {
-                            @Override
-                            public void onDismiss(Boolean isUpdate, String data) {
-                                if(isUpdate){
-                                    //TODO:提交申请
-                                    submitApply(data);
-                                }
-                            }
-                        }).show();
-                    }else {
-                        showToast("申请已关闭，请联系发帖人");
-                    }
+                    showToast("申请已关闭，请联系发帖人开放申请");
                 }
             }
         });

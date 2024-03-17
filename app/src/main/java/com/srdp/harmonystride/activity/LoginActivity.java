@@ -256,6 +256,16 @@ public class LoginActivity extends BaseActivity {
         SharedPreferenceUtil.setParam("password_remember", rememberPwdCb.isChecked());
         //下次开屏页结束后进入主页
         SharedPreferenceUtil.setParam("is_login", true);
+        //写入默认的设置信息
+        SharedPreferenceUtil.setParam("notification_system", true);
+        SharedPreferenceUtil.setParam("notification_unfocus", false);
+        SharedPreferenceUtil.setParam("privacy_all", true);
+        SharedPreferenceUtil.setParam("privacy_post", true);
+        SharedPreferenceUtil.setParam("privacy_apply", true);
+        SharedPreferenceUtil.setParam("privacy_comment", true);
+        SharedPreferenceUtil.setParam("post_allow_open", true);
+        SharedPreferenceUtil.setParam("post_image_watermark", true);
+
         //写入SQLite本地数据库
         if(!LitePal.isExist(User.class, "account = ?", curUser.getAccount())){
             curUser.save();

@@ -37,7 +37,6 @@
     <string name="profile">资料</string>
     <string name="certify">已认证</string>
     <string name="no_certify">未认证</string>
-    <string name="setting">设置</string>
     <string name="logout">退出</string>
 
     <!--用户相关-->
@@ -144,5 +143,26 @@
     <string name="apply_allow_true">开放申请</string>
     <string name="apply_allow_false">关闭申请</string>
     <string name="apply_find">查看申请列表</string>
+    <string name="apply_reason_edit">申请理由</string>
+    <string name="apply_reason_edit_hint">请输入申请理由</string>
+
+    <!-- 设置相关 -->
+    <string name="setting">设置</string>
+    <string name="setting_account_hint">账号安全</string>
+    <string name="setting_password_edit">修改密码</string>
+    <string name="setting_account_delete">注销账号</string>
+    <string name="setting_notification_hint">消息通知</string>
+    <string name="setting_notification_system">订阅通知</string>
+    <string name="setting_notification_unfocus">不接受未关注人私信</string>
+    <string name="setting_privacy_hint">社交隐私</string>
+    <string name="setting_privacy_all">个人主页访问权限</string>
+    <string name="setting_privacy_post">在个人中心展示我发布的帖子</string>
+    <string name="setting_privacy_apply">在个人中心展示我的申请</string>
+    <string name="setting_privacy_comment">在个人中心展示我的评论</string>
+    <string name="setting_post_hint">帖子设置</string>
+    <string name="setting_post_allow_open">新帖子自动开放申请</string>
+    <string name="setting_post_image_watermark">上传图片时添加水印</string>
+    <string name="setting_logout">退出登录</string>
+
 
 </resources>
