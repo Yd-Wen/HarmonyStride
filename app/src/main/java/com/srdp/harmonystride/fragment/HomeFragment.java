@@ -457,10 +457,10 @@ public class HomeFragment extends Fragment{
         toolbarNicknameTv.setText(curUser.getNickname());
         if(curUser.getCertify().equals("0")) {
             navigationView.getMenu().findItem(R.id.certify).setTitle(R.string.no_certify);
-            navigationView.getMenu().findItem(R.id.certify).setIcon(R.drawable.certifiy);
+            navigationView.getMenu().findItem(R.id.certify).setIcon(R.drawable.certify_null);
         } else {
             navigationView.getMenu().findItem(R.id.certify).setTitle(R.string.certify);
-            navigationView.getMenu().findItem(R.id.certify).setIcon(R.drawable.certify_null);
+            navigationView.getMenu().findItem(R.id.certify).setIcon(R.drawable.certifiy);
         }
     }
 

@@ -1,10 +1,13 @@
 package com.srdp.harmonystride.entity;
 
+import com.srdp.harmonystride.MyApplication;
+import com.srdp.harmonystride.R;
+
 import java.io.Serializable;
 
 public class Application implements Serializable {
     //applicant：uid 主键
-    private int applicant;
+    private int uid;
     //pid：主键
     private int pid;
     //datetime：帖子发布时间
@@ -18,19 +21,19 @@ public class Application implements Serializable {
     }
 
     public Application(int applicant, int pid, String datetime, String reason, String status) {
-        this.applicant = applicant;
+        this.uid = applicant;
         this.pid = pid;
         this.datetime = datetime;
         this.reason = reason;
         this.status = status;
     }
 
-    public int getApplicant() {
-        return applicant;
+    public int getUid() {
+        return uid;
     }
 
-    public void setApplicant(int applicant) {
-        this.applicant = applicant;
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 
     public int getPid() {
@@ -68,7 +71,7 @@ public class Application implements Serializable {
     @Override
     public String toString() {
         return "Application{" +
-                "applicant='" + applicant + '\'' +
+                "applicant='" + uid + '\'' +
                 ", pid='" + pid + '\'' +
                 ", datetime='" + datetime + '\'' +
                 ", reason='" + reason + '\'' +

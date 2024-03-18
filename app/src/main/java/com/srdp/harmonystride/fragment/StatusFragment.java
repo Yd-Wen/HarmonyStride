@@ -40,8 +40,10 @@ import com.srdp.harmonystride.activity.MainActivity;
 import com.srdp.harmonystride.activity.PostActivity;
 import com.srdp.harmonystride.activity.PostingActivity;
 import com.srdp.harmonystride.activity.ProfileActivity;
+import com.srdp.harmonystride.adapter.ApplyMyAdapter;
 import com.srdp.harmonystride.adapter.PostBriefAdapter;
 import com.srdp.harmonystride.dialog.TipDialog;
+import com.srdp.harmonystride.entity.Application;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
@@ -82,9 +84,10 @@ public class StatusFragment extends Fragment{
     private RecyclerView recyclerView;
 
     private List<Post> postList = new ArrayList<>();
+    private List<Application> applicationList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
 
-    private PostBriefAdapter postBriefAdapter;
+    private ApplyMyAdapter applyMyAdapter;
 
     private final Handler handler = new Handler(Looper.getMainLooper()){
         @Override
@@ -92,11 +95,11 @@ public class StatusFragment extends Fragment{
             super.handleMessage(msg);
             switch (msg.what){
                 case REFRESH_SUCCESS:
-                    postBriefAdapter.notifyDataSetChanged();
+                    applyMyAdapter.notifyDataSetChanged();
                     smartRefreshLayout.finishRefresh();
                     break;
                 case LOADMORE_SUCCESS:
-                    postBriefAdapter.notifyDataSetChanged();
+                    applyMyAdapter.notifyDataSetChanged();
                     smartRefreshLayout.finishLoadMore();
                 default:
                     break;
@@ -113,37 +116,60 @@ public class StatusFragment extends Fragment{
         //初始化事件
         initActions();
         //请求数据
-        requestDatas(false);
+        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
         // Inflate the layout for this fragment
         return view;
     }
 
 
-    private void requestDatas(Boolean isLoadMore){
-        //暂停一秒
-
-        if(!isLoadMore){
-            postList.clear();
-            userList.clear();
-        }
+    private void requestDatas(String time, Boolean isLoadMore){
         //发送请求，获取帖子简略页列表，包括Post列表和User列表
-        Post post = new Post(1, 1, "2024-01-01", "title", "content", "志愿", null, 1, "1");
-        for(int i = 0; i < 10; i++){
-            postList.add(post);
-        }
-        User user = new User("account", "password", null, "nickname", "0", "保密", "", "系统原装签名：与你同行", "0");
-        for(int i = 0; i < 10; i++){
-            userList.add(user);
-        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("time", time);
+        params.put("uid", SharedPreferenceUtil.getParam("current_uid", 0).toString());
+        HTTPUtil.POST(params, "/application/findFocus", new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e("find my application", "error" + e);
+            }
 
-        //传递消息
-        Message message = new Message();
-        if(isLoadMore){
-            message.what = LOADMORE_SUCCESS;
-        }else {
-            message.what = REFRESH_SUCCESS;
-        }
-        handler.sendMessage(message);
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d("find my application", "success");
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    String applicationS = jsonObject.getJSONObject("data").getString("applicationList");
+                    String postS = jsonObject.getJSONObject("data").getString("postList");
+                    String userS = jsonObject.getJSONObject("data").getString("userList");
+                    Gson gson = new Gson();
+                    List<Application> applicationL = gson.fromJson(applicationS, new TypeToken<List<Application>>(){}.getType());
+                    List<Post> postL = gson.fromJson(postS, new TypeToken<List<Post>>(){}.getType());
+                    List<User> userL = gson.fromJson(userS, new TypeToken<List<User>>(){}.getType());
+                    //获取新数据
+                    if(!isLoadMore){
+                        postList.clear();
+                        applicationList.clear();
+                        userList.clear();
+                    }
+                    for(int i = 0; i < applicationL.size(); ++i){
+                        postList.add(postL.get(i));
+                        applicationList.add(applicationL.get(i));
+                        userList.add(userL.get(i));
+                    }
+                    //传递消息
+                    Message message = new Message();
+                    if(isLoadMore){
+                        message.what = LOADMORE_SUCCESS;
+                    }else {
+                        message.what = REFRESH_SUCCESS;
+                    }
+                    handler.sendMessage(message);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void initViews(){
@@ -161,6 +187,14 @@ public class StatusFragment extends Fragment{
         smartRefreshLayout = view.findViewById(R.id.smart_refresh_layout);
         recyclerView = view.findViewById(R.id.recycler_view);
 
+        //设置布局管理器
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+        //设置适配器
+        applyMyAdapter = new ApplyMyAdapter(applicationList, postList, userList);
+        recyclerView.setAdapter(applyMyAdapter);
+
     }
 
     private void initActions(){
@@ -169,40 +203,18 @@ public class StatusFragment extends Fragment{
         smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                requestDatas(false);
+                requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
             }
         });
 
         smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                requestDatas(true);
+                String time = applicationList.get(postList.size()-1).getDatetime();
+                requestDatas(time, true);
             }
         });
 
-        //添加滑动事件监听器
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                // 当滑动停止时
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    // 恢复图片加载
-                    Glide.with(MyApplication.getContext()).resumeRequests();
-                } else {
-                    // 暂停图片加载
-                    Glide.with(MyApplication.getContext()).pauseRequests();
-                }
-            }
-        });
-
-        //设置布局管理器
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
-        recyclerView.setLayoutManager(gridLayoutManager);
-
-        //设置适配器
-        postBriefAdapter = new PostBriefAdapter(postList, userList);
-        recyclerView.setAdapter(postBriefAdapter);
     }
 
     @Override
@@ -213,10 +225,6 @@ public class StatusFragment extends Fragment{
         }
     }
 
-//    public void refresh(){
-//        smartRefreshLayout.autoRefresh();
-//        requestDatas(false);
-//    }
 
 
 }

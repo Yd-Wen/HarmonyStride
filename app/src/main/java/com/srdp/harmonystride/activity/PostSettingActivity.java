@@ -128,7 +128,6 @@ public class PostSettingActivity extends BaseActivity {
         applyAllowSw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                //TODO 修改申请权限
                 if(isChecked) updateAllowTrue(curPid);
                 else updateAllowFalse(curPid);
             }
@@ -147,7 +146,6 @@ public class PostSettingActivity extends BaseActivity {
         postDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO:删除帖子
                 new TipDialog(PostSettingActivity.this, "确定删除该帖子？该操作不可逆", new TipDialog.OnDismissListener() {
                     @Override
                     public void onDismiss(Boolean isConfirm) {
@@ -186,7 +184,6 @@ public class PostSettingActivity extends BaseActivity {
     }
 
     private void updateAllowFalse(int pid) {
-        //TODO:修改申请权限
         Map<String, Object> params = new HashMap<>();
         params.put("pid", String.valueOf(pid));
         HTTPUtil.POST(params, "/post/deny", new Callback() {
@@ -211,7 +208,6 @@ public class PostSettingActivity extends BaseActivity {
     }
 
     private void deletePost(int pid) {
-        //TODO:删除帖子
         Map<String, Object> params = new HashMap<>();
         params.put("pid", String.valueOf(pid));
         HTTPUtil.POST(params, "/post/done", new Callback() {
@@ -233,7 +229,5 @@ public class PostSettingActivity extends BaseActivity {
                 }
             }
         });
-
-
     }
 }

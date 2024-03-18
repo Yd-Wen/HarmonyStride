@@ -12,17 +12,32 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.adapter.ApplyBriefAdapter;
 import com.srdp.harmonystride.entity.Application;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.User;
+import com.srdp.harmonystride.util.HTTPUtil;
+import com.srdp.harmonystride.util.LogUtil;
+import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.TimeUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class ApplyManageActivity extends BaseActivity {
     private static final int LOADMORE_SUCCESS = 1; //请求刷新数据
@@ -66,7 +81,7 @@ public class ApplyManageActivity extends BaseActivity {
         //初始化事件
         initEvents();
         //请求数据
-        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
+        requestDatas(false);
 
     }
 
@@ -90,7 +105,7 @@ public class ApplyManageActivity extends BaseActivity {
         applyRv.setLayoutManager(gridLayoutManager);
 
         //设置适配器
-        applyBriefAdapter = new ApplyBriefAdapter(userList, applicationList);
+        applyBriefAdapter = new ApplyBriefAdapter(userList, applicationList, String.valueOf(getIntent().getIntExtra("pid", 0)));
         applyRv.setAdapter(applyBriefAdapter);
     }
 
@@ -104,21 +119,62 @@ public class ApplyManageActivity extends BaseActivity {
 
         applySrl.setOnRefreshListener(refreshLayout -> {
             //刷新数据
-            requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), true);
+            requestDatas(false);
         });
 
         applySrl.setOnLoadMoreListener(refreshLayout -> {
             //加载更多数据
-            requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
+            requestDatas(true);
         });
     }
 
-    private void requestDatas(String datetime, boolean isLoadMore){
-        //TODO:根据PID发送请求
-        Message message = new Message();
-        if(isLoadMore) message.obj = LOADMORE_SUCCESS;
-        else  message.obj = REFRESH_SUCCESS;
-        handler.sendMessage(message);
+    private void requestDatas(Boolean isLoadMore){
+        //发送请求，获取帖子简略页列表，包括Post列表和User列表
+        String uid = null;
+        if(isLoadMore) uid = String.valueOf(userList.get(userList.size()-1).getUid());
+        else uid = "0";
+        Map<String, Object> params = new HashMap<>();
+        params.put("pid", String.valueOf(curPid));
+        params.put("uid", uid);
+        HTTPUtil.POST(params, "/application/findOther", new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e("find other application", "error" + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d("find other application", "success");
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    String applicationS = jsonObject.getJSONObject("data").getString("applicationList");
+                    String userS = jsonObject.getJSONObject("data").getString("userList");
+                    Gson gson = new Gson();
+                    List<Application> applicationL = gson.fromJson(applicationS, new TypeToken<List<Application>>(){}.getType());
+                    List<User> userL = gson.fromJson(userS, new TypeToken<List<User>>(){}.getType());
+                    //获取新数据
+                    if(!isLoadMore){
+                        applicationList.clear();
+                        userList.clear();
+                    }
+                    for(int i = 0; i < applicationL.size(); ++i){
+                        applicationList.add(applicationL.get(i));
+                        userList.add(userL.get(i));
+                    }
+                    //传递消息
+                    Message message = new Message();
+                    if(isLoadMore){
+                        message.what = LOADMORE_SUCCESS;
+                    }else {
+                        message.what = REFRESH_SUCCESS;
+                    }
+                    handler.sendMessage(message);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 

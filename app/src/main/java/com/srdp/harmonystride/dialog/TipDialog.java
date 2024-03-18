@@ -34,14 +34,6 @@ public class TipDialog extends BaseDialog{
         this.content = content;
     }
 
-    public TipDialog(Context context, String content, String cancelText, String confirmText, OnDismissListener onDismissListener) {
-        super(context);
-        this.onDismissListener = onDismissListener;
-        this.content = content;
-        getCancelBtn().setText(cancelText);
-        getConfirmBtn().setText(confirmText);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

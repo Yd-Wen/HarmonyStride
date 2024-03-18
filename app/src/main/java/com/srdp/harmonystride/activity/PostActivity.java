@@ -57,6 +57,8 @@ import okhttp3.Response;
 public class PostActivity extends BaseActivity {
     private static final int REQUEST_POST_SUCCESS = 1; //获取帖子成功
     private static final int REQUEST_POST_NULL = 2; //帖子不存在
+    private static final int APPLY_SUCCESS = 3; //申请提交
+    private static final int APPLY_EXIST = 4; //已存在申请
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private AppBarLayout appBarLayout;
@@ -98,6 +100,12 @@ public class PostActivity extends BaseActivity {
                     if(toolbar.getMenu().findItem(R.id.setting) != null){
                         toolbar.getMenu().findItem(R.id.setting).setVisible(false);
                     }
+                    break;
+                case APPLY_SUCCESS:
+                    showToast(getResources().getString(R.string.apply_submit_yes));
+                    break;
+                case APPLY_EXIST:
+                    showToast(getResources().getString(R.string.apply_submit_no));
                     break;
                 default:
                     break;
@@ -223,7 +231,7 @@ public class PostActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if(isAllowApply){
-                    new EditTextDialog(PostActivity.this, EditTextDialog.EDIT_TYPE_APPLY_REASON, "申请理由", new EditTextDialog.OnDismissListener() {
+                    new EditTextDialog(PostActivity.this, EditTextDialog.EDIT_TYPE_APPLY_REASON, "", new EditTextDialog.OnDismissListener() {
                         @Override
                         public void onDismiss(Boolean isUpdate, String data) {
                             if(isUpdate){
@@ -307,15 +315,36 @@ public class PostActivity extends BaseActivity {
         });
     }
 
-    //TODO 修改post.allow
-    private void openAllowApply(){
-        //TODO 发起update请求
-    }
-
-    //TODO:提交申请
+    //提交申请
     private void submitApply(String reason){
-        Application application = new Application(curUid, post.getPid(), TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), reason, "0");
+        Application application = new Application(curUid, post.getPid(), post.getDatetime(), reason, "0");
         //TODO:发起insert请求
+        String json = new Gson().toJson(application);
+        Map<String, Object> map = new HashMap<>();
+        map.put("application", json);
+        HTTPUtil.POST(map, "/application/add", new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e("application add request", "error" + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d("application add request", "success");
+                Gson gson = new Gson();
+                Result result = gson.fromJson(response.body().string(), Result.class);
+                //传递消息
+                Message message = new Message();
+                if(result.getCode()==1){
+                    message.what = APPLY_SUCCESS;
+                }else {
+                    message.what = APPLY_EXIST;
+                }
+                handler.sendMessage(message);
+            }
+        });
+
+
     }
 
     //获取工具栏菜单

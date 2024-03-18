@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="4dp">
+    <LinearLayout
+        android:id="@+id/ll_apply_my_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingVertical="@dimen/dimen10"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_apply_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen10"
+            android:textAppearance="@style/TextAppearance"
+            android:lines="1"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tv_apply_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/dimen10"
+            android:textAppearance="@style/TipBlackAppearance" />
+
+        <TextView
+            android:id="@+id/tv_post_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen10"
+            android:layout_marginEnd="@dimen/dimen10"
+            android:paddingHorizontal="@dimen/dimen10"
+            android:paddingVertical="@dimen/dimen5"
+            android:background="@drawable/shape_hint"
+            android:textAppearance="@style/TextAppearance"
+            android:lines="1"
+            android:ellipsize="end"
+            android:shadowRadius="5"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

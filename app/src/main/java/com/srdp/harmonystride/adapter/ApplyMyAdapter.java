@@ -15,55 +15,44 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.activity.PostActivity;
+import com.srdp.harmonystride.dialog.TipDialog;
+import com.srdp.harmonystride.entity.Application;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.ImageUtil;
-import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
 import java.util.List;
 
-public class PostVisitAdapter extends RecyclerView.Adapter<PostVisitAdapter.ViewHolder>{
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class ApplyMyAdapter extends RecyclerView.Adapter<ApplyMyAdapter.ViewHolder>{
     private Context mContext;
+    private List<Application> applicationList;
     private List<Post> postList;
-    private User user;
+    private List<User> userList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout postVisitPageLinearLayout;
+        LinearLayout applyMyPageLinearLayout;
 
-        TextView postDatetimeTv;
-        ImageView moreIv;
-
+        TextView applyReasonTv;
+        TextView applyStatusTv;
         TextView postTitleTv;
-        TextView postContentTv;
-
-        ImageView postImageIv;
-
-        TextView postLabelTv;
-        ImageView postCommentIv;
-
 
         public ViewHolder(View view) {
             super(view);
-            postVisitPageLinearLayout = view.findViewById(R.id.ll_post_visit_page);
+            applyMyPageLinearLayout = view.findViewById(R.id.ll_apply_my_page);
 
-            postDatetimeTv = view.findViewById(R.id.tv_post_datatime);
-            moreIv = view.findViewById(R.id.iv_more);
-
+            applyReasonTv = view.findViewById(R.id.tv_apply_reason);
+            applyStatusTv = view.findViewById(R.id.tv_apply_status);
             postTitleTv = view.findViewById(R.id.tv_post_title);
-            postContentTv = view.findViewById(R.id.tv_post_content);
-
-            postImageIv = view.findViewById(R.id.iv_post_image);
-
-            postLabelTv = view.findViewById(R.id.tv_post_label);
-            postCommentIv = view.findViewById(R.id.iv_post_comment);
         }
     }
 
-    public PostVisitAdapter(List<Post> postList, User user){
+    public ApplyMyAdapter(List<Application> applicationList, List<Post> postList, List<User> userList){
+        this.applicationList = applicationList;
         this.postList = postList;
-        this.user = user;
-        LogUtil.e("user", user.toString());
+        this.userList = userList;
     }
 
     @NonNull
@@ -72,14 +61,16 @@ public class PostVisitAdapter extends RecyclerView.Adapter<PostVisitAdapter.View
         if (mContext == null) {
             mContext = parent.getContext();
         }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.content_post_visit_page, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.content_apply_my_page, parent, false);
         final ViewHolder viewHolder = new ViewHolder(view);
         //点击事件监听器
-        viewHolder.postVisitPageLinearLayout.setOnClickListener(new View.OnClickListener() {
+        viewHolder.postTitleTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO:跳转到帖子详情页
                 int position = viewHolder.getAdapterPosition();
                 Post post = postList.get(position);
+                User user = userList.get(position);
                 Intent intent = new Intent(mContext, PostActivity.class);
                 //TODO:传递数据进入帖子详情页
                 intent.putExtra("user_id", user.getUid());
@@ -87,6 +78,7 @@ public class PostVisitAdapter extends RecyclerView.Adapter<PostVisitAdapter.View
                 intent.putExtra("user_nickname", user.getNickname());
                 intent.putExtra("post_id", post.getPid());
                 mContext.startActivity(intent);
+
             }
         });
         return viewHolder;
@@ -95,35 +87,32 @@ public class PostVisitAdapter extends RecyclerView.Adapter<PostVisitAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //绑定数据
+        Application application = applicationList.get(position);
         Post post = postList.get(position);
 
-        holder.postDatetimeTv.setText(post.getDatetime());
-
-        holder.postTitleTv.setText(post.getTitle());
-        holder.postContentTv.setText(post.getContentWithoutHtmlTags());
-
-        if(post.getImages() == null){
-            holder.postImageIv.setVisibility(View.GONE);
-        }else {
-            Glide.with(mContext)
-                    .load(ImageUtil.getImagePath(post.getImages()))
-                    .error(R.drawable.load_error)
-                    .into(holder.postImageIv);
+        holder.applyReasonTv.setText(application.getReason());
+        switch (application.getStatus()){
+            case "0":
+                holder.applyStatusTv.setText("状态：申请待通过");
+                break;
+            case "1":
+                holder.applyStatusTv.setText("状态：申请已通过");
+                break;
+            default:
+                break;
         }
+        holder.postTitleTv.setText(post.getTitle());
 
-        holder.postLabelTv.setText(post.getLabel());
     }
 
     @Override
-    public void onViewRecycled(@NonNull PostVisitAdapter.ViewHolder holder) {
+    public void onViewRecycled(@NonNull ApplyMyAdapter.ViewHolder holder) {
         super.onViewRecycled(holder);
-        // 在 onViewRecycled 中取消加载请求
-        Glide.with(mContext).clear(holder.postImageIv);
     }
 
     @Override
     public int getItemCount() {
-        return postList.size();
+        return applicationList.size();
     }
 
 

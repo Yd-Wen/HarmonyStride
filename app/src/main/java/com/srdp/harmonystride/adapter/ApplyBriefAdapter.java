@@ -2,6 +2,9 @@ package com.srdp.harmonystride.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,23 +16,56 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.activity.PostActivity;
+import com.srdp.harmonystride.activity.ProfileActivity;
 import com.srdp.harmonystride.dialog.TipDialog;
 import com.srdp.harmonystride.entity.Application;
 import com.srdp.harmonystride.entity.Post;
+import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
+import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.ImageUtil;
+import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.StringUtil;
+import com.srdp.harmonystride.util.ToastUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class ApplyBriefAdapter extends RecyclerView.Adapter<ApplyBriefAdapter.ViewHolder>{
+    private static final int RECEIVE_SUCCESS = 1;
     private Context mContext;
     private List<User> userList;
     private List<Application> applicationList;
+    String pid;
+
+    private final Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case RECEIVE_SUCCESS:
+                    new ToastUtil(mContext).showToast("通过申请");
+                    notifyDataSetChanged();
+                default:
+                    break;
+            }
+        }
+    };
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout applyBriefPageLinearLayout;
@@ -54,9 +90,10 @@ public class ApplyBriefAdapter extends RecyclerView.Adapter<ApplyBriefAdapter.Vi
         }
     }
 
-    public ApplyBriefAdapter(List<User> userList, List<Application> applicationList){
+    public ApplyBriefAdapter(List<User> userList, List<Application> applicationList, String pid){
         this.userList = userList;
         this.applicationList = applicationList;
+        this.pid = pid;
     }
 
     @NonNull
@@ -68,15 +105,51 @@ public class ApplyBriefAdapter extends RecyclerView.Adapter<ApplyBriefAdapter.Vi
         View view = LayoutInflater.from(mContext).inflate(R.layout.content_apply_brief_page, parent, false);
         final ViewHolder viewHolder = new ViewHolder(view);
         //点击事件监听器
+        viewHolder.userAvatarCiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = viewHolder.getAdapterPosition();
+                Intent profileIntent = new Intent(mContext, ProfileActivity.class);
+                profileIntent.putExtra("is_self", false);
+                profileIntent.putExtra("user_id", userList.get(position).getUid());
+                mContext.startActivity(profileIntent);
+            }
+        });
         viewHolder.moreIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO:通过不通过
-                new TipDialog(mContext, "是否接受该用户申请", "拒绝", "接受", new TipDialog.OnDismissListener() {
+                new TipDialog(mContext, "是否接受该用户申请", new TipDialog.OnDismissListener() {
                     @Override
                     public void onDismiss(Boolean isConfirm) {
                         if(isConfirm){
+                            int position = viewHolder.getAdapterPosition();
+                            Map<String, Object> params = new HashMap<>();
+                            params.put("pid", pid);
+                            params.put("uid", String.valueOf( userList.get(position).getUid()));
+                            HTTPUtil.POST(params, "/application/receive", new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    LogUtil.e("application receive", "error" + e);
+                                }
 
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
+                                    LogUtil.d("application receive", "success");
+                                    Gson gson = new Gson();
+                                    String responseBody = response.body().string();
+                                    Result result = gson.fromJson(responseBody, Result.class);
+                                    //传递消息
+                                    Message message = new Message();
+                                    if(result.getCode() == 1){
+                                        message.what = RECEIVE_SUCCESS;
+                                        applicationList.get(position).setStatus("1");
+
+                                    }
+                                    handler.sendMessage(message);
+
+                                }
+                            });
                         }
                     }
                 }).show();
@@ -103,9 +176,6 @@ public class ApplyBriefAdapter extends RecyclerView.Adapter<ApplyBriefAdapter.Vi
                 holder.applyStatusTv.setText("待接受");
                 break;
             case "1":
-                holder.applyStatusTv.setText("拒绝");
-                break;
-            case "2":
                 holder.applyStatusTv.setText("接受");
                 break;
             default:

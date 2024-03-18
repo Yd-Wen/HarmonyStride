@@ -145,6 +145,10 @@
     <string name="apply_find">查看申请列表</string>
     <string name="apply_reason_edit">申请理由</string>
     <string name="apply_reason_edit_hint">请输入申请理由</string>
+    <string name="apply_status_yes">申请已通过</string>
+    <string name="apply_status_no">申请待通过</string>
+    <string name="apply_submit_yes">提交申请成功</string>
+    <string name="apply_submit_no">不可重复申请</string>
 
     <!-- 设置相关 -->
     <string name="setting">设置</string>
