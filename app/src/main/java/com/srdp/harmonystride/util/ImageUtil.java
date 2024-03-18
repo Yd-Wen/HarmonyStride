@@ -18,8 +18,14 @@ import com.srdp.harmonystride.activity.CertificationActivity;
 import com.srdp.harmonystride.activity.ProfileEditActivity;
 import com.srdp.harmonystride.entity.User;
 
+import org.litepal.LitePal;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.List;
 
 public class ImageUtil {
     //打开相册请求码
@@ -99,6 +105,15 @@ public class ImageUtil {
         final String ROOT = "img/";
         String IP = "https://" + BUCKET_NAME + "." + ENDPOINT + "/" +ROOT;
         return IP + avatarPath;
+    }
+
+    public static String addWaterMark(String url){
+        List<User> users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
+        String nickname = "@" + users.get(0).getNickname();
+        byte[] utf8Bytes = nickname.getBytes(StandardCharsets.UTF_8);
+        String watermark = URLEncoder.encode(Base64.getEncoder().encodeToString(utf8Bytes));
+        String watermarkPath = "?x-oss-process=image/watermark,text_" + watermark + ",t_80,color_6C6C6C,size_20,g_se";
+        return url + watermarkPath;
     }
 
     /**

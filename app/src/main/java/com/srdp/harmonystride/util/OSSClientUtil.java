@@ -23,13 +23,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.entity.Result;
+import com.srdp.harmonystride.entity.User;
+
+import org.litepal.LitePal;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import okhttp3.Callback;

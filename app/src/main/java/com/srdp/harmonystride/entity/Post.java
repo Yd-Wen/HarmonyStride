@@ -1,6 +1,7 @@
 package com.srdp.harmonystride.entity;
 
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
 import java.io.Serializable;
@@ -17,7 +18,9 @@ public class Post implements Serializable {
     private String allow; //是否允许申请
 
     public Post() {
-        allow = "1";
+        if((Boolean) SharedPreferenceUtil.getParam("post_allow_open", false)){
+            allow = "1";
+        }else allow = "0";
     }
 
     public Post(int pid, int owner, String datetime, String title, String content, String label, String images, Integer receiver, String allow) {

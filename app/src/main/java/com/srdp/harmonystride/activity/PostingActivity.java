@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.Result;
+import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.LogUtil;
@@ -36,9 +37,14 @@ import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.TimeUtil;
 
 
+import org.litepal.LitePal;
+
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -77,8 +83,13 @@ public class PostingActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case IMAGE_UPLOAD_SUCCESS:
-                    post.setImages(msg.obj.toString());
-                    contentRe.insertImage(getImagePath(msg.obj.toString()), msg.obj.toString());
+                    String url = msg.obj.toString();
+                    if((Boolean) SharedPreferenceUtil.getParam("post_image_watermark", false)){
+                        //添加水印
+                        url = ImageUtil.addWaterMark(msg.obj.toString());
+                    }
+                    post.setImages(url);
+                    contentRe.insertImage(ImageUtil.getImagePath(url), "");
                     break;
                 case POST_ADD_SUCCESS:
                     showToast("帖子发布成功");
@@ -307,8 +318,5 @@ public class PostingActivity extends BaseActivity {
             }
         }
     }
-
-
-
 
 }

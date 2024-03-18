@@ -11,6 +11,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -33,6 +34,8 @@ import okhttp3.Response;
 
 public class SettingActivity extends BaseActivity {
     private static final int DELETE = 1; //注销成功
+
+    private Toolbar toolbar;
 
     private TextView passwordEditTv;
     private TextView accountDeleteTv;
@@ -80,6 +83,8 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void initViews() {
+        toolbar = findViewById(R.id.tool_bar);
+
         passwordEditTv = findViewById(R.id.tv_setting_password_edit);
         accountDeleteTv = findViewById(R.id.tv_setting_account_delete);
 
@@ -111,6 +116,13 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void initEvents() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         //修改密码
         passwordEditTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,7 +242,9 @@ public class SettingActivity extends BaseActivity {
                     @Override
                     public void onDismiss(Boolean isConfirm) {
                         if(isConfirm){
-                            navigateTo(LoginActivity.class);
+                            Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            navigateTo(intent);
                             finish();
                             //下次开屏页结束后进入登录页
                             SharedPreferenceUtil.setParam("is_login", false);
