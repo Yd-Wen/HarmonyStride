@@ -6,18 +6,24 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Trace;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
@@ -25,11 +31,16 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.adapter.CommentAdapter;
 import com.srdp.harmonystride.dialog.EditTextDialog;
-import com.srdp.harmonystride.dialog.TipDialog;
 import com.srdp.harmonystride.entity.Application;
+import com.srdp.harmonystride.entity.Comment;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
@@ -45,6 +56,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +71,8 @@ public class PostActivity extends BaseActivity {
     private static final int REQUEST_POST_NULL = 2; //帖子不存在
     private static final int APPLY_SUCCESS = 3; //申请提交
     private static final int APPLY_EXIST = 4; //已存在申请
+    private static final int COMMENT_SUCCESS = 5; //评论发布成功
+    private static final int REQUEST_COMMENT_SUCCESS = 6; //评论获取成功
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private AppBarLayout appBarLayout;
@@ -76,6 +90,9 @@ public class PostActivity extends BaseActivity {
     private TextView postNullTv;
     private FloatingActionButton applyFab;
 
+    private EditText commentEt;
+    private Button commentBtn;
+
     private Boolean isSelf; //是否查看自己的帖子
     private Boolean isAllowApply; //是否允许申请
     private int curUid; //当前用户UID
@@ -84,6 +101,11 @@ public class PostActivity extends BaseActivity {
     private String nickname;
     private int postId;
     private Post post;
+
+    private RecyclerView commentRv;
+    private CommentAdapter commentAdapter;
+    private List<User> userList = new ArrayList<>();
+    private List<Comment> commentList = new ArrayList<>();
 
     private final Handler handler = new Handler(Looper.getMainLooper()){
         @Override
@@ -106,6 +128,21 @@ public class PostActivity extends BaseActivity {
                     break;
                 case APPLY_EXIST:
                     showToast(getResources().getString(R.string.apply_submit_no));
+                    break;
+                case COMMENT_SUCCESS:
+                    showToast("发布成功");
+                    commentEt.setText("");
+                    //暂停1秒
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 这里放置你要在一秒后执行的代码，例如发起网络请求
+                            requestComment(postId);
+                        }
+                    }, 1000); // 延迟1000毫秒，即1秒
+                    break;
+                case REQUEST_COMMENT_SUCCESS:
+                    commentAdapter.notifyDataSetChanged();
                     break;
                 default:
                     break;
@@ -137,8 +174,6 @@ public class PostActivity extends BaseActivity {
         initViews();
         //初始化事件
         initEvents();
-//        //请求数据
-//        requestPost(postId);
     }
 
     private void initDatas(){
@@ -178,10 +213,23 @@ public class PostActivity extends BaseActivity {
         postContentWv = findViewById(R.id.wv_post_content);
         postNullTv = findViewById(R.id.tv_post_null);
 
+        commentEt = findViewById(R.id.et_comment);
+        commentBtn = findViewById(R.id.btn_comment);
+
         applyFab = findViewById(R.id.fab_apply);
 
         //无法申请自己的帖子
         if(isSelf) applyFab.setVisibility(View.GONE);
+
+        commentRv = findViewById(R.id.rv_comment);
+
+        //设置布局管理器
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
+        commentRv.setLayoutManager(gridLayoutManager);
+
+        //设置适配器
+        commentAdapter = new CommentAdapter(userList, commentList);
+        commentRv.setAdapter(commentAdapter);
     }
 
     private void initEvents(){
@@ -235,13 +283,66 @@ public class PostActivity extends BaseActivity {
                         @Override
                         public void onDismiss(Boolean isUpdate, String data) {
                             if(isUpdate){
-                                //TODO:提交申请
                                 submitApply(data);
                             }
                         }
                     }).show();
                 }else {
                     showToast("申请已关闭，请联系发帖人开放申请");
+                }
+            }
+        });
+
+        commentEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!StringUtil.isEmpty(commentEt.getText().toString())){
+                    //文本不为空
+                    commentBtn.setEnabled(true);
+                    commentBtn.setTextColor(getResources().getColor(R.color.colorWhite, null));
+                }else {
+                    //文本为空
+                    commentBtn.setEnabled(false);
+                    commentBtn.setTextColor(getResources().getColor(R.color.colorText, null));
+                }
+            }
+        });
+
+        commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO 发布评论
+                Comment comment = new Comment();
+                comment.setOwner((Integer) SharedPreferenceUtil.getParam("current_uid", 0));
+                comment.setPid(postId);
+                comment.setDatetime(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"));
+                comment.setContent(commentEt.getText().toString());
+                submitComment(comment);
+            }
+        });
+
+        //添加滑动事件监听器
+        commentRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                // 当滑动停止时
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // 恢复图片加载
+                    Glide.with(MyApplication.getContext()).resumeRequests();
+                    findViewById(R.id.ll_comment).setVisibility(View.VISIBLE);
+                } else {
+                    // 暂停图片加载
+                    Glide.with(MyApplication.getContext()).pauseRequests();
+                    findViewById(R.id.ll_comment).setVisibility(View.GONE);
                 }
             }
         });
@@ -253,6 +354,7 @@ public class PostActivity extends BaseActivity {
         super.onStart();
         //请求数据
         requestPost(postId);
+        requestComment(postId);
     }
 
     private void loadDatas(){
@@ -315,10 +417,74 @@ public class PostActivity extends BaseActivity {
         });
     }
 
+    private void requestComment(int pid){
+        //TODO 请求评论
+        Map<String, Object> params = new HashMap<>();
+        params.put("pid", String.valueOf(pid));
+        params.put("time", TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"));
+        HTTPUtil.POST(params, "/comment/browse", new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e("comment browse request", "error" + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d("comment browse request", "success");
+                try {
+                    Message message = new Message();
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    String commentS = jsonObject.getJSONObject("data").getString("commentList");
+                    String userS = jsonObject.getJSONObject("data").getString("userList");
+                    Gson gson = new Gson();
+                    List<Comment> commentL = gson.fromJson(commentS, new TypeToken<List<Comment>>(){}.getType());
+                    List<User> userL = gson.fromJson(userS, new TypeToken<List<User>>(){}.getType());
+                    //获取新数据
+                    commentList.clear();
+                    userList.clear();
+                    for(int i = 0; i < commentL.size(); ++i){
+                        commentList.add(commentL.get(i));
+                        userList.add(userL.get(i));
+                    }
+                    message.what = REQUEST_COMMENT_SUCCESS;
+                    handler.sendMessage(message);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void submitComment(Comment comment){
+        //TODO 提交评论
+        String json = new Gson().toJson(comment);
+        Map<String, Object> map = new HashMap<>();
+        map.put("comment", json);
+        HTTPUtil.POST(map, "/comment/add", new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e("comment add request", "error" + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d("comment add request", "success");
+                Gson gson = new Gson();
+                Result result = gson.fromJson(response.body().string(), Result.class);
+                //传递消息
+                Message message = new Message();
+                if(result.getCode()==1){
+                    message.what = COMMENT_SUCCESS;
+                }
+                handler.sendMessage(message);
+            }
+        });
+    }
+
     //提交申请
     private void submitApply(String reason){
         Application application = new Application(curUid, post.getPid(), post.getDatetime(), reason, "0");
-        //TODO:发起insert请求
         String json = new Gson().toJson(application);
         Map<String, Object> map = new HashMap<>();
         map.put("application", json);

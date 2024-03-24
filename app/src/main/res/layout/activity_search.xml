@@ -14,7 +14,7 @@
         android:paddingHorizontal="@dimen/dimen10"
         android:background="@color/colorToolbarGreyBackground"
         android:orientation="horizontal">
-        <SearchView
+        <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:background="@color/colorToolbarGreyBackground"
             android:textAppearance="@style/TextAppearance"
-            android:text="@string/cancel"/>
+            android:text="@string/edit_cancel"/>
     </LinearLayout>
 
     <LinearLayout

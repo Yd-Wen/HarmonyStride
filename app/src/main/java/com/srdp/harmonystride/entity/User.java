@@ -1,5 +1,13 @@
 package com.srdp.harmonystride.entity;
 
+import android.graphics.Bitmap;
+import android.os.Message;
+
+import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.util.IMUtil;
+import com.srdp.harmonystride.util.ImageUtil;
+import com.srdp.harmonystride.util.SharedPreferenceUtil;
+
 import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
@@ -42,6 +50,11 @@ public class User extends LitePalSupport {
         this.account = account;
         this.password = password;
         this.nickname = "User" + account;
+        //上传头像
+        String imageUrl = "user/" + account + "/" + System.currentTimeMillis() + ".png";
+        this.avatar = imageUrl;
+        Bitmap image = ImageUtil.getBitmapFromResourceId(R.drawable.default_avatar);
+        ImageUtil.upload("", image, imageUrl, null);
         //TODO: 添加默认的管理员Uid
         //focusUid = "";
     }
@@ -165,5 +178,9 @@ public class User extends LitePalSupport {
         this.location = user.getLocation();
         this.introduction = user.getIntroduction();
         this.focus = user.getFocus();
+    }
+
+    public String getAvatarUrl(){
+        return ImageUtil.getImagePath(avatar);
     }
 }

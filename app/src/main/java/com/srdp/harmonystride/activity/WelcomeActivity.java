@@ -13,18 +13,15 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMOptions;
-import com.srdp.harmonystride.MyApplication;
+//import com.hyphenate.EMCallBack;
+//import com.hyphenate.chat.EMClient;
+//import com.hyphenate.chat.EMOptions;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.dialog.PrivacyDialog;
-import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.IMUtil;
 import com.srdp.harmonystride.util.LogUtil;
+import com.srdp.harmonystride.util.RongIMUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
-
-import org.litepal.LitePal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,6 +30,7 @@ import java.io.InputStreamReader;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.rong.imlib.RongIMClient;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -41,13 +39,28 @@ public class WelcomeActivity extends BaseActivity {
     private static final int GET_IM_USER_TOKEN_SUCCESS = 0; //获取IM用户Token成功
     private static final int LOGIN_IM_SUCCESS = 1; //登录IM成功
 
+    //RongIM连接状态监听器
+    private RongIMClient.ConnectionStatusListener connectionStatusListener = new RongIMClient.ConnectionStatusListener() {
+        @Override
+        public void onChanged(ConnectionStatus status) {
+            switch (status){
+                case TOKEN_INCORRECT:
+                    //token过期
+                    getUserToken();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     private final Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                 case GET_IM_USER_TOKEN_SUCCESS:
-                    loginIM(msg.obj.toString());
+                    //loginIM(msg.obj.toString());
                     break;
                 case LOGIN_IM_SUCCESS:
                     navigateTo(MainActivity.class);
@@ -137,59 +150,37 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     //获取IM用户的TOKEN
-    private void getIMUserToken(){
-        IMUtil.getUserToken(SharedPreferenceUtil.getParam("current_account","").toString(), new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LogUtil.e("get user token", "error");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                LogUtil.d("get user token", "success");
-                if(response.code() == 200){
-                    //获取请求体
-                    String responseBody = response.body().string();
-                    //转换为json对象
-                    JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-                    //传递消息
-                    Message message = new Message();
-                    message.what = GET_IM_USER_TOKEN_SUCCESS;
-                    message.obj = jsonObject.get("access_token").getAsString();
-                    handler.sendMessage(message);
-                    LogUtil.d("get user token success", message.obj.toString());
-                }else {
-                    LogUtil.e("register error", String.valueOf(response.code()));
-                }
-            }
-        });
+    private void getUserToken(){
+        String account = SharedPreferenceUtil.getParam("current_account","").toString();
+        String nickname = SharedPreferenceUtil.getParam("current_nickname","").toString();
+        //RongIMUtil.register();
     }
 
     //登录IM用户
-    private void loginIM(String token){
-        //登录IM
-        EMClient.getInstance().loginWithToken(SharedPreferenceUtil.getParam("current_account","").toString(), token, new EMCallBack() {
-            // 登录成功回调
-            @Override
-            public void onSuccess() {
-                LogUtil.d("login IM", "success");
-                Message message = new Message();
-                message.what = LOGIN_IM_SUCCESS;
-                handler.sendMessage(message);
-            }
-
-            // 登录失败回调，包含错误信息
-            @Override
-            public void onError(int code, String error) {
-                LogUtil.e("login IM", code + "-" + error);
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-                LogUtil.d("login IM", "login...");
-            }
-        });
-
-    }
+//    private void loginIM(String token){
+//        //登录IM
+//        EMClient.getInstance().loginWithToken(SharedPreferenceUtil.getParam("current_account","").toString(), token, new EMCallBack() {
+//            // 登录成功回调
+//            @Override
+//            public void onSuccess() {
+//                LogUtil.d("login IM", "success");
+//                Message message = new Message();
+//                message.what = LOGIN_IM_SUCCESS;
+//                handler.sendMessage(message);
+//            }
+//
+//            // 登录失败回调，包含错误信息
+//            @Override
+//            public void onError(int code, String error) {
+//                LogUtil.e("login IM", code + "-" + error);
+//            }
+//
+//            @Override
+//            public void onProgress(int progress, String status) {
+//                LogUtil.d("login IM", "login...");
+//            }
+//        });
+//
+//    }
 
 }

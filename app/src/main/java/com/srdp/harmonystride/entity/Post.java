@@ -1,6 +1,7 @@
 package com.srdp.harmonystride.entity;
 
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
@@ -134,11 +135,12 @@ public class Post implements Serializable {
         this.pid = post.pid;
     }
 
+    public String getImageUrl(){
+        return ImageUtil.getImagePath(images);
+    }
+
     public String getContentWithoutHtmlTags(){
         return StringUtil.removeHtmlTags(content);
     }
 
-    public String getTitleWithApplyHint(){
-        return R.string.apply_post_hint + title;
-    }
 }

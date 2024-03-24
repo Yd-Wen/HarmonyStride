@@ -2,7 +2,6 @@ package com.srdp.harmonystride.activity;
 
 import static com.mob.MobSDK.submitPolicyGrantResult;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,8 +24,9 @@ import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
-import com.srdp.harmonystride.util.IMUtil;
 import com.srdp.harmonystride.util.LogUtil;
+import com.srdp.harmonystride.util.RongIMUtil;
+import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.TimerUtil;
 
@@ -40,7 +40,7 @@ import okhttp3.Response;
 
 public class RegisterActivity extends BaseActivity {
     private static final int REGISTER_SUCCESS = 1; //注册成功
-    private static final int REGISTER_IM_SUCCESS = 2; //注册IM成功
+    private static final int GET_TOKEN_SUCCESS = 2; //注册IM成功
     private static final int GET_SYSTEM_MESSAGE_SUCCESS = 3; //获取系统消息成功
     private static final int EXIST = 4; //账号已存在
     public static final int NOT_EXIST = 5; //账号不存在
@@ -62,9 +62,9 @@ public class RegisterActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case REGISTER_SUCCESS:
-                    registerIM();
+                    getUserToken(new User(accountEt.getText().toString(), passwordEt.getText().toString()));
                     break;
-                case REGISTER_IM_SUCCESS:
+                case GET_TOKEN_SUCCESS:
                     getSystemMessage();
                     break;
                 case GET_SYSTEM_MESSAGE_SUCCESS:
@@ -255,26 +255,53 @@ public class RegisterActivity extends BaseActivity {
     }
 
     //向环信IM服务器注册
-    private void registerIM(){
-        IMUtil.registerUser(accountEt.getText().toString(), passwordEt.getText().toString(), new Callback() {
+    private void getUserToken(User user){
+        String TAG = "registerIM";
+//        IMUtil.registerUser(accountEt.getText().toString(), passwordEt.getText().toString(), new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                LogUtil.e("register into IM", "error");
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                LogUtil.d("register into IM", "success");
+//                if(response.code() == 200){
+//                    LogUtil.d("register success", String.valueOf(response.code()));
+//                    Message message = new Message();
+//                    message.what = REGISTER_IM_SUCCESS;
+//                    handler.sendMessage(message);
+//                }else {
+//                    LogUtil.e("register error", String.valueOf(response.code()));
+//                }
+//            }
+//        });
+
+        RongIMUtil.register(user, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                LogUtil.e("register into IM", "error");
+                LogUtil.e(TAG, "error:" + e);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                LogUtil.d("register into IM", "success");
+                LogUtil.d(TAG, "success");
                 if(response.code() == 200){
-                    LogUtil.d("register success", String.valueOf(response.code()));
-                    Message message = new Message();
-                    message.what = REGISTER_IM_SUCCESS;
-                    handler.sendMessage(message);
+                    Result result = RongIMUtil.gson.fromJson(response.body().string(), Result.class);
+                    if(result.getCode() == 1){
+                        //记录token
+                        SharedPreferenceUtil.setParam("user_token", result.getData().toString());
+                        Message message = new Message();
+                        message.what = GET_TOKEN_SUCCESS;
+                        handler.sendMessage(message);
+                    }
                 }else {
-                    LogUtil.e("register error", String.valueOf(response.code()));
+                    LogUtil.e(TAG, "error:" + response.code());
                 }
             }
         });
+
+
     }
 
     private void getSystemMessage(){

@@ -61,8 +61,8 @@ dependencies {
     implementation 'org.litepal.guolindev:core:3.2.3'
     //环信IM依赖
     //implementation 'io.hyphenate:hyphenate-chat:4.4.0'
-    implementation 'io.hyphenate:ease-im-kit:3.8.5'
-    implementation 'io.hyphenate:hyphenate-chat:3.8.5'
+    //implementation 'io.hyphenate:ease-im-kit:3.8.5'
+    //implementation 'io.hyphenate:hyphenate-chat:3.8.5'
 
     //阿里云OSS依赖
     implementation 'com.aliyun.dpa:oss-android-sdk:2.9.13'
@@ -82,6 +82,12 @@ dependencies {
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.28'
 
+    // 即时通讯 UI 基础组件
+    implementation 'cn.rongcloud.sdk:im_kit:5.6.10'
+    // 即时通讯基础能力库
+    implementation 'cn.rongcloud.sdk:im_lib:5.6.10'
+    // 即时通讯基础能力库
+    implementation 'cn.rongcloud.sdk:im_libcore:5.6.10'
 
 
 }

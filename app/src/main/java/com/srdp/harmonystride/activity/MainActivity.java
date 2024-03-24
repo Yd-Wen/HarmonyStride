@@ -25,7 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
-import com.hyphenate.chat.EMClient;
+//import com.hyphenate.chat.EMClient;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.dialog.TipDialog;
@@ -61,7 +61,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         //注册消息监听
-        EMClient.getInstance().chatManager().addMessageListener(MyApplication.messamgeListener);
+        //EMClient.getInstance().chatManager().addMessageListener(MyApplication.messamgeListener);
 
         //初始化视图
         initViews();
@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         //记得在不需要的时候移除listener，如在activity的onDestroy()时
-        EMClient.getInstance().chatManager().removeMessageListener(MyApplication.messamgeListener);
+        //EMClient.getInstance().chatManager().removeMessageListener(MyApplication.messamgeListener);
     }
 
     //获取工具栏菜单

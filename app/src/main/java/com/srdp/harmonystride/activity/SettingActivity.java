@@ -16,7 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.hyphenate.chat.EMClient;
+//import com.hyphenate.chat.EMClient;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.dialog.TipDialog;
@@ -62,7 +62,7 @@ public class SettingActivity extends BaseActivity {
                     //下次开屏页结束后进入登录页
                     SharedPreferenceUtil.setParam("is_login", false);
                     //登出IM
-                    EMClient.getInstance().logout(true);
+                    //EMClient.getInstance().logout(true);
                     navigateTo(LoginActivity.class);
                     finish();
                     break;
@@ -249,7 +249,7 @@ public class SettingActivity extends BaseActivity {
                             //下次开屏页结束后进入登录页
                             SharedPreferenceUtil.setParam("is_login", false);
                             //登出IM
-                            EMClient.getInstance().logout(true);
+                            //EMClient.getInstance().logout(true);
                         }
                     }
                 }).show();

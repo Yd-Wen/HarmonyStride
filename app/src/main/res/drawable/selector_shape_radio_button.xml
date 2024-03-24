@@ -15,7 +15,7 @@
             <!-- 圆角的半径 -->
             <corners android:radius="@dimen/dimen10"/>
             <!-- 边框 -->
-            <stroke android:color="@color/gray"
+            <stroke android:color="@color/app_color_grey"
                 android:width="@dimen/dimen2"/>
         </shape>
     </item>

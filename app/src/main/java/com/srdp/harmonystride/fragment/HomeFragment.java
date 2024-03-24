@@ -30,7 +30,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hyphenate.chat.EMClient;
+//import com.hyphenate.chat.EMClient;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
@@ -86,6 +86,8 @@ public class HomeFragment extends Fragment{
     private NavigationView navigationView;
     private CircleImageView avatarCiv;
     private TextView nicknameTv;
+    private ImageView certifyIv;
+    private ImageView postIv;
 
     private FloatingActionButton floatingActionButton;
 
@@ -101,7 +103,6 @@ public class HomeFragment extends Fragment{
     private SmartRefreshLayout smartRefreshLayout;
     private RecyclerView recyclerView;
 
-    private ToastUtil toastUtil;
     private ScrollUtil scrollUtil; // 滑动工具
     private static final int SCROLL_THRESHOLD = 1000; // 设置滑动阈值
 
@@ -152,7 +153,6 @@ public class HomeFragment extends Fragment{
         //通过账户名从本地数据库读取当前用户信息
         List<User> Users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
         curUser = Users.get(0);
-        toastUtil = new ToastUtil(MyApplication.getContext());
         curTag = getString(R.string.post_label_all);
     }
 
@@ -251,6 +251,9 @@ public class HomeFragment extends Fragment{
         //设置新标题
         titleTv.setText(R.string.home);
 
+        certifyIv = view.findViewById(R.id.iv_certify);
+        postIv = view.findViewById(R.id.iv_post);
+
         floatingActionButton = view.findViewById(R.id.floating_action_btn);
 
         searchIv = view.findViewById(R.id.iv_search);
@@ -299,6 +302,22 @@ public class HomeFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        certifyIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent certifyIntent = new Intent(getActivity(), CertificationActivity.class);
+                startActivity(certifyIntent);
+            }
+        });
+
+        postIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), PostingActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -8,7 +8,9 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -79,6 +81,10 @@ public class ProfileActivity extends BaseActivity {
     private SmartRefreshLayout smartRefreshLayout;
     private RecyclerView recyclerView;
 
+    private LinearLayout userOptionLl;
+    private Button chatBtn;
+    private Button focusBtn;
+
     private PostVisitAdapter postVisitAdapter;
 
     private User curUser = new User();
@@ -131,7 +137,6 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void requestDatas(String time, Boolean isLoadMore){
-        //TODO:请求数据user/postList
         Map<String, Object> params = new HashMap<>();
         params.put("uid", String.valueOf(uid));
         params.put("time", time);
@@ -182,6 +187,7 @@ public class ProfileActivity extends BaseActivity {
         if(!StringUtil.isEmpty(curUser.getAvatar())){
             Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(ImageUtil.requestOptionsWithCircle).into(avatarCiv);
             Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(ImageUtil.requestOptionsWithCircle).into(avatarToolbarCiv);
+            Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(ImageUtil.requestOptionsWithCircle).into(backgroundIv);
         }
         //显示昵称
         nicknameTv.setText(curUser.getNickname());
@@ -252,6 +258,10 @@ public class ProfileActivity extends BaseActivity {
 
         smartRefreshLayout = findViewById(R.id.smart_refresh_layout);
         recyclerView = findViewById(R.id.recycler_view);
+
+        userOptionLl = findViewById(R.id.ll_user_option);
+        chatBtn = findViewById(R.id.btn_chat);
+        focusBtn = findViewById(R.id.btn_focus);
 
     }
 
@@ -324,6 +334,20 @@ public class ProfileActivity extends BaseActivity {
         //设置适配器
         postVisitAdapter = new PostVisitAdapter(postList, curUser);
         recyclerView.setAdapter(postVisitAdapter);
+
+        chatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        focusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
     }
 

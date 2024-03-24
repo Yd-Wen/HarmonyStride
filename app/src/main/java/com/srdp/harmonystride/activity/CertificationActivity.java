@@ -338,7 +338,7 @@ public class CertificationActivity extends BaseActivity {
     //获取工具栏菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_toolbar_setting, menu);
+        getMenuInflater().inflate(R.menu.menu_toolbar_edit, menu);
         return true;
     }
 

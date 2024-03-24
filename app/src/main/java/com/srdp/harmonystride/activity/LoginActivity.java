@@ -18,8 +18,8 @@ import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
+//import com.hyphenate.EMCallBack;
+//import com.hyphenate.chat.EMClient;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.Result;
@@ -223,27 +223,31 @@ public class LoginActivity extends BaseActivity {
     //登录IM用户
     private void loginIM(String token){
         //登录IM
-        EMClient.getInstance().loginWithToken(accountEt.getText().toString(), token, new EMCallBack() {
-            // 登录成功回调
-            @Override
-            public void onSuccess() {
-                LogUtil.d("login IM", "success");
-                Message message = new Message();
+//        EMClient.getInstance().loginWithToken(accountEt.getText().toString(), token, new EMCallBack() {
+//            // 登录成功回调
+//            @Override
+//            public void onSuccess() {
+//                LogUtil.d("login IM", "success");
+//                Message message = new Message();
+//                message.what = LOGIN_IM_SUCCESS;
+//                handler.sendMessage(message);
+//            }
+//
+//            // 登录失败回调，包含错误信息
+//            @Override
+//            public void onError(int code, String error) {
+//                LogUtil.e("login IM", code + "-" + error);
+//            }
+//
+//            @Override
+//            public void onProgress(int progress, String status) {
+//                LogUtil.d("login IM", "login...");
+//            }
+//        });
+
+        Message message = new Message();
                 message.what = LOGIN_IM_SUCCESS;
                 handler.sendMessage(message);
-            }
-
-            // 登录失败回调，包含错误信息
-            @Override
-            public void onError(int code, String error) {
-                LogUtil.e("login IM", code + "-" + error);
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-                LogUtil.d("login IM", "login...");
-            }
-        });
 
     }
 

@@ -58,6 +58,12 @@ public class ImageUtil {
         return AppCompatResources.getDrawable(MyApplication.getContext(), resourceId);
     }
 
+    //将图片资源转换成bitmap
+    public static Bitmap getBitmapFromResourceId(int resourceId) {
+        Drawable drawable = getDrawableFromResourceId(resourceId);
+        return ((BitmapDrawable)drawable).getBitmap();
+    }
+
     // 将drawable 图像转化成二进制字节
     public static byte[] drawableToByteArray(Drawable drawable) {
         if (drawable != null) {
