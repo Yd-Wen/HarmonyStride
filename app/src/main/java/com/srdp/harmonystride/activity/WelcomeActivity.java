@@ -18,10 +18,12 @@ import com.google.gson.JsonParser;
 //import com.hyphenate.chat.EMOptions;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.dialog.PrivacyDialog;
+import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.util.IMUtil;
 import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.RongIMUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
+import com.srdp.harmonystride.util.StringUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,6 +32,7 @@ import java.io.InputStreamReader;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -46,6 +49,7 @@ public class WelcomeActivity extends BaseActivity {
             switch (status){
                 case TOKEN_INCORRECT:
                     //token过期
+                    LogUtil.e("token过期", "WelcomeActivity");
                     getUserToken();
                     break;
                 default:
@@ -60,11 +64,16 @@ public class WelcomeActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case GET_IM_USER_TOKEN_SUCCESS:
-                    //loginIM(msg.obj.toString());
+                    //TODO 连接IM服务器
+                    LogUtil.e("获取IM用户Token成功", "WelcomeActivity");
+                    loginIM();
                     break;
                 case LOGIN_IM_SUCCESS:
+                    LogUtil.e("登录IM成功", "WelcomeActivity");
                     navigateTo(MainActivity.class);
                     finish();
+                    //移除连接监听器
+                    RongIM.setConnectionStatusListener(null);
                     break;
                 default:
                     break;
@@ -76,7 +85,8 @@ public class WelcomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
+        //设置连接监听器
+        RongIM.setConnectionStatusListener(connectionStatusListener);
         //展示隐私内容
         checkPrivacy();
     }
@@ -126,9 +136,12 @@ public class WelcomeActivity extends BaseActivity {
                     //是否已经登录
                     Boolean isLogin = (Boolean) SharedPreferenceUtil.getParam("is_login", false);
                     if(isLogin){
-                        navigateTo(MainActivity.class);
-                        finish();
-                        //getIMUserToken();
+                        //TODO 连接IM服务器
+                        if(StringUtil.isEmpty((String)SharedPreferenceUtil.getParam("user_token", ""))){
+                            getUserToken();
+                        }else {
+                            loginIM();
+                        }
                     }else{
                         navigateTo(LoginActivity.class);
                         finish();
@@ -151,36 +164,59 @@ public class WelcomeActivity extends BaseActivity {
 
     //获取IM用户的TOKEN
     private void getUserToken(){
+        String TAG = "getUserToken";
         String account = SharedPreferenceUtil.getParam("current_account","").toString();
-        String nickname = SharedPreferenceUtil.getParam("current_nickname","").toString();
-        //RongIMUtil.register();
+        RongIMUtil.getToken(account, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.e(TAG, "error" + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d(TAG, "success");
+                Result result = RongIMUtil.gson.fromJson(response.body().string(), Result.class);
+                LogUtil.e("token", result.getData().toString());
+                SharedPreferenceUtil.setParam("user_token", result.getData().toString());
+                Message message = new Message();
+                message.what = GET_IM_USER_TOKEN_SUCCESS;
+                handler.sendMessage(message);
+            }
+        });
     }
 
+
+
     //登录IM用户
-//    private void loginIM(String token){
-//        //登录IM
-//        EMClient.getInstance().loginWithToken(SharedPreferenceUtil.getParam("current_account","").toString(), token, new EMCallBack() {
-//            // 登录成功回调
-//            @Override
-//            public void onSuccess() {
-//                LogUtil.d("login IM", "success");
-//                Message message = new Message();
-//                message.what = LOGIN_IM_SUCCESS;
-//                handler.sendMessage(message);
-//            }
-//
-//            // 登录失败回调，包含错误信息
-//            @Override
-//            public void onError(int code, String error) {
-//                LogUtil.e("login IM", code + "-" + error);
-//            }
-//
-//            @Override
-//            public void onProgress(int progress, String status) {
-//                LogUtil.d("login IM", "login...");
-//            }
-//        });
-//
-//    }
+    private void loginIM(){
+        //登录IM
+        String token = (String) SharedPreferenceUtil.getParam("user_token", "");
+        LogUtil.e("token", token);
+        RongIM.connect(token, new RongIMClient.ConnectCallback() {
+            @Override
+            public void onSuccess(String t) {
+                Message message = new Message();
+                message.what = LOGIN_IM_SUCCESS;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onError(RongIMClient.ConnectionErrorCode e) {
+                switch (e){
+                    case RC_CONN_TOKEN_INCORRECT:
+                        //token无效
+                        getUserToken();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onDatabaseOpened(RongIMClient.DatabaseOpenStatus code) {
+            }
+        });
+
+    }
 
 }

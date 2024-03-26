@@ -30,6 +30,9 @@ import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.TimerUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import cn.smssdk.EventHandler;
@@ -55,6 +58,8 @@ public class RegisterActivity extends BaseActivity {
     private Button registerBtn;
     private CheckBox privacyAgreeCb;
 
+    private User user;
+
     private EventHandler eventHandler;
     private final Handler handler = new Handler(Looper.getMainLooper()){
         @Override
@@ -62,12 +67,10 @@ public class RegisterActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case REGISTER_SUCCESS:
-                    getUserToken(new User(accountEt.getText().toString(), passwordEt.getText().toString()));
+                    getUserToken(user);
                     break;
                 case GET_TOKEN_SUCCESS:
                     getSystemMessage();
-                    break;
-                case GET_SYSTEM_MESSAGE_SUCCESS:
                     //返回登录页
                     Intent resutltIntent = new Intent();
                     resutltIntent.putExtra("account", accountEt.getText().toString())
@@ -75,6 +78,15 @@ public class RegisterActivity extends BaseActivity {
                     setResult(Activity.RESULT_OK, resutltIntent);
                     finish();
                     showToast("注册成功，请登录");
+                    break;
+                case GET_SYSTEM_MESSAGE_SUCCESS:
+                    //返回登录页
+//                    Intent resutltIntent = new Intent();
+//                    resutltIntent.putExtra("account", accountEt.getText().toString())
+//                            .putExtra("password", passwordEt.getText().toString());
+//                    setResult(Activity.RESULT_OK, resutltIntent);
+//                    finish();
+//                    showToast("注册成功，请登录");
                     break;
                 case EXIST:
                     showToast("账号已注册");
@@ -129,7 +141,8 @@ public class RegisterActivity extends BaseActivity {
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         //提交短信、语音验证码成功
                         //服务端注册
-                        register(new User(accountEt.getText().toString(), passwordEt.getText().toString()));
+                        user = new User(accountEt.getText().toString(), passwordEt.getText().toString());
+                        register(user);
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         //获取短信验证码成功
                         Message message = new Message();
@@ -254,29 +267,9 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-    //向环信IM服务器注册
+    //向融云IM服务器注册
     private void getUserToken(User user){
         String TAG = "registerIM";
-//        IMUtil.registerUser(accountEt.getText().toString(), passwordEt.getText().toString(), new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                LogUtil.e("register into IM", "error");
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                LogUtil.d("register into IM", "success");
-//                if(response.code() == 200){
-//                    LogUtil.d("register success", String.valueOf(response.code()));
-//                    Message message = new Message();
-//                    message.what = REGISTER_IM_SUCCESS;
-//                    handler.sendMessage(message);
-//                }else {
-//                    LogUtil.e("register error", String.valueOf(response.code()));
-//                }
-//            }
-//        });
-
         RongIMUtil.register(user, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -289,11 +282,16 @@ public class RegisterActivity extends BaseActivity {
                 if(response.code() == 200){
                     Result result = RongIMUtil.gson.fromJson(response.body().string(), Result.class);
                     if(result.getCode() == 1){
-                        //记录token
-                        SharedPreferenceUtil.setParam("user_token", result.getData().toString());
-                        Message message = new Message();
-                        message.what = GET_TOKEN_SUCCESS;
-                        handler.sendMessage(message);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.body().string());
+                            String token = jsonObject.getJSONObject("data").getString("token");
+                            SharedPreferenceUtil.setParam("user_token", token);
+                            Message message = new Message();
+                            message.what = GET_TOKEN_SUCCESS;
+                            handler.sendMessage(message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }else {
                     LogUtil.e(TAG, "error:" + response.code());

@@ -86,8 +86,6 @@ dependencies {
     implementation 'cn.rongcloud.sdk:im_kit:5.6.10'
     // 即时通讯基础能力库
     implementation 'cn.rongcloud.sdk:im_lib:5.6.10'
-    // 即时通讯基础能力库
-    implementation 'cn.rongcloud.sdk:im_libcore:5.6.10'
 
 
 }

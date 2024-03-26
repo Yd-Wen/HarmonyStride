@@ -28,6 +28,7 @@ import com.srdp.harmonystride.util.SharedPreferenceUtil;
 
 import java.io.IOException;
 
+import io.rong.imkit.RongIM;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -249,6 +250,7 @@ public class SettingActivity extends BaseActivity {
                             //下次开屏页结束后进入登录页
                             SharedPreferenceUtil.setParam("is_login", false);
                             //登出IM
+                            RongIM.getInstance().disconnect();
                             //EMClient.getInstance().logout(true);
                         }
                     }

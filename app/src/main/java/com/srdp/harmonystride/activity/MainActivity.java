@@ -43,6 +43,7 @@ import org.litepal.LitePal;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.rong.imkit.utils.RouteUtils;
 
 public class MainActivity extends BaseActivity {
     private HomeFragment homeFragment;
@@ -62,6 +63,8 @@ public class MainActivity extends BaseActivity {
 
         //注册消息监听
         //EMClient.getInstance().chatManager().addMessageListener(MyApplication.messamgeListener);
+
+        RouteUtils.registerActivity(RouteUtils.RongActivityType.ConversationListActivity, MainActivity.class);
 
         //初始化视图
         initViews();

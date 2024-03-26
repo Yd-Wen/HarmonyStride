@@ -187,7 +187,6 @@ public class ProfileActivity extends BaseActivity {
         if(!StringUtil.isEmpty(curUser.getAvatar())){
             Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(ImageUtil.requestOptionsWithCircle).into(avatarCiv);
             Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(ImageUtil.requestOptionsWithCircle).into(avatarToolbarCiv);
-            Glide.with(this).load(ImageUtil.getImagePath(curUser.getAvatar())).apply(ImageUtil.requestOptionsWithCircle).into(backgroundIv);
         }
         //显示昵称
         nicknameTv.setText(curUser.getNickname());

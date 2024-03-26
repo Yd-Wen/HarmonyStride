@@ -26,7 +26,7 @@ import okio.BufferedSink;
 public class HTTPUtil {
     public static final OkHttpClient client = new OkHttpClient();
     public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
-    //public static final String IP = "http://10.142.223.141:8080";
+    //public static final String IP = "http://10.152.222.96:8080";
     public static final Gson gson = new Gson();
 
     //异步执行GET方法
@@ -51,7 +51,7 @@ public class HTTPUtil {
     public static void POST(RequestBody requestBody, Boolean noIP, String ipUrl, okhttp3.Callback callback){
         if(noIP){
             Request request = new Request.Builder()
-                    .url("http://10.142.220.131:8080" + ipUrl)
+                    .url("http://10.152.222.96:8080" + ipUrl)
                     .post(requestBody)
                     .build();
             client.newCall(request).enqueue(callback);

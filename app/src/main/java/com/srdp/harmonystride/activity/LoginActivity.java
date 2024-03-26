@@ -27,15 +27,20 @@ import com.srdp.harmonystride.util.HTTPUtil;
 
 import java.io.IOException;
 
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.IMUtil;
 import com.srdp.harmonystride.util.LogUtil;
+import com.srdp.harmonystride.util.RongIMUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.litepal.LitePal;
 
 public class LoginActivity extends BaseActivity {
@@ -59,7 +64,7 @@ public class LoginActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case GET_IM_USER_TOKEN_SUCCESS:
-                    loginIM(msg.obj.toString());
+                    loginIM();
                     break;
                 case LOGIN_IM_SUCCESS:
                     login();
@@ -68,7 +73,7 @@ public class LoginActivity extends BaseActivity {
                     showToast("账号或密码错误");
                     break;
                 case EXIST:
-                    getIMUserToken();
+                    getUserToken();
                     break;
                 default:
                     break;
@@ -191,64 +196,63 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    //登录IM用户
+    private void loginIM(){
+        //登录IM
+        String token = (String) SharedPreferenceUtil.getParam("user_token", "");
+        LogUtil.e("token", token);
+        RongIM.connect(token, new RongIMClient.ConnectCallback() {
+            @Override
+            public void onSuccess(String t) {
+                Message message = new Message();
+                message.what = LOGIN_IM_SUCCESS;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onError(RongIMClient.ConnectionErrorCode e) {
+                switch (e){
+                    case RC_CONN_TOKEN_INCORRECT:
+                        //token无效
+                        getUserToken();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onDatabaseOpened(RongIMClient.DatabaseOpenStatus code) {
+            }
+        });
+
+    }
+
     //获取IM用户的TOKEN
-    private void getIMUserToken(){
-        IMUtil.getUserToken(accountEt.getText().toString(), new Callback() {
+    private void getUserToken(){
+        String TAG = "getUserToken";
+        String account = SharedPreferenceUtil.getParam("current_account","").toString();
+        RongIMUtil.getToken(account, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                LogUtil.e("get user " + accountEt.getText().toString() + " token", "error");
+                LogUtil.e(TAG, "error" + e);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                LogUtil.d("get user " + accountEt.getText().toString() + " token", "success");
-                if(response.code() == 200){
-                    //获取请求体
-                    String responseBody = response.body().string();
-                    //转换为json对象
-                    JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-                    //传递消息
+                LogUtil.d(TAG, "success");
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    String token = jsonObject.getJSONObject("data").getString("token");
+                    SharedPreferenceUtil.setParam("user_token", token);
                     Message message = new Message();
                     message.what = GET_IM_USER_TOKEN_SUCCESS;
-                    message.obj = jsonObject.get("access_token").getAsString();
                     handler.sendMessage(message);
-                    LogUtil.d("get user token success", message.obj.toString());
-                }else {
-                    LogUtil.e("register error", String.valueOf(response.code()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });
-    }
-
-    //登录IM用户
-    private void loginIM(String token){
-        //登录IM
-//        EMClient.getInstance().loginWithToken(accountEt.getText().toString(), token, new EMCallBack() {
-//            // 登录成功回调
-//            @Override
-//            public void onSuccess() {
-//                LogUtil.d("login IM", "success");
-//                Message message = new Message();
-//                message.what = LOGIN_IM_SUCCESS;
-//                handler.sendMessage(message);
-//            }
-//
-//            // 登录失败回调，包含错误信息
-//            @Override
-//            public void onError(int code, String error) {
-//                LogUtil.e("login IM", code + "-" + error);
-//            }
-//
-//            @Override
-//            public void onProgress(int progress, String status) {
-//                LogUtil.d("login IM", "login...");
-//            }
-//        });
-
-        Message message = new Message();
-                message.what = LOGIN_IM_SUCCESS;
-                handler.sendMessage(message);
-
     }
 
     //登录，更新本地数据，记录配置信息

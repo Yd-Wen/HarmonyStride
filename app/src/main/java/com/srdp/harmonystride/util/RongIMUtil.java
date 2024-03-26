@@ -11,14 +11,14 @@ import okhttp3.RequestBody;
 public class RongIMUtil {
     public static final OkHttpClient client = new OkHttpClient();
     //public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
-    public static final String IP = "http://192.168.43.69:8080"; //服务器IP地址
+    public static final String IP = "http://10.152.222.96:8080"; //服务器IP地址
 
     public static final Gson gson = new Gson();
 
     //异步执行POST方法
     public static void POST(RequestBody requestBody, String url, okhttp3.Callback callback){
         Request request = new Request.Builder()
-                .url(url)
+                .url(IP + url)
                 .post(requestBody)
                 .build();
         client.newCall(request).enqueue(callback);
@@ -39,22 +39,16 @@ public class RongIMUtil {
         POST(requestBody, url, callback);
     }
 
-    public static void register(String account, okhttp3.Callback callback){
-       // HTTPUtil.
-
-
-
-//        String url = "/imuser/register";
-//        // 创建一个FormBody.Builder实例
-//        FormBody.Builder formBuilder = new FormBody.Builder();
-//        // 添加键值对到Builder中
-//        formBuilder.add("userId", account);
-//        formBuilder.add("name", nickname);
-//        formBuilder.add("portraitUri", avatarUrl);
-//        // 创建RequestBody
-//        RequestBody requestBody = formBuilder.build();
-//        //发起POST请求
-//        POST(requestBody, url, callback);
+    public static void getToken(String account, okhttp3.Callback callback){
+        String url = "/imuser/token";
+        // 创建一个FormBody.Builder实例
+        FormBody.Builder formBuilder = new FormBody.Builder();
+        // 添加键值对到Builder中
+        formBuilder.add("userId", account);
+        // 创建RequestBody
+        RequestBody requestBody = formBuilder.build();
+        //发起POST请求
+        POST(requestBody, url, callback);
     }
 
 

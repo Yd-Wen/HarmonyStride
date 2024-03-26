@@ -32,10 +32,13 @@ import com.srdp.harmonystride.util.ImageUtil;
 import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.rong.imkit.conversation.RongConversationActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class ChatActivity extends BaseActivity {
+public class ChatActivity extends RongConversationActivity {
+
+
 
 }
