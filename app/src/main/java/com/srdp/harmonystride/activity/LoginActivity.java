@@ -28,6 +28,7 @@ import com.srdp.harmonystride.util.HTTPUtil;
 import java.io.IOException;
 
 import io.rong.imkit.RongIM;
+import io.rong.imkit.utils.RouteUtils;
 import io.rong.imlib.RongIMClient;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -175,7 +176,9 @@ public class LoginActivity extends BaseActivity {
                     JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
                     JsonObject data = jsonObject.getAsJsonObject("data");
                     //注意不要用toString，否则引号会保留到字符串
-                    curUser = new User(accountEt.getText().toString(), passwordEt.getText().toString());
+                    curUser = new User();
+                    curUser.setAccount(accountEt.getText().toString());
+                    curUser.setPassword(passwordEt.getText().toString());
                     curUser.setUid(data.get("id").getAsInt());
                     curUser.setAvatar(data.get("avatar").getAsString());
                     curUser.setNickname(data.get("nickname").getAsString());
@@ -231,7 +234,8 @@ public class LoginActivity extends BaseActivity {
     //获取IM用户的TOKEN
     private void getUserToken(){
         String TAG = "getUserToken";
-        String account = SharedPreferenceUtil.getParam("current_account","").toString();
+        //String account = SharedPreferenceUtil.getParam("current_account","").toString();
+        String account = accountEt.getText().toString();
         RongIMUtil.getToken(account, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -280,7 +284,8 @@ public class LoginActivity extends BaseActivity {
         }
 
         //跳转到主页
-        navigateTo(MainActivity.class);
+        //navigateTo(MainActivity.class);
+        RouteUtils.routeToConversationListActivity(LoginActivity.this, "");
         finish();
         showToast("登录成功");
     }

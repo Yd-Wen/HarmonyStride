@@ -1,11 +1,15 @@
 package com.srdp.harmonystride.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 //import com.hyphenate.chat.EMConversation;
@@ -13,6 +17,7 @@ import androidx.fragment.app.Fragment;
 //import com.hyphenate.easeui.modules.conversation.EaseConversationListFragment;
 //import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.srdp.harmonystride.MyApplication;
+import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.activity.ChatActivity;
 import com.srdp.harmonystride.activity.MainActivity;
 
@@ -21,4 +26,16 @@ import io.rong.imkit.utils.RouteUtils;
 
 public class MessageFragment extends ConversationListFragment {
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //addHeaderView(view.findViewById(R.layout.fragment_message));
+    }
+
+    @Override
+    public void addHeaderView(View view) {
+        //super.addHeaderView((View) getResources().getLayout(R.layout.fragment_message));
+        //super.addHeaderView(view);
+        //mAdapter.addHeaderView(view);
+    }
 }

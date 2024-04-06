@@ -337,7 +337,9 @@ public class ProfileActivity extends BaseActivity {
         chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
+                intent.putExtra("uid", curUser.getUid());
+                navigateTo(intent);
             }
         });
 

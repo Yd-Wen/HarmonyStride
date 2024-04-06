@@ -28,7 +28,6 @@ import com.google.android.material.navigation.NavigationView;
 //import com.hyphenate.chat.EMClient;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.dialog.TipDialog;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.fragment.HomeFragment;
 import com.srdp.harmonystride.fragment.MessageFragment;
@@ -64,7 +63,7 @@ public class MainActivity extends BaseActivity {
         //注册消息监听
         //EMClient.getInstance().chatManager().addMessageListener(MyApplication.messamgeListener);
 
-        RouteUtils.registerActivity(RouteUtils.RongActivityType.ConversationListActivity, MainActivity.class);
+        //RouteUtils.registerActivity(RouteUtils.RongActivityType.ConversationListActivity, MainActivity.class);
 
         //初始化视图
         initViews();

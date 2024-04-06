@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.activity.PostActivity;
-import com.srdp.harmonystride.dialog.TipDialog;
 import com.srdp.harmonystride.entity.Application;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.User;
