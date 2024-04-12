@@ -245,14 +245,14 @@ public class CertificationActivity extends BaseActivity {
                     }else {
                         submitBtn.setVisibility(View.GONE);
                         //TODO:插入数据库
-                        insert();
+                        insert(certification);
                     }
                 }
             }
         });
     }
 
-    private void insert(){
+    private void insert(Certification certification){
         HTTPUtil.insert(certification, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

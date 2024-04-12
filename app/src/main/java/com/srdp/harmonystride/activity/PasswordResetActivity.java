@@ -49,7 +49,6 @@ import okhttp3.Response;
 
 public class PasswordResetActivity extends BaseActivity {
     private static final int UPDATE_SUCCESS = 1; //重置密码成功
-    private static final int UPDATE_IM_SUCCESS = 2; //重置密码成功
     private static final int EXIST = 3; //账号已存在
     public static final int NOT_EXIST = 4; //账号不存在
     private static final int MESSAGE_GET_SUCCESS = 5; //短信发送成功
@@ -70,9 +69,6 @@ public class PasswordResetActivity extends BaseActivity {
             int tag = msg.what;
             switch (tag){
                 case UPDATE_SUCCESS:
-                    updateIM();
-                    break;
-                case UPDATE_IM_SUCCESS:
                     toLogin();
                     break;
                 case EXIST:
@@ -196,7 +192,7 @@ public class PasswordResetActivity extends BaseActivity {
 
     //服务端查重，是否已注册
     private void isRegistered(String account){
-        HTTPUtil.isExist(User.class, "account", account, new Callback() {
+        HTTPUtil.isRegistered(account, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 LogUtil.e(account, " request error " + e);
@@ -247,31 +243,6 @@ public class PasswordResetActivity extends BaseActivity {
             }
         });
     }
-
-    //向IM服务端更新密码
-    private void updateIM(){
-        IMUtil.resetPassword(accountEt.getText().toString(), newPwdEt.getText().toString(), new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LogUtil.e("update IM", "error");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                LogUtil.d("update IM", "success");
-                if(response.code() == 200){
-                    LogUtil.d("update IM success", String.valueOf(response.code()));
-                    Message message = new Message();
-                    message.what = UPDATE_IM_SUCCESS;
-                    handler.sendMessage(message);
-                }else {
-                    LogUtil.e("update IM error", String.valueOf(response.code()));
-                }
-
-            }
-        });
-    }
-
 
     //返回登录，更新本地数据，记录配置信息
     private void toLogin(){

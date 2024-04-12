@@ -75,15 +75,33 @@
                     android:paddingBottom="@dimen/dimen50"
                     android:orientation="vertical">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/civ_avatar"
-                        android:layout_width="@dimen/circleImageSize"
-                        android:layout_height="@dimen/circleImageSize"
-                        app:civ_border_color="@color/colorCircleImageBorder"
-                        app:civ_border_width="@dimen/dimen2"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/default_avatar"
-                        android:foreground="@drawable/avatar_stroke_default"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/civ_avatar"
+                            android:layout_width="@dimen/circleImageSize"
+                            android:layout_height="@dimen/circleImageSize"
+                            app:civ_border_color="@color/colorCircleImageBorder"
+                            app:civ_border_width="@dimen/dimen2"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/default_avatar"
+                            android:foreground="@drawable/avatar_stroke_default"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"/>
+                        <Button
+                            android:id="@+id/btn_chat"
+                            android:layout_width="@dimen/dimen100"
+                            android:layout_height="@dimen/dimen40"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/selector_shape_button_orange"
+                            android:textAppearance="@style/TipBlackAppearance"
+                            android:text="@string/chat"/>
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tv_nickname"
@@ -96,9 +114,10 @@
                         android:id="@+id/tv_introduction"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen10"
                         android:layout_marginEnd="@dimen/dimen100"
                         android:gravity="center_vertical"
-                        android:textAppearance="@style/TitleProfileAppearance"/>
+                        android:textAppearance="@style/TipProfileAppearance" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -154,7 +173,7 @@
             <com.scwang.smart.refresh.layout.SmartRefreshLayout
                 android:id="@+id/smart_refresh_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 app:srlAccentColor="@color/colorAccent"
                 app:srlPrimaryColor="@color/colorPrimary"
                 app:srlReboundDuration="300"
@@ -165,9 +184,13 @@
                 app:srlFooterHeight="@dimen/dimen50"
                 app:srlEnableLoadMore="true">
 
-                <com.scwang.smart.refresh.header.BezierRadarHeader
+                <pl.droidsonroids.gif.GifImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="@dimen/dimen50"
+                    android:src="@drawable/loading"
+                    android:scaleType="center"
+                    app:layout_srlSpinnerStyle="Scale"
+                    app:layout_srlBackgroundColor="@android:color/transparent"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
@@ -189,32 +212,5 @@
             android:layout_margin="@dimen/floatingActionButtonMargin"
             android:src="@drawable/edit"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_user_option"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen100"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/btn_chat"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginHorizontal="@dimen/dimen20"
-            android:background="@drawable/selector_shape_button_orange"
-            android:textAppearance="@style/TitleAppearance"
-            android:text="@string/chat"/>
-        <Button
-            android:id="@+id/btn_focus"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginHorizontal="@dimen/dimen20"
-            android:background="@drawable/selector_shape_button_blue"
-            android:textAppearance="@style/TitleAppearance"
-            android:text="@string/focus"/>
-    </LinearLayout>
 
 </LinearLayout>

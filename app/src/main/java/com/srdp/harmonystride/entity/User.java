@@ -46,17 +46,15 @@ public class User extends LitePalSupport {
 
     }
 
-    public User(String account, String password) {
+    public User(String account, String password, String imageUrl) {
         this.account = account;
         this.password = password;
-        this.nickname = "User" + account;
-        //上传头像
-        String imageUrl = "user/" + account + "/" + System.currentTimeMillis() + ".png";
+        this.nickname = "user" + account;
         this.avatar = imageUrl;
-        Bitmap image = ImageUtil.getBitmapFromResourceId(R.drawable.default_avatar);
-        ImageUtil.upload("", image, imageUrl, null);
-        //TODO: 添加默认的管理员Uid
-        //focusUid = "";
+        this.gender = "保密";
+        this.certify = "未认证";
+        this.location = "未定位";
+        this.introduction = "系统原装签名：与你同行";
     }
 
     public User(String account, String password, String avatar, String nickname, String certify, String sex, String location, String introduction, String focus) {

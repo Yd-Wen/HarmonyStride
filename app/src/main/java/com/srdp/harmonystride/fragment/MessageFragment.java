@@ -26,16 +26,5 @@ import io.rong.imkit.utils.RouteUtils;
 
 public class MessageFragment extends ConversationListFragment {
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        //addHeaderView(view.findViewById(R.layout.fragment_message));
-    }
 
-    @Override
-    public void addHeaderView(View view) {
-        //super.addHeaderView((View) getResources().getLayout(R.layout.fragment_message));
-        //super.addHeaderView(view);
-        //mAdapter.addHeaderView(view);
-    }
 }

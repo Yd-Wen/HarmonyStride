@@ -338,11 +338,9 @@ public class PostActivity extends BaseActivity {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     // 恢复图片加载
                     Glide.with(MyApplication.getContext()).resumeRequests();
-                    findViewById(R.id.ll_comment).setVisibility(View.VISIBLE);
                 } else {
                     // 暂停图片加载
                     Glide.with(MyApplication.getContext()).pauseRequests();
-                    findViewById(R.id.ll_comment).setVisibility(View.GONE);
                 }
             }
         });

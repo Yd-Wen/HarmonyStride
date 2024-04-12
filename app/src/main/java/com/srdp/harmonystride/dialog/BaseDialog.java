@@ -3,10 +3,14 @@ package com.srdp.harmonystride.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.util.ScreenSizeUtil;
 
 public class BaseDialog extends Dialog {
     protected Context baseContext;
@@ -16,6 +20,8 @@ public class BaseDialog extends Dialog {
     public BaseDialog(Context context) {
         super(context, R.style.DialogStyle);
         baseContext = context;
+        Window dialogWindow = this.getWindow();
+        dialogWindow.setWindowAnimations(R.style.dialogWindowAnim);
     }
 
     @Override

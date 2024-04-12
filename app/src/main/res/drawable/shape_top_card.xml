@@ -5,5 +5,5 @@
         android:topLeftRadius="@dimen/dimen20"
         android:topRightRadius="@dimen/dimen20"/>
     <!-- 填充颜色 -->
-    <solid android:color="@color/colorWhite"/>
+    <solid android:color="@color/colorToolbarGreyBackground"/>
 </shape>

@@ -125,7 +125,7 @@ public class ApplyBriefAdapter extends RecyclerView.Adapter<ApplyBriefAdapter.Vi
                         if(isConfirm){
                             int position = viewHolder.getAdapterPosition();
                             Map<String, Object> params = new HashMap<>();
-                            params.put("pid", pid);
+                            params.put("pid",  String.valueOf(pid));
                             params.put("uid", String.valueOf( userList.get(position).getUid()));
                             HTTPUtil.POST(params, "/application/receive", new Callback() {
                                 @Override
@@ -141,6 +141,7 @@ public class ApplyBriefAdapter extends RecyclerView.Adapter<ApplyBriefAdapter.Vi
                                     Result result = gson.fromJson(responseBody, Result.class);
                                     //传递消息
                                     Message message = new Message();
+                                    LogUtil.e("111111111111111111111111111111", result.toString());
                                     if(result.getCode() == 1){
                                         message.what = RECEIVE_SUCCESS;
                                         applicationList.get(position).setStatus("1");

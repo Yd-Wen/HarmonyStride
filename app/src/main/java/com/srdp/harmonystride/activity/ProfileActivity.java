@@ -1,5 +1,6 @@
 package com.srdp.harmonystride.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -53,6 +55,9 @@ import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.rong.imkit.utils.RouteUtils;
+import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.ConversationIdentifier;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -64,12 +69,12 @@ public class ProfileActivity extends BaseActivity {
 
     private AppBarLayout appBarLayout;
     private CollapsingToolbarLayout collapsingToolbarLayout;
-    private ImageView backgroundIv;
     private Toolbar toolbar;
     private CircleImageView avatarToolbarCiv;
     private TextView nicknameToolbarTv;
 
     private CircleImageView avatarCiv;
+    private Button chatBtn;
     private TextView nicknameTv;
     private TextView introductionTv;
     private TextView certifyTv;
@@ -80,10 +85,6 @@ public class ProfileActivity extends BaseActivity {
 
     private SmartRefreshLayout smartRefreshLayout;
     private RecyclerView recyclerView;
-
-    private LinearLayout userOptionLl;
-    private Button chatBtn;
-    private Button focusBtn;
 
     private PostVisitAdapter postVisitAdapter;
 
@@ -118,6 +119,7 @@ public class ProfileActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
         //初始化视图
         initViews();
         //初始化事件
@@ -130,10 +132,11 @@ public class ProfileActivity extends BaseActivity {
         Intent intent = getIntent();
         isSelf = intent.getBooleanExtra("is_self", false);
         uid = intent.getIntExtra("user_id", 0);
-        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
         if(!isSelf){
             floatingActionButton.setVisibility(View.GONE);
-        }
+        }else chatBtn.setVisibility(View.GONE);
+        //发起请求
+        //requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
     }
 
     private void requestDatas(String time, Boolean isLoadMore){
@@ -195,21 +198,25 @@ public class ProfileActivity extends BaseActivity {
         introductionTv.setText(curUser.getIntroduction());
         //显示认证信息
         switch (curUser.getCertify()){
-            case "0":
+            case "未认证":
                 certifyTv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.certify_unknown), null, null, null);
                 certifyTv.setText(R.string.certify_unknown);
                 break;
-            case "1":
+            case "残疾人":
                 certifyTv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.certify_disabled), null, null, null);
                 certifyTv.setText(R.string.certify_disabled);
                 break;
-            case "2":
+            case "志愿者":
                 certifyTv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.certify_volunteer), null, null, null);
                 certifyTv.setText(R.string.certify_volunteer);
                 break;
-            case "3":
+            case "用人单位":
                 certifyTv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.certify_employer), null, null, null);
                 certifyTv.setText(R.string.certify_employer);
+                break;
+            case "管理员":
+                certifyTv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.certify_admin), null, null, null);
+                certifyTv.setText(R.string.certify_admin);
                 break;
             default:
                 break;
@@ -236,7 +243,6 @@ public class ProfileActivity extends BaseActivity {
         appBarLayout = findViewById(R.id.appbar_layout);
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout);
 
-        backgroundIv = findViewById(R.id.iv_background);
         toolbar = findViewById(R.id.tool_bar);
         //不要忘记设置工具栏
         setSupportActionBar(toolbar);
@@ -257,10 +263,7 @@ public class ProfileActivity extends BaseActivity {
 
         smartRefreshLayout = findViewById(R.id.smart_refresh_layout);
         recyclerView = findViewById(R.id.recycler_view);
-
-        userOptionLl = findViewById(R.id.ll_user_option);
         chatBtn = findViewById(R.id.btn_chat);
-        focusBtn = findViewById(R.id.btn_focus);
 
     }
 
@@ -337,39 +340,18 @@ public class ProfileActivity extends BaseActivity {
         chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
-                intent.putExtra("uid", curUser.getUid());
-                navigateTo(intent);
-            }
-        });
-
-        focusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
+                String targetId = curUser.getAccount();
+                ConversationIdentifier conversationIdentifier = new ConversationIdentifier(Conversation.ConversationType.PRIVATE, targetId);
+                RouteUtils.routeToConversationActivity(ProfileActivity.this, conversationIdentifier, false, null);
             }
         });
 
     }
 
-    //获取工具栏菜单
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_toolbar_more, menu);
-        return true;
-    }
-
-    //为工具栏菜单绑定单击事件监听器
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.more:
-                // TODO:弹出更多选项的对话框
-                showToast(String.valueOf(R.string.more));
-                break;
-            default:
-                break;
-        }
-        return true;
+    protected void onStart() {
+        super.onStart();
+        //发起请求
+        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), false);
     }
 }

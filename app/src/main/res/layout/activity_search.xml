@@ -16,12 +16,19 @@
         android:orientation="horizontal">
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:iconifiedByDefault="true"
+            android:background="@color/colorToolbarGreyBackground"
+            android:queryHint="@string/search_hint"/>
+        <TextView
+            android:id="@+id/tv_search_hint"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:iconifiedByDefault="false"
-            android:background="@color/cardview_light_background"
-            android:queryHint="@string/search_hint"/>
+            android:textAppearance="@style/TitleAppearance"
+            android:text="@string/search"
+            android:gravity="center"/>
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"

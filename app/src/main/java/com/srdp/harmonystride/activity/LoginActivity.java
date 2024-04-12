@@ -174,12 +174,12 @@ public class LoginActivity extends BaseActivity {
                 Message message = new Message();
                 if(result.getCode() == 1){
                     JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-                    JsonObject data = jsonObject.getAsJsonObject("data");
+                    JsonObject data = jsonObject.getAsJsonObject("data").getAsJsonObject("user");
                     //注意不要用toString，否则引号会保留到字符串
                     curUser = new User();
                     curUser.setAccount(accountEt.getText().toString());
                     curUser.setPassword(passwordEt.getText().toString());
-                    curUser.setUid(data.get("id").getAsInt());
+                    curUser.setUid(data.get("uid").getAsInt());
                     curUser.setAvatar(data.get("avatar").getAsString());
                     curUser.setNickname(data.get("nickname").getAsString());
                     curUser.setCertify(data.get("certify").getAsString());
@@ -270,11 +270,11 @@ public class LoginActivity extends BaseActivity {
         SharedPreferenceUtil.setParam("is_login", true);
         //写入默认的设置信息
         SharedPreferenceUtil.setParam("notification_system", true);
-        SharedPreferenceUtil.setParam("notification_unfocus", false);
+        SharedPreferenceUtil.setParam("notification_unfocus", true);
         SharedPreferenceUtil.setParam("privacy_all", true);
         SharedPreferenceUtil.setParam("privacy_post", true);
-        SharedPreferenceUtil.setParam("privacy_apply", true);
-        SharedPreferenceUtil.setParam("privacy_comment", true);
+        SharedPreferenceUtil.setParam("privacy_apply", false);
+        SharedPreferenceUtil.setParam("privacy_comment", false);
         SharedPreferenceUtil.setParam("post_allow_open", true);
         SharedPreferenceUtil.setParam("post_image_watermark", true);
 
@@ -287,7 +287,12 @@ public class LoginActivity extends BaseActivity {
         //navigateTo(MainActivity.class);
         RouteUtils.routeToConversationListActivity(LoginActivity.this, "");
         finish();
-        showToast("登录成功");
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showToast("登录成功");
+            }
+        });
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.srdp.harmonystride.entity.User;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Callback;
@@ -25,8 +26,8 @@ import okio.BufferedSink;
 
 public class HTTPUtil {
     public static final OkHttpClient client = new OkHttpClient();
-    public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
-    //public static final String IP = "http://10.152.222.96:8080";
+    //public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
+    public static final String IP = "http://10.152.221.238:8080";
     public static final Gson gson = new Gson();
 
     //异步执行GET方法
@@ -44,6 +45,7 @@ public class HTTPUtil {
                 .url(IP + url)
                 .post(requestBody)
                 .build();
+        LogUtil.d("isExist", IP+url);
         client.newCall(request).enqueue(callback);
     }
 
@@ -51,7 +53,7 @@ public class HTTPUtil {
     public static void POST(RequestBody requestBody, Boolean noIP, String ipUrl, okhttp3.Callback callback){
         if(noIP){
             Request request = new Request.Builder()
-                    .url("http://10.152.222.96:8080" + ipUrl)
+                    .url("http://10.152.221.238:8080" + ipUrl)
                     .post(requestBody)
                     .build();
             client.newCall(request).enqueue(callback);
@@ -69,10 +71,15 @@ public class HTTPUtil {
 
     //是否存在
     public static void isExist(Class cls, String key, String value, okhttp3.Callback callback){
+        JsonObject jsonObject = new JsonObject();
         String  url = null;
         String path = "is_registered";
         if(cls == User.class){
             url = "/user/" + path;
+            jsonObject.addProperty(key, value);
+            String json = gson.toJson(jsonObject);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+            POST(requestBody, url, callback);
         }else if(cls == Certification.class){
             url = "/certification/" + path;
         }else if(cls == Post.class){
@@ -80,9 +87,20 @@ public class HTTPUtil {
         }else if(cls == Label.class){
             url = "/label/" + path;
         }
-        url = url + "?" + key + "=" + value;
+        //url = url + "?" + key + "=" + value;
         LogUtil.d("isExist", url);
-        GET(url, callback);
+        //GET(url, callback);
+    }
+
+    public static void isRegistered(String account, okhttp3.Callback callback){
+        String  url = "/user/is_registered";
+        // 创建一个FormBody.Builder实例
+        FormBody.Builder formBuilder = new FormBody.Builder();
+        // 添加键值对到Builder中
+        formBuilder.add("account", account);
+        // 创建RequestBody
+        RequestBody requestBody = formBuilder.build();
+        POST(requestBody, url, callback);
     }
 
     //验证用户
@@ -94,21 +112,39 @@ public class HTTPUtil {
     }
 
     //插入
-    public static void insert(Object object, Callback callback){
-        Class cls = object.getClass();
-        String  url = null;
-        String  path = "register";
-        if(cls == User.class){
-            url = "/user/" + path;
-        }else if(cls == Certification.class){
-            url = "/certification/" + path;
-        }else if(cls == Post.class){
-            url = "/post/" + path;
-        }else if(cls == Label.class){
-            url = "/label/" + path;
-        }
-        String json = gson.toJson(object);
+    public static void insert(User user, Callback callback){
+        String  url = "/user/register";
+        JsonObject jsonObject = new JsonObject();
+
+        jsonObject.addProperty("account", user.getAccount());
+        jsonObject.addProperty("password", user.getPassword());
+        jsonObject.addProperty("avatar", user.getAvatar());
+        jsonObject.addProperty("nickname", user.getNickname());
+        jsonObject.addProperty("gender", user.getAvatar());
+        jsonObject.addProperty("location", user.getAvatar());
+        jsonObject.addProperty("introduction", user.getAvatar());
+        jsonObject.addProperty("certify", user.getAvatar());
+        jsonObject.addProperty("focus", user.getAvatar());
+
+        String json = gson.toJson(jsonObject);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
+
+        LogUtil.d("insert", url);
+        POST(requestBody, url, callback);
+    }
+
+    public static void insert(Certification certification, Callback callback){
+        String  url = "/certification/register";
+        // 创建一个FormBody.Builder实例
+        FormBody.Builder formBuilder = new FormBody.Builder();
+        // 添加键值对到Builder中
+//        formBuilder.add("account", user.getAccount());
+//        formBuilder.add("password", user.getPassword());
+//        formBuilder.add("nickname", user.getNickname());
+//        formBuilder.add("avatar", user.getAvatar());
+        // 创建RequestBody
+        RequestBody requestBody = formBuilder.build();
+
         LogUtil.d("insert", url);
         POST(requestBody, url, callback);
     }

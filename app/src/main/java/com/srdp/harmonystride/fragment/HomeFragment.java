@@ -135,16 +135,10 @@ public class HomeFragment extends Fragment{
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        //初始化数据
-        initDatas();
         //初始化视图
         initViews();
-        //加载用户数据
-        loadUserInfo();
         //初始化事件
         initEvents();
-        //请求数据
-        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), curTag,false);
         // Inflate the layout for this fragment
         return view;
     }
@@ -492,4 +486,14 @@ public class HomeFragment extends Fragment{
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        //初始化数据
+        initDatas();
+        //加载用户数据
+        loadUserInfo();
+        //请求数据
+        requestDatas(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"), curTag,false);
+    }
 }

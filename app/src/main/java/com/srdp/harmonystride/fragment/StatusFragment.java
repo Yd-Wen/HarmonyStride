@@ -210,7 +210,10 @@ public class StatusFragment extends Fragment{
         smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                String time = applicationList.get(postList.size()-1).getDatetime();
+                String time = TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss");
+                if(postList.size() > 0){
+                    time = applicationList.get(postList.size()-1).getDatetime();
+                }
                 requestDatas(time, true);
             }
         });

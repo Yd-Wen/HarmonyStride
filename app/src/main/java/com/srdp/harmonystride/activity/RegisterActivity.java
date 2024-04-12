@@ -4,6 +4,7 @@ import static com.mob.MobSDK.submitPolicyGrantResult;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,6 +25,7 @@ import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
+import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.RongIMUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
@@ -44,7 +46,6 @@ import okhttp3.Response;
 public class RegisterActivity extends BaseActivity {
     private static final int REGISTER_SUCCESS = 1; //注册成功
     private static final int GET_TOKEN_SUCCESS = 2; //注册IM成功
-    private static final int GET_SYSTEM_MESSAGE_SUCCESS = 3; //获取系统消息成功
     private static final int EXIST = 4; //账号已存在
     public static final int NOT_EXIST = 5; //账号不存在
     private static final int MESSAGE_GET_SUCCESS = 6; //短信发送成功
@@ -70,7 +71,6 @@ public class RegisterActivity extends BaseActivity {
                     getUserToken(user);
                     break;
                 case GET_TOKEN_SUCCESS:
-                    getSystemMessage();
                     //返回登录页
                     Intent resutltIntent = new Intent();
                     resutltIntent.putExtra("account", accountEt.getText().toString())
@@ -78,15 +78,6 @@ public class RegisterActivity extends BaseActivity {
                     setResult(Activity.RESULT_OK, resutltIntent);
                     finish();
                     showToast("注册成功，请登录");
-                    break;
-                case GET_SYSTEM_MESSAGE_SUCCESS:
-                    //返回登录页
-//                    Intent resutltIntent = new Intent();
-//                    resutltIntent.putExtra("account", accountEt.getText().toString())
-//                            .putExtra("password", passwordEt.getText().toString());
-//                    setResult(Activity.RESULT_OK, resutltIntent);
-//                    finish();
-//                    showToast("注册成功，请登录");
                     break;
                 case EXIST:
                     showToast("账号已注册");
@@ -140,8 +131,12 @@ public class RegisterActivity extends BaseActivity {
                     //成功回调
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         //提交短信、语音验证码成功
+                        //上传头像
+                        String imageUrl = "user/" + accountEt.getText().toString() + "/" + System.currentTimeMillis() + ".png";
+                        Bitmap image = ImageUtil.getBitmapFromResourceId(R.drawable.default_avatar);
+                        ImageUtil.upload("", image, imageUrl, null);
                         //服务端注册
-                        user = new User(accountEt.getText().toString(), passwordEt.getText().toString());
+                        user = new User(accountEt.getText().toString(), passwordEt.getText().toString(), imageUrl);
                         register(user);
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         //获取短信验证码成功
@@ -215,7 +210,7 @@ public class RegisterActivity extends BaseActivity {
 
     //服务端查重，是否已注册
     private void isRegistered(String account){
-        HTTPUtil.isExist(User.class, "account", account, new Callback() {
+        HTTPUtil.isRegistered(account, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 LogUtil.e(account, " request error " + e);
@@ -280,10 +275,11 @@ public class RegisterActivity extends BaseActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 LogUtil.d(TAG, "success");
                 if(response.code() == 200){
-                    Result result = RongIMUtil.gson.fromJson(response.body().string(), Result.class);
+                    String responseStr = response.body().string();
+                    Result result = RongIMUtil.gson.fromJson(responseStr, Result.class);
                     if(result.getCode() == 1){
                         try {
-                            JSONObject jsonObject = new JSONObject(response.body().string());
+                            JSONObject jsonObject = new JSONObject(responseStr);
                             String token = jsonObject.getJSONObject("data").getString("token");
                             SharedPreferenceUtil.setParam("user_token", token);
                             Message message = new Message();
@@ -300,33 +296,6 @@ public class RegisterActivity extends BaseActivity {
         });
 
 
-    }
-
-    private void getSystemMessage(){
-        //发送系统消息
-        HTTPUtil.sendSystemMessage(accountEt.getText().toString(), new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LogUtil.e("send system message", "error");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                LogUtil.d("send system message", "success");
-                try {
-                    String responseBody = response.body().string();
-                    Result result = new Gson().fromJson(responseBody, Result.class);
-                    if(result.getCode() == 1){
-                        Message message = new Message();
-                        message.what = GET_SYSTEM_MESSAGE_SUCCESS;
-                        handler.sendMessage(message);
-                        LogUtil.d("send system message", result.getData().toString());
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     //获取工具栏菜单

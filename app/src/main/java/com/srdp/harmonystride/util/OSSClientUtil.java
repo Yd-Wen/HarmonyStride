@@ -23,8 +23,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.entity.Result;
+import com.srdp.harmonystride.entity.StsCredential;
 import com.srdp.harmonystride.entity.User;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.io.ByteArrayOutputStream;
@@ -76,8 +79,7 @@ public class OSSClientUtil {
                     if (DateUtil.getFixedSkewedTimeMillis() / 1000 > expiration - 5 * 60) {
                         LogUtil.d("update stsCredential", "reqesting");
 
-                       OkHttpClient client = new OkHttpClient();
-
+                        OkHttpClient client = new OkHttpClient();
                         Request request = new Request.Builder()
                                 .url(HTTPUtil.IP + "/sts/update")
                                 .build();
@@ -87,13 +89,14 @@ public class OSSClientUtil {
                             String responseBody = response.body().string();
                             Result result = new Gson().fromJson(responseBody, Result.class);
                             if (result.getCode() == 1) {
-                                JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-                                JsonObject data = jsonObject.getAsJsonObject("data");
+                                JSONObject jsonObject = new JSONObject(responseBody);
+                                String sts = jsonObject.getJSONObject("data").getString("sts");
                                 //注意不要用toString，否则引号会保留到字符串
-                                ACCESS_KEY_ID = data.get("accessKeyId").getAsString();
-                                ACCESS_KEY_SECRET = data.get("accessKeySecret").getAsString();
-                                SECURITY_TOKEN = data.get("securityToken").getAsString();
-                                EXPIRATION = data.get("expiration").getAsString();
+                                StsCredential data = new Gson().fromJson(sts, StsCredential.class);
+                                ACCESS_KEY_ID = data.getAccessKeyId();
+                                ACCESS_KEY_SECRET = data.getAccessKeySecret();
+                                SECURITY_TOKEN = data.getSecurityToken();
+                                EXPIRATION = data.getExpiration();
                                 LogUtil.d("update stsCredential", "update success");
                             } else {
                                 LogUtil.e("update stsCredential", "update error");
@@ -101,6 +104,8 @@ public class OSSClientUtil {
 
 
                         } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
