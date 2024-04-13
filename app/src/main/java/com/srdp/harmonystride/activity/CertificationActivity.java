@@ -28,13 +28,17 @@ import com.srdp.harmonystride.dialog.EditTextDialog;
 import com.srdp.harmonystride.dialog.RadioButtonDialog;
 import com.srdp.harmonystride.entity.Certification;
 import com.srdp.harmonystride.entity.Result;
+import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
+import org.litepal.LitePal;
+
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -43,8 +47,9 @@ import okhttp3.Response;
 
 public class CertificationActivity extends BaseActivity {
     public static final int EXIST = 1; //当前用户的认证信息存在
-    public static final int INSERT = 2; //认证信息插入
-    public static final int UPDATE = 3; //认证信息更新
+    public static final int NOT_EXIST = 2; //当前用户的认证信息存在
+    public static final int INSERT = 3; //认证信息插入
+    public static final int UPDATE = 4; //认证信息更新
     private Toolbar toolbar;
 
     private TextView certifyTypeTv;
@@ -69,6 +74,9 @@ public class CertificationActivity extends BaseActivity {
             switch (msg.what){
                 case EXIST:
                     loadInfo();
+                    break;
+                case NOT_EXIST:
+                    showToast("请上传认证信息");
                     break;
                 case INSERT:
                     showToast("提交成功，请耐心等待审核");
@@ -136,6 +144,10 @@ public class CertificationActivity extends BaseActivity {
                     handler.sendMessage(message);
                     isExist = true;
                     LogUtil.d("get certify", "success");
+                }else {
+                    message.what = NOT_EXIST;
+                    handler.sendMessage(message);
+                    isExist = false;
                 }
             }
         });
@@ -230,7 +242,7 @@ public class CertificationActivity extends BaseActivity {
                     showToast("请选择认证类型");
                 }else if(StringUtil.isEmpty(certifyNumberTv.getText().toString())){
                     showToast("请输入证件号");
-                }else if(certifyImageIv.getDrawable() == null){
+                }else if(certification.getImageUrl() == null){
                     showToast("请上传证件照片");
                 }else {
                     //提交按钮不可见
@@ -326,6 +338,28 @@ public class CertificationActivity extends BaseActivity {
             default:
                 break;
         }
+
+        switch (certification.getStatus()){
+            case "通过":
+                SharedPreferenceUtil.setParam("current_certify", certification.getType());
+                showToast("认证信息已更新");
+                //写入SQLite本地数据库
+                List<User> Users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
+                User user = new User();
+                user = Users.get(0);
+                user.setCertify(certification.getType());
+                user.save();
+                break;
+            case "待审核":
+                showToast("待审核，请耐心等待或联系同行小助手");
+                break;
+            case "不通过":
+                showToast("认证不通过");
+                break;
+            default:
+                break;
+        }
+
         //提交按钮不可见
         submitBtn.setVisibility(View.GONE);
         //查看状态不可点击
@@ -347,14 +381,20 @@ public class CertificationActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.edit:
-                if(!certification.getStatus().equals("通过")){
-                    //修改认证
-                    //提交按钮可见
-                    submitBtn.setVisibility(View.VISIBLE);
-                    //编辑状态可点击
-                    certifyTypeTv.setClickable(true);
-                    certifyNumberTv.setClickable(true);
-                    certifyImageIv.setClickable(true);
+                if(certification.getStatus() != null){
+                    if(certification.getStatus().equals("不通过")){
+                        //修改认证
+                        //提交按钮可见
+                        submitBtn.setVisibility(View.VISIBLE);
+                        //编辑状态可点击
+                        certifyTypeTv.setClickable(true);
+                        certifyNumberTv.setClickable(true);
+                        certifyImageIv.setClickable(true);
+                    }else if(certification.getStatus().equals("通过")){
+                        showToast("认证信息已更新");
+                    }else if(certification.getStatus().equals("待审核")){
+                        showToast("待审核，请耐心等待或联系同行小助手");
+                    }
                 }
                 break;
             default:

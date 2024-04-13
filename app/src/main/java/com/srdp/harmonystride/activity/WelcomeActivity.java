@@ -19,7 +19,6 @@ import com.google.gson.JsonParser;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.dialog.PrivacyDialog;
 import com.srdp.harmonystride.entity.Result;
-import com.srdp.harmonystride.util.IMUtil;
 import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.RongIMUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;

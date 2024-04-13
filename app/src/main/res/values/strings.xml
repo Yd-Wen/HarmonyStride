@@ -109,7 +109,7 @@
     <string name="post_post">发布</string>
     <string name="post_title_hint">标题（必填）</string>
     <string name="post_content">请输入发布内容</string>
-    <string name="post_label">选择标签</string>
+    <string name="post_label">标签</string>
     <string name="post_label_all">全部</string>
     <string name="post_label_volunteer">志愿</string>
     <string name="post_label_job">求职</string>

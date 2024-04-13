@@ -1,13 +1,6 @@
 package com.srdp.harmonystride.entity;
 
-import android.graphics.Bitmap;
-import android.os.Message;
-
-import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.util.IMUtil;
 import com.srdp.harmonystride.util.ImageUtil;
-import com.srdp.harmonystride.util.SharedPreferenceUtil;
-
 import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 

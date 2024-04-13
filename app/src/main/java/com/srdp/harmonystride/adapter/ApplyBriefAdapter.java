@@ -47,6 +47,7 @@ import okhttp3.Response;
 
 public class ApplyBriefAdapter extends RecyclerView.Adapter<ApplyBriefAdapter.ViewHolder>{
     private static final int RECEIVE_SUCCESS = 1;
+    private static final int RECEIVE_EXIST = 2;
     private Context mContext;
     private List<User> userList;
     private List<Application> applicationList;
@@ -60,6 +61,10 @@ public class ApplyBriefAdapter extends RecyclerView.Adapter<ApplyBriefAdapter.Vi
                 case RECEIVE_SUCCESS:
                     new ToastUtil(mContext).showToast("通过申请");
                     notifyDataSetChanged();
+                    break;
+                case RECEIVE_EXIST:
+                    new ToastUtil(mContext).showToast("已接受其他用户申请");
+                    break;
                 default:
                     break;
             }
@@ -141,11 +146,12 @@ public class ApplyBriefAdapter extends RecyclerView.Adapter<ApplyBriefAdapter.Vi
                                     Result result = gson.fromJson(responseBody, Result.class);
                                     //传递消息
                                     Message message = new Message();
-                                    LogUtil.e("111111111111111111111111111111", result.toString());
                                     if(result.getCode() == 1){
                                         message.what = RECEIVE_SUCCESS;
                                         applicationList.get(position).setStatus("1");
 
+                                    }else if(result.getCode() == 2){
+                                        message.what = RECEIVE_EXIST;
                                     }
                                     handler.sendMessage(message);
 

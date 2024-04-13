@@ -26,23 +26,13 @@ import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
-import com.srdp.harmonystride.util.IMUtil;
 import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.TimerUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.litepal.LitePal;
-
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
-import cn.smssdk.wrapper.TokenVerifyResult;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;

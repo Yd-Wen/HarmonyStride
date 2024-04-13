@@ -109,13 +109,6 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void initEvents(){
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                findViewById(R.id.tv_search_hint).setVisibility(View.GONE);
-            }
-        });
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {

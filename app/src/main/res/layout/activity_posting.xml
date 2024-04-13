@@ -42,17 +42,24 @@
         android:textAppearance="@style/TitleAppearance"
         android:hint="@string/post_title_hint" />
 
-    <jp.wasabeef.richeditor.RichEditor
-        android:id="@+id/re_content"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingHorizontal="@dimen/dimen10"/>
+        android:layout_marginHorizontal="@dimen/dimen5"
+        app:cardCornerRadius="@dimen/dimen10"
+        app:cardElevation="@dimen/dimen10">
+        <jp.wasabeef.richeditor.RichEditor
+            android:id="@+id/re_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.cardview.widget.CardView>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen50"
-        android:paddingHorizontal="@dimen/dimen10">
+        android:paddingHorizontal="@dimen/dimen10"
+        android:background="@color/colorWhite">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -62,36 +69,41 @@
                 android:layout_width="@dimen/dimen30"
                 android:layout_height="@dimen/dimen30"
                 android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="@dimen/dimen5"
-                android:src="@drawable/undo"/>
+                android:layout_marginHorizontal="@dimen/dimen10"
+                android:src="@drawable/undo"
+                android:background="@drawable/selector_shape_editkit"/>
             <ImageView
                 android:id="@+id/iv_action_redo"
                 android:layout_width="@dimen/dimen30"
                 android:layout_height="@dimen/dimen30"
                 android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="@dimen/dimen5"
-                android:src="@drawable/redo"/>
+                android:layout_marginHorizontal="@dimen/dimen10"
+                android:src="@drawable/redo"
+                android:background="@drawable/selector_shape_editkit"/>
             <ImageView
                 android:id="@+id/iv_action_bold"
-                android:layout_width="@dimen/dimen30"
-                android:layout_height="@dimen/dimen30"
+                android:button="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="@dimen/dimen5"
-                android:src="@drawable/bold"/>
+                android:layout_marginHorizontal="@dimen/dimen10"
+                android:src="@drawable/bold" />
             <ImageView
                 android:id="@+id/iv_action_italic"
+                android:button="@null"
                 android:layout_width="@dimen/dimen30"
                 android:layout_height="@dimen/dimen30"
                 android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="@dimen/dimen5"
-                android:src="@drawable/italic"/>
+                android:layout_marginHorizontal="@dimen/dimen10"
+                android:src="@drawable/italic" />
             <ImageView
                 android:id="@+id/iv_action_insert_image"
                 android:layout_width="@dimen/dimen30"
                 android:layout_height="@dimen/dimen30"
                 android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="@dimen/dimen5"
-                android:src="@drawable/insert_image"/>
+                android:layout_marginHorizontal="@dimen/dimen10"
+                android:src="@drawable/insert_image"
+                android:background="@drawable/selector_shape_editkit"/>
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -99,6 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen50"
         android:paddingHorizontal="@dimen/dimen10"
+        android:background="@color/colorWhite"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -123,7 +136,6 @@
                     android:orientation="horizontal">
                     <RadioButton
                         android:id="@+id/rb_label_v"
-                        android:checked="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dimen10"

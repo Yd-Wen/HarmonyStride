@@ -196,33 +196,6 @@ public class HomeFragment extends Fragment{
         });
     }
 
-//    private void requestDatas(String time, String curTag, Boolean isLoadMore){
-//        //暂停一秒
-//
-//        if(!isLoadMore){
-//            postList.clear();
-//            userList.clear();
-//        }
-//        //发送请求，获取帖子简略页列表，包括Post列表和User列表
-//        Post post = new Post(1, 1, "2024-01-01", "title", "content", "志愿", null, 1, "1");
-//        for(int i = 0; i < 10; i++){
-//            postList.add(post);
-//        }
-//        User user = new User("account", "password", null, "nickname", "0", "保密", "", "系统原装签名：与你同行", "0");
-//        for(int i = 0; i < 10; i++){
-//            userList.add(user);
-//        }
-//
-//        //传递消息
-//        Message message = new Message();
-//        if(isLoadMore){
-//            message.what = LOADMORE_SUCCESS;
-//        }else {
-//            message.what = REFRESH_SUCCESS;
-//        }
-//        handler.sendMessage(message);
-//    }
-
     private void initViews(){
         //获取drawerLayout
         drawerLayout = view.findViewById(R.id.drawer_layout);
@@ -468,7 +441,7 @@ public class HomeFragment extends Fragment{
         }
         nicknameTv.setText(curUser.getNickname());
         toolbarNicknameTv.setText(curUser.getNickname());
-        if(curUser.getCertify().equals("0")) {
+        if(curUser.getCertify().equals("未认证")) {
             navigationView.getMenu().findItem(R.id.certify).setTitle(R.string.no_certify);
             navigationView.getMenu().findItem(R.id.certify).setIcon(R.drawable.certify_null);
         } else {

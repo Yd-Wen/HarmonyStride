@@ -34,7 +34,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import com.srdp.harmonystride.entity.User;
-import com.srdp.harmonystride.util.IMUtil;
 import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.RongIMUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
@@ -265,12 +264,13 @@ public class LoginActivity extends BaseActivity {
         SharedPreferenceUtil.setParam("current_uid", curUser.getUid());
         SharedPreferenceUtil.setParam("current_account", curUser.getAccount());
         SharedPreferenceUtil.setParam("current_password", curUser.getPassword());
+        SharedPreferenceUtil.setParam("current_certify", curUser.getCertify());
         SharedPreferenceUtil.setParam("password_remember", rememberPwdCb.isChecked());
         //下次开屏页结束后进入主页
         SharedPreferenceUtil.setParam("is_login", true);
         //写入默认的设置信息
         SharedPreferenceUtil.setParam("notification_system", true);
-        SharedPreferenceUtil.setParam("notification_unfocus", true);
+        SharedPreferenceUtil.setParam("notification_unfocus", false);
         SharedPreferenceUtil.setParam("privacy_all", true);
         SharedPreferenceUtil.setParam("privacy_post", true);
         SharedPreferenceUtil.setParam("privacy_apply", false);

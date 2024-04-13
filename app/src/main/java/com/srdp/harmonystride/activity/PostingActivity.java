@@ -25,7 +25,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
+import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
+import com.srdp.harmonystride.dialog.TipDialog;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
@@ -77,6 +79,9 @@ public class PostingActivity extends BaseActivity {
 
     private Post post;
 
+    private Boolean isBold = false;
+    private Boolean isItalic = false;
+
     private final Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -125,8 +130,9 @@ public class PostingActivity extends BaseActivity {
         contentRe = findViewById(R.id.re_content);
         contentRe.setEditorBackgroundColor(Color.WHITE); //白色背景
         contentRe.setEditorFontColor(R.color.colorText); //设置字体颜色
-        contentRe.setFontSize(R.dimen.textSize); //设置字体大小
+        contentRe.setFontSize(1); //设置字体大小
         contentRe.setPlaceholder(getResources().getString(R.string.post_content)); //设置文本
+        contentRe.setPadding(5, 10, 5, 50); //设置内边距
 
         undoIv = findViewById(R.id.iv_action_undo);
         redoIv = findViewById(R.id.iv_action_redo);
@@ -153,36 +159,55 @@ public class PostingActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //TODO:发布帖子
-                post.setTitle(titleEt.getText().toString());
-                post.setContent(contentRe.getHtml());
-                post.setDatetime(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"));
-                LogUtil.d("post", post.toString());
-
-                String json = new Gson().toJson(post);
-                Map<String, Object> map = new HashMap<>();
-                map.put("post", json);
-
-                HTTPUtil.POST(map, "/post/add", new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        LogUtil.e("post add", "error" + e);
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        LogUtil.d("post add", "success");
-
-                        Gson gson = new Gson();
-                        Result result = gson.fromJson(response.body().string(), Result.class);
-                        if(result.getCode() == 1){
-                            Message message = new Message();
-                            message.what = POST_ADD_SUCCESS;
-                            handler.sendMessage(message);
+                if(SharedPreferenceUtil.getParam("current_certify", "").equals("未认证")){
+                    new TipDialog(PostingActivity.this, "未认证，是否刷新认证信息", new TipDialog.OnDismissListener() {
+                        @Override
+                        public void onDismiss(Boolean isConfirm) {
+                            if(isConfirm){
+                                navigateTo(CertificationActivity.class);
+                            }
                         }
+                    }).show();
+                }else if(StringUtil.isEmpty(post.getLabel())){
+                    showToast("请选择标签");
+                }else {
+                    new TipDialog(PostingActivity.this, "确认标签并发布帖子？", new TipDialog.OnDismissListener() {
+                        @Override
+                        public void onDismiss(Boolean isConfirm) {
+                            if(isConfirm){
+                                post.setTitle(titleEt.getText().toString());
+                                post.setContent(contentRe.getHtml());
+                                post.setDatetime(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"));
+                                LogUtil.d("post", post.toString());
 
-                    }
-                });
+                                String json = new Gson().toJson(post);
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("post", json);
 
+                                HTTPUtil.POST(map, "/post/add", new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+                                        LogUtil.e("post add", "error" + e);
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        LogUtil.d("post add", "success");
+
+                                        Gson gson = new Gson();
+                                        Result result = gson.fromJson(response.body().string(), Result.class);
+                                        if(result.getCode() == 1){
+                                            Message message = new Message();
+                                            message.what = POST_ADD_SUCCESS;
+                                            handler.sendMessage(message);
+                                        }
+
+                                    }
+                                });
+                            }
+                        }
+                    }).show();
+                }
             }
         });
 
@@ -242,6 +267,12 @@ public class PostingActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 contentRe.setBold();
+                isBold = !isBold;
+                if(isBold){
+                    boldIv.setBackgroundResource(R.drawable.shape_editkit_checked);
+                }else {
+                    boldIv.setBackgroundResource(R.drawable.shape_editkit_unchecked);
+                }
             }
         });
 
@@ -249,6 +280,12 @@ public class PostingActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 contentRe.setItalic();
+                isItalic = !isItalic;
+                if(isItalic){
+                    italicIv.setBackgroundResource(R.drawable.shape_editkit_checked);
+                }else {
+                    italicIv.setBackgroundResource(R.drawable.shape_editkit_unchecked);
+                }
             }
         });
 
@@ -278,7 +315,6 @@ public class PostingActivity extends BaseActivity {
         //初始化帖子
         post = new Post();
         post.setOwner((int) SharedPreferenceUtil.getParam("current_uid", 0));
-        post.setLabel("志愿");
     }
 
     @Override

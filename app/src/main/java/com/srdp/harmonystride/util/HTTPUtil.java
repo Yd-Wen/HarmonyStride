@@ -1,33 +1,22 @@
 package com.srdp.harmonystride.util;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.srdp.harmonystride.entity.Certification;
-import com.srdp.harmonystride.entity.Label;
 import com.srdp.harmonystride.entity.Post;
-import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
-
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
-
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
-import okio.BufferedSink;
 
 public class HTTPUtil {
     public static final OkHttpClient client = new OkHttpClient();
-    //public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
-    public static final String IP = "http://10.152.221.238:8080";
+    public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
+    //public static final String IP = "http://10.152.221.238:8080";
     public static final Gson gson = new Gson();
 
     //异步执行GET方法
@@ -53,7 +42,7 @@ public class HTTPUtil {
     public static void POST(RequestBody requestBody, Boolean noIP, String ipUrl, okhttp3.Callback callback){
         if(noIP){
             Request request = new Request.Builder()
-                    .url("http://10.152.221.238:8080" + ipUrl)
+                    .url("http://yindongwen.top:8080" + ipUrl)
                     .post(requestBody)
                     .build();
             client.newCall(request).enqueue(callback);
@@ -67,29 +56,6 @@ public class HTTPUtil {
         }
         RequestBody requestBody = builder.build();
         POST(requestBody, true, url, callback);
-    }
-
-    //是否存在
-    public static void isExist(Class cls, String key, String value, okhttp3.Callback callback){
-        JsonObject jsonObject = new JsonObject();
-        String  url = null;
-        String path = "is_registered";
-        if(cls == User.class){
-            url = "/user/" + path;
-            jsonObject.addProperty(key, value);
-            String json = gson.toJson(jsonObject);
-            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
-            POST(requestBody, url, callback);
-        }else if(cls == Certification.class){
-            url = "/certification/" + path;
-        }else if(cls == Post.class){
-            url = "/post/" + path;
-        }else if(cls == Label.class){
-            url = "/label/" + path;
-        }
-        //url = url + "?" + key + "=" + value;
-        LogUtil.d("isExist", url);
-        //GET(url, callback);
     }
 
     public static void isRegistered(String account, okhttp3.Callback callback){
@@ -136,14 +102,24 @@ public class HTTPUtil {
     public static void insert(Certification certification, Callback callback){
         String  url = "/certification/register";
         // 创建一个FormBody.Builder实例
-        FormBody.Builder formBuilder = new FormBody.Builder();
+//        FormBody.Builder formBuilder = new FormBody.Builder();
         // 添加键值对到Builder中
-//        formBuilder.add("account", user.getAccount());
-//        formBuilder.add("password", user.getPassword());
-//        formBuilder.add("nickname", user.getNickname());
-//        formBuilder.add("avatar", user.getAvatar());
+//        formBuilder.add("uid", String.valueOf(certification.getUid()));
+//        formBuilder.add("type", certification.getType());
+//        formBuilder.add("number", certification.getNumber());
+//        formBuilder.add("imageurl", certification.getImageUrl());
         // 创建RequestBody
-        RequestBody requestBody = formBuilder.build();
+//        RequestBody requestBody = formBuilder.build();
+
+        JsonObject jsonObject = new JsonObject();
+
+        jsonObject.addProperty("uid", certification.getUid());
+        jsonObject.addProperty("type", certification.getType());
+        jsonObject.addProperty("number", certification.getNumber());
+        jsonObject.addProperty("imageurl", certification.getImageUrl());
+
+        String json = gson.toJson(jsonObject);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
 
         LogUtil.d("insert", url);
         POST(requestBody, url, callback);
@@ -193,8 +169,6 @@ public class HTTPUtil {
             json = gson.toJson(jsonObject);
         }else if(cls == Post.class){
             url = "/post/" + path;
-        }else if(cls == Label.class){
-            url = "/label/" + path;
         }
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
@@ -223,12 +197,12 @@ public class HTTPUtil {
     }
 
     //发送系统消息
-    public static void sendSystemMessage(String username, okhttp3.Callback callback){
-        String url = "/message/system";
-        url = url + "?" + "username=" + username ;
-        LogUtil.d("send system message", url);
-        GET(url, callback);
-    }
+//    public static void sendSystemMessage(String username, okhttp3.Callback callback){
+//        String url = "/message/system";
+//        url = url + "?" + "username=" + username ;
+//        LogUtil.d("send system message", url);
+//        GET(url, callback);
+//    }
 
     //验证并获取认证信息
     public static void getCertify(int uid, okhttp3.Callback callback){

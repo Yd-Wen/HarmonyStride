@@ -55,6 +55,9 @@ public class MainActivity extends BaseActivity {
     private ScrollUtil scrollUtil; // 滑动工具
     private static final int SCROLL_THRESHOLD = 1000; // 设置滑动阈值
 
+    private long mBackPressedTimestamp = 0;
+    private static final int DOUBLE_BACK_INTERVAL = 2000; // 单位：毫秒
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,5 +187,17 @@ public class MainActivity extends BaseActivity {
             curFragment = tgtFragment;
         }
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        long currentTimestamp = System.currentTimeMillis();
+        if (currentTimestamp - mBackPressedTimestamp > DOUBLE_BACK_INTERVAL) { // 检查时间差是否大于预设阈值
+            mBackPressedTimestamp = currentTimestamp; // 更新首次按下返回键的时间戳
+            showToast("再按一次退出应用");// 提示用户
+        } else {
+            //super.onBackPressed(); // 跳转到上一个Activity或退出应用（取决于当前栈状态）
+            System.exit(0); //退出应用
+        }
     }
 }

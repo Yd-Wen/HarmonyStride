@@ -10,20 +10,10 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
-import androidx.appcompat.content.res.AppCompatResources;
-
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.entity.User;
-import com.srdp.harmonystride.util.IMUtil;
 import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.ScreenSizeUtil;
-import com.srdp.harmonystride.util.SharedPreferenceUtil;
-
-import org.litepal.LitePal;
-
-import java.util.List;
 
 public class RadioButtonDialog extends BaseDialog{
     public static final int EDIT_TYPE_GENDER = 1; //修改性别

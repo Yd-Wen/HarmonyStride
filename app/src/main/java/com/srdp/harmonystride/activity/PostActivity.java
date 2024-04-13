@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Trace;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -31,14 +30,11 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.scwang.smart.refresh.layout.SmartRefreshLayout;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.adapter.CommentAdapter;
 import com.srdp.harmonystride.dialog.EditTextDialog;
+import com.srdp.harmonystride.dialog.TipDialog;
 import com.srdp.harmonystride.entity.Application;
 import com.srdp.harmonystride.entity.Comment;
 import com.srdp.harmonystride.entity.Post;
@@ -278,7 +274,16 @@ public class PostActivity extends BaseActivity {
         applyFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isAllowApply){
+                if(SharedPreferenceUtil.getParam("current_certify", "").equals("未认证")){
+                    new TipDialog(PostActivity.this, "未认证，是否刷新认证信息", new TipDialog.OnDismissListener() {
+                        @Override
+                        public void onDismiss(Boolean isConfirm) {
+                            if(isConfirm){
+                                navigateTo(CertificationActivity.class);
+                            }
+                        }
+                    }).show();
+                }else if(isAllowApply){
                     new EditTextDialog(PostActivity.this, EditTextDialog.EDIT_TYPE_APPLY_REASON, "", new EditTextDialog.OnDismissListener() {
                         @Override
                         public void onDismiss(Boolean isUpdate, String data) {
@@ -319,13 +324,24 @@ public class PostActivity extends BaseActivity {
         commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO 发布评论
-                Comment comment = new Comment();
-                comment.setOwner((Integer) SharedPreferenceUtil.getParam("current_uid", 0));
-                comment.setPid(postId);
-                comment.setDatetime(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"));
-                comment.setContent(commentEt.getText().toString());
-                submitComment(comment);
+                if(SharedPreferenceUtil.getParam("current_certify", "").equals("未认证")){
+                    new TipDialog(PostActivity.this, "未认证，是否刷新认证信息", new TipDialog.OnDismissListener() {
+                        @Override
+                        public void onDismiss(Boolean isConfirm) {
+                            if(isConfirm){
+                                navigateTo(CertificationActivity.class);
+                            }
+                        }
+                    }).show();
+                }else {
+                    //TODO 发布评论
+                    Comment comment = new Comment();
+                    comment.setOwner((Integer) SharedPreferenceUtil.getParam("current_uid", 0));
+                    comment.setPid(postId);
+                    comment.setDatetime(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"));
+                    comment.setContent(commentEt.getText().toString());
+                    submitComment(comment);
+                }
             }
         });
 

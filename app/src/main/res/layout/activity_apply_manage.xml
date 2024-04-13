@@ -37,9 +37,13 @@
         app:srlFooterHeight="@dimen/dimen50"
         app:srlEnableLoadMore="true">
 
-        <com.scwang.smart.refresh.header.BezierRadarHeader
+        <pl.droidsonroids.gif.GifImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="@dimen/dimen50"
+            android:src="@drawable/loading"
+            android:scaleType="center"
+            app:layout_srlSpinnerStyle="Scale"
+            app:layout_srlBackgroundColor="@android:color/transparent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_apply"

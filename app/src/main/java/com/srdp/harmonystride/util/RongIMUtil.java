@@ -10,8 +10,8 @@ import okhttp3.RequestBody;
 
 public class RongIMUtil {
     public static final OkHttpClient client = new OkHttpClient();
-    //public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
-    public static final String IP = "http://10.152.221.238:8080"; //服务器IP地址
+    public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
+    //public static final String IP = "http://10.152.221.238:8080"; //服务器IP地址
 
     public static final Gson gson = new Gson();
 
