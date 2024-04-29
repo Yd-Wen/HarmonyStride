@@ -406,7 +406,7 @@ public class HomeFragment extends Fragment{
                     scrollUtil.setItem(R.drawable.top, R.string.top);
                 }else {
                     floatingActionButton.show();
-                    scrollUtil.setItem(R.drawable.home, R.string.status);
+                    scrollUtil.setItem(R.drawable.home, R.string.home);
                 }
             }
 
