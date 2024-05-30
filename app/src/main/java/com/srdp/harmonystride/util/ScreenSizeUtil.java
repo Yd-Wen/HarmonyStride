@@ -7,7 +7,8 @@ import android.view.WindowManager;
 //计算手机屏幕的宽高
 public class ScreenSizeUtil {
     private static ScreenSizeUtil instance = null;
-    private int screenWidth, screenHeight;
+    private int screenWidth = 0;
+    private int screenHeight = 0;
 
     public static ScreenSizeUtil getInstance(Context mContext) {
         if (instance == null) {

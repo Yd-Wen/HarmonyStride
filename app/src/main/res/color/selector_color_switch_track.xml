@@ -2,8 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_checked="true"
-        android:color="@color/colorAccent"/> <!-- 开启状态 -->
+        android:drawable="@drawable/switch_track_open"/> <!-- 开启状态 -->
     <item
         android:state_checked="false"
-        android:color="@color/colorWhite"/> <!-- 关闭状态 -->
+        android:drawable="@drawable/switch_track_close" /> <!-- 关闭状态 -->
 </selector>

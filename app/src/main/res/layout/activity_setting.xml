@@ -89,11 +89,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen50"
                     android:paddingHorizontal="@dimen/dimen10"
-                    android:background="@color/colorWhite"
                     android:textAppearance="@style/TextAppearance"
                     android:text="@string/setting_notification_system"
-                    android:thumbTint="@color/selector_color_switch_thumb"
-                    android:trackTint="@color/selector_color_switch_track"
+                    android:thumb="@drawable/shape_switch_thumb"
+                    android:track="@drawable/selector_switch_track"
                     android:checked="true"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
                 <View
@@ -108,8 +107,8 @@
                     android:paddingHorizontal="@dimen/dimen10"
                     android:textAppearance="@style/TextAppearance"
                     android:text="@string/setting_notification_unfocus"
-                    android:thumbTint="@color/selector_color_switch_thumb"
-                    android:trackTint="@color/selector_color_switch_track"
+                    android:thumb="@drawable/shape_switch_thumb"
+                    android:track="@drawable/selector_switch_track"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
 
@@ -131,11 +130,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen50"
                     android:paddingHorizontal="@dimen/dimen10"
-                    android:background="@color/colorWhite"
                     android:textAppearance="@style/TextAppearance"
                     android:text="@string/setting_privacy_all"
-                    android:thumbTint="@color/selector_color_switch_thumb"
-                    android:trackTint="@color/selector_color_switch_track"
+                    android:thumb="@drawable/shape_switch_thumb"
+                    android:track="@drawable/selector_switch_track"
                     android:checked="true"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
                 <View
@@ -150,8 +148,8 @@
                     android:paddingHorizontal="@dimen/dimen10"
                     android:textAppearance="@style/TextAppearance"
                     android:text="@string/setting_privacy_post"
-                    android:thumbTint="@color/selector_color_switch_thumb"
-                    android:trackTint="@color/selector_color_switch_track"
+                    android:thumb="@drawable/shape_switch_thumb"
+                    android:track="@drawable/selector_switch_track"
                     android:checked="true"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
                 <View
@@ -166,8 +164,8 @@
                     android:paddingHorizontal="@dimen/dimen10"
                     android:textAppearance="@style/TextAppearance"
                     android:text="@string/setting_privacy_apply"
-                    android:thumbTint="@color/selector_color_switch_thumb"
-                    android:trackTint="@color/selector_color_switch_track"
+                    android:thumb="@drawable/shape_switch_thumb"
+                    android:track="@drawable/selector_switch_track"
                     android:checked="true"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
                 <View
@@ -182,8 +180,8 @@
                     android:paddingHorizontal="@dimen/dimen10"
                     android:textAppearance="@style/TextAppearance"
                     android:text="@string/setting_privacy_comment"
-                    android:thumbTint="@color/selector_color_switch_thumb"
-                    android:trackTint="@color/selector_color_switch_track"
+                    android:thumb="@drawable/shape_switch_thumb"
+                    android:track="@drawable/selector_switch_track"
                     android:checked="true"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
@@ -206,11 +204,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen50"
                     android:paddingHorizontal="@dimen/dimen10"
-                    android:background="@color/colorWhite"
                     android:textAppearance="@style/TextAppearance"
                     android:text="@string/setting_post_allow_open"
-                    android:thumbTint="@color/selector_color_switch_thumb"
-                    android:trackTint="@color/selector_color_switch_track"
+                    android:thumb="@drawable/shape_switch_thumb"
+                    android:track="@drawable/selector_switch_track"
                     android:checked="true"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
                 <View
@@ -225,8 +222,8 @@
                     android:paddingHorizontal="@dimen/dimen10"
                     android:textAppearance="@style/TextAppearance"
                     android:text="@string/setting_post_image_watermark"
-                    android:thumbTint="@color/selector_color_switch_thumb"
-                    android:trackTint="@color/selector_color_switch_track"
+                    android:thumb="@drawable/shape_switch_thumb"
+                    android:track="@drawable/selector_switch_track"
                     android:checked="true"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
@@ -241,7 +238,8 @@
                 android:background="@drawable/shape_card"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance"
-                android:text="@string/setting_logout"/>
+                android:text="@string/setting_logout"
+                android:textColor="@color/colorWarning"/>
         </LinearLayout>
     </ScrollView>
 

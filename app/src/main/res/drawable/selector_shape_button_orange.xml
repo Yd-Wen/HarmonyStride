@@ -6,7 +6,14 @@
             <!-- 圆角的半径 -->
             <corners android:radius="@dimen/dimen10"/>
             <!-- 填充颜色 -->
-            <solid android:color="@color/colorBtnOrange"/>
+<!--            <solid android:color="@color/colorBtnOrange"/>-->
+            <gradient
+                android:type="radial"
+                android:startColor="@color/colorAccent"
+                android:endColor="@color/colorBtnOrange"
+                android:centerX="0.8"
+                android:centerY="0.5"
+                android:gradientRadius="100dp"/>
         </shape>
     </item>
 
@@ -16,7 +23,7 @@
             <!-- 圆角的半径 -->
             <corners android:radius="@dimen/dimen10"/>
             <!-- 填充颜色 -->
-            <solid android:color="@color/colorBtnOrangePressed"/>
+            <solid android:color="@color/colorBtnOrange"/>
         </shape>
     </item>
 

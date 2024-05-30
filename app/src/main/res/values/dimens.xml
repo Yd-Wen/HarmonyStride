@@ -11,6 +11,7 @@
     <dimen name="paddingDrawer">20dp</dimen>
     <dimen name="paddingHeader">80dp</dimen>
 
+    <dimen name="appTitleSize">32sp</dimen>
     <dimen name="titleSize">24sp</dimen>
     <dimen name="titlePostBriefSize">20sp</dimen>
     <dimen name="titleNicknameSize">18sp</dimen>

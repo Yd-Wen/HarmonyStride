@@ -17,20 +17,24 @@ import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.dialog.ButtonDialog;
-import com.srdp.harmonystride.dialog.RadioButtonDialog;
-import com.srdp.harmonystride.dialog.EditTextDialog;
+import com.srdp.harmonystride.dialog.BaseDialog;
+import com.srdp.harmonystride.dialog.factory.ButtonSheetDialogFactory;
+import com.srdp.harmonystride.dialog.factory.DialogFactory;
+import com.srdp.harmonystride.dialog.factory.EditDialogFactory;
+import com.srdp.harmonystride.dialog.factory.SigleChoiceDialogFactory;
 import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.LogUtil;
+import com.srdp.harmonystride.util.PermissionUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
 import org.litepal.LitePal;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -120,18 +124,39 @@ public class ProfileEditActivity extends BaseActivity {
         avatarCiv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new ButtonDialog(ProfileEditActivity.this).show();
+                factory = new ButtonSheetDialogFactory();
+                List<String> data = new ArrayList<>();
+                data.add(PermissionUtil.TYPE_PHOTO_ALBUM);
+                data.add(PermissionUtil.TYPE_OPEN_CAMERA);
+                dialog = factory.createDialog(ProfileEditActivity.this, null, data, null, new BaseDialog.MyDialogListener() {
+                    @Override
+                    public void onClick(Boolean isConfirm, String data) {
+                        if(isConfirm){
+                            if(data.equals(PermissionUtil.TYPE_PHOTO_ALBUM)){
+                                //选择相册
+                                PermissionUtil.getInstance(ProfileEditActivity.this).requestExternalPermission();
+                            }else if(data.equals(PermissionUtil.TYPE_OPEN_CAMERA)){
+                                //拍照
+                                PermissionUtil.getInstance(ProfileEditActivity.this).requestCameraPermission();
+                            }
+                        }
+                    }
+                });
+                dialog.show();
             }
         });
 
         nicknameTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new EditTextDialog(ProfileEditActivity.this, EditTextDialog.EDIT_TYPE_NICKNAME, curUser.getNickname(), new EditTextDialog.OnDismissListener() {
+                factory = new EditDialogFactory();
+                List<String> data = new ArrayList<>();
+                data.add(curUser.getNickname());
+                data.add(DialogFactory.DIALOG_HINT_ACCOUNT_NICKNAME);
+                dialog = factory.createDialog(ProfileEditActivity.this, DialogFactory.DIALOG_TITLE_ACCOUNT_NICKNAME, data, null, new BaseDialog.MyDialogListener() {
                     @Override
-                    public void onDismiss(Boolean update, String data) {
-                        //更新数据
-                        if(update){
+                    public void onClick(Boolean isConfirm, String data) {
+                        if(isConfirm){
                             //更新本地数据库
                             User user = new User();
                             //修改昵称
@@ -142,18 +167,28 @@ public class ProfileEditActivity extends BaseActivity {
                             isUpdate = true;
                         }
                     }
-                }).show();
+                });
+                dialog.show();
             }
         });
 
         genderTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new RadioButtonDialog(ProfileEditActivity.this, RadioButtonDialog.EDIT_TYPE_GENDER, genderTv.getText().toString(), new RadioButtonDialog.OnDismissListener(){
+                factory = new SigleChoiceDialogFactory();
+                List<String> data = new ArrayList<>();
+                List<Integer> resId = new ArrayList<>();
+                data.add(genderTv.getText().toString());
+                data.add(getResources().getString(R.string.gender_male));
+                data.add(getResources().getString(R.string.gender_female));
+                data.add(getResources().getString(R.string.gender_unknown));
+                resId.add(R.drawable.gender_m);
+                resId.add(R.drawable.gender_f);
+                resId.add(R.drawable.gender_u);
+                dialog = factory.createDialog(ProfileEditActivity.this, DialogFactory.DIALOG_TITLE_ACCOUNT_GENDER, data, resId, new BaseDialog.MyDialogListener() {
                     @Override
-                    public void onDismiss(Boolean update, String data) {
-                        //更新数据
-                        if(update){
+                    public void onClick(Boolean isConfirm, String data) {
+                        if(isConfirm){
                             //更新本地数据库
                             User user = new User();
                             user.setGender(data);
@@ -162,7 +197,8 @@ public class ProfileEditActivity extends BaseActivity {
                             isUpdate = true;
                         }
                     }
-                }).show();
+                });
+                dialog.show();
             }
         });
 
@@ -176,11 +212,14 @@ public class ProfileEditActivity extends BaseActivity {
         introductionTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new EditTextDialog(ProfileEditActivity.this, EditTextDialog.EDIT_TYPE_INTRODUCTION, curUser.getIntroduction(), new EditTextDialog.OnDismissListener() {
+                factory = new EditDialogFactory();
+                List<String> data = new ArrayList<>();
+                data.add(curUser.getIntroduction());
+                data.add(DialogFactory.DIALOG_HINT_ACCOUNT_INTRODUCTION);
+                dialog = factory.createDialog(ProfileEditActivity.this, DialogFactory.DIALOG_TITLE_ACCOUNT_INTRODUCTION, data, null, new BaseDialog.MyDialogListener() {
                     @Override
-                    public void onDismiss(Boolean update, String data) {
-                        //更新数据
-                        if(update){
+                    public void onClick(Boolean isConfirm, String data) {
+                        if(isConfirm){
                             //更新本地数据库
                             User user = new User();
                             //修改签名
@@ -191,7 +230,8 @@ public class ProfileEditActivity extends BaseActivity {
                             isUpdate = true;
                         }
                     }
-                }).show();
+                });
+                dialog.show();
             }
         });
     }

@@ -7,7 +7,7 @@
                 android:topRightRadius="@dimen/dimen10"
                 android:topLeftRadius="@dimen/dimen10"/>
             <!-- 填充色 -->
-            <solid android:color="@color/colorWhite" />
+            <solid android:color="@color/colorDividingLine" />
         </shape>
     </item>
 

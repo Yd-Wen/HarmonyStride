@@ -9,6 +9,10 @@
     </style>
 
     <!-- Custom title text appearance -->
+    <style name="AppTitleAppearance" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textSize">@dimen/appTitleSize</item>
+    </style>
     <style name="TitleAppearance" parent="@style/TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/colorTitle</item>
         <item name="android:textSize">@dimen/titleSize</item>

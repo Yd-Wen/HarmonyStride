@@ -1,7 +1,5 @@
 package com.srdp.harmonystride.activity;
 
-import static com.mob.MobSDK.submitPolicyGrantResult;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,10 +13,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-
 import com.google.gson.Gson;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
@@ -51,7 +48,7 @@ public class RegisterActivity extends BaseActivity {
     private static final int MESSAGE_GET_SUCCESS = 6; //短信发送成功
     private static final int MESSAGE_GET_ERROR = 7; //短信发送失败
 
-    private Toolbar toolbar;
+    private ImageView closeIv;
     private EditText accountEt;
     private EditText passwordEt;
     private EditText verificationCodeEt;
@@ -110,10 +107,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void initViews(){
-        toolbar = findViewById(R.id.tool_bar);
-        //不要忘记设置工具栏
-        setSupportActionBar(toolbar);
-
+        closeIv = findViewById(R.id.iv_close);
         accountEt = findViewById(R.id.et_account);
         passwordEt = findViewById(R.id.et_password);
         verificationCodeEt = findViewById(R.id.et_verification_code);
@@ -123,6 +117,12 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void initEvents(){
+        closeIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         eventHandler = new EventHandler(){
             @Override
@@ -296,26 +296,6 @@ public class RegisterActivity extends BaseActivity {
         });
 
 
-    }
-
-    //获取工具栏菜单
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_close, menu);
-        return true;
-    }
-
-    //为工具栏菜单绑定单击事件监听器
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.close:
-                finish();
-                break;
-            default:
-                break;
-        }
-        return true;
     }
 
     @Override

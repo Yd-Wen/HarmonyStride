@@ -13,7 +13,7 @@
     <color name="colorToolbarTitle">#FFFFFF</color>
     <color name="colorToolbarGreyBackground">#E7E7E7</color>
 
-    <color name="colorBtnOrange">#D3FF9800</color>
+    <color name="colorBtnOrange">#FFDC6C</color>
     <color name="colorBtnOrangePressed">#FF3D00</color>
     <color name="colorBtnBlue">#32E9FA</color>
     <color name="colorBtnBluePressed">#00B0FF</color>
@@ -41,12 +41,14 @@
     <color name="colorTagBackground">#99BCBBBB</color>
     <color name="colorTagSelectedBackground">#662AA4DC</color>
 
-    <color name="editTextBackground">#FFFFFF</color>
+    <color name="editTextBackground">#F2F2F2</color>
 
     <color name="colorMessageBackground">#EFEAEA</color>
 
     <color name="colorWhite">#FFFFFF</color>
 
     <color name="colorCardBorder">#99969696</color>
+
+    <color name="colorBannerBackground">#99D9D9D9</color>
 
 </resources>

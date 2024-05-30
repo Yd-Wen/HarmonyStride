@@ -23,21 +23,25 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.dialog.ButtonDialog;
-import com.srdp.harmonystride.dialog.EditTextDialog;
-import com.srdp.harmonystride.dialog.RadioButtonDialog;
+import com.srdp.harmonystride.dialog.BaseDialog;
+import com.srdp.harmonystride.dialog.factory.ButtonSheetDialogFactory;
+import com.srdp.harmonystride.dialog.factory.DialogFactory;
+import com.srdp.harmonystride.dialog.factory.EditDialogFactory;
+import com.srdp.harmonystride.dialog.factory.SigleChoiceDialogFactory;
 import com.srdp.harmonystride.entity.Certification;
 import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.LogUtil;
+import com.srdp.harmonystride.util.PermissionUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 
 import org.litepal.LitePal;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -181,10 +185,22 @@ public class CertificationActivity extends BaseActivity {
         certifyTypeTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new RadioButtonDialog(CertificationActivity.this, RadioButtonDialog.EDIT_TYPE_CERTIFY, certifyTypeTv.getText().toString(), new RadioButtonDialog.OnDismissListener() {
+                factory = new SigleChoiceDialogFactory();
+                List<String> data = new ArrayList<>();
+                List<Integer> resId = new ArrayList<>();
+                data.add(certifyTypeTv.getText().toString());
+                data.add(getResources().getString(R.string.certify_disabled));
+                data.add(getResources().getString(R.string.certify_volunteer));
+                data.add(getResources().getString(R.string.certify_employer));
+                data.add(getResources().getString(R.string.certify_admin));
+                resId.add(R.drawable.certify_d);
+                resId.add(R.drawable.certify_v);
+                resId.add(R.drawable.certify_e);
+                resId.add(R.drawable.certify_a);
+                dialog = factory.createDialog(CertificationActivity.this, DialogFactory.DIALOG_TITLE_CERTIFY_TYPE, data, resId, new BaseDialog.MyDialogListener() {
                     @Override
-                    public void onDismiss(Boolean update, String data) {
-                        if(update){
+                    public void onClick(Boolean isConfirm, String data) {
+                        if(isConfirm) {
                             certifyTypeTv.setText(data);
                             certification.setType(data);
                             switch (data){
@@ -209,29 +225,75 @@ public class CertificationActivity extends BaseActivity {
                             }
                         }
                     }
-                }).show();
+                });
+                dialog.show();
             }
         });
 
         certifyNumberTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new EditTextDialog(CertificationActivity.this, EditTextDialog.EDIT_TYPE_CERTIFY_NUMBER, certification.getNumber(), new EditTextDialog.OnDismissListener() {
+                factory = new EditDialogFactory();
+                List<String> data = new ArrayList<>();
+                data.add(certification.getNumber());
+                String dialogTitle = "";
+                String dialogHint = "";
+                switch (certifyTypeTv.getText().toString()){
+                    case "残疾人":
+                        dialogTitle = DialogFactory.DIALOG_TITLE_CERTIFY_DISABLED_NUMBER;
+                        dialogHint = DialogFactory.DIALOG_HINT_CERTIFY_DISABLED_NUMBER;
+                        break;
+                    case "志愿者":
+                        dialogTitle = DialogFactory.DIALOG_TITLE_CERTIFY_VOLUNTEER_NUMBER;
+                        dialogHint = DialogFactory.DIALOG_HINT_CERTIFY_VOLUNTEER_NUMBER;
+                        break;
+                    case "用人单位":
+                        dialogTitle = DialogFactory.DIALOG_TITLE_CERTIFY_EMPLOYER_NUMBER;
+                        dialogHint = DialogFactory.DIALOG_HINT_CERTIFY_EMPLOYER_NUMBER;
+                        break;
+                    case "管理员":
+                        dialogTitle = DialogFactory.DIALOG_TITLE_CERTIFY_ADMIN_NUMBER;
+                        dialogHint = DialogFactory.DIALOG_HINT_CERTIFY_ADMIN_NUMBER;
+                        break;
+                    default:
+                        break;
+                }
+                data.add(dialogHint);
+                dialog = factory.createDialog(CertificationActivity.this, dialogTitle, data, null, new BaseDialog.MyDialogListener() {
                     @Override
-                    public void onDismiss(Boolean update, String data) {
-                        if(update){
+                    public void onClick(Boolean isConfirm, String data) {
+                        if(isConfirm){
                             certifyNumberTv.setText(data);
                             certification.setNumber(data);
                         }
                     }
-                }).show();
+                });
+                dialog.show();
             }
         });
 
         certifyImageIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new ButtonDialog(CertificationActivity.this).show();
+                factory = new ButtonSheetDialogFactory();
+                List<String> data = new ArrayList<>();
+                data.add(PermissionUtil.TYPE_PHOTO_ALBUM);
+                data.add(PermissionUtil.TYPE_OPEN_CAMERA);
+                dialog = factory.createDialog(CertificationActivity.this, null, data, null, new BaseDialog.MyDialogListener() {
+                    @Override
+                    public void onClick(Boolean isConfirm, String data) {
+                        if(isConfirm){
+                            if(data.equals(PermissionUtil.TYPE_PHOTO_ALBUM)){
+                                //选择相册
+                                PermissionUtil.getInstance(CertificationActivity.this).requestExternalPermission();
+                            }else if(data.equals(PermissionUtil.TYPE_OPEN_CAMERA)){
+                                //拍照
+                                PermissionUtil.getInstance(CertificationActivity.this).requestCameraPermission();
+                            }
+                        }
+                    }
+                });
+                dialog.show();
             }
         });
 

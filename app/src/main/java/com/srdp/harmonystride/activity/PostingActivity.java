@@ -1,7 +1,6 @@
 package com.srdp.harmonystride.activity;
 
 import static com.srdp.harmonystride.util.ImageUtil.OPEN_ALBUM_CODE;
-import static com.srdp.harmonystride.util.ImageUtil.getImagePath;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,12 +24,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
-import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.dialog.TipDialog;
+import com.srdp.harmonystride.dialog.BaseDialog;
+import com.srdp.harmonystride.dialog.factory.DialogFactory;
+import com.srdp.harmonystride.dialog.factory.TipDialogFactory;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.Result;
-import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.LogUtil;
@@ -39,12 +38,9 @@ import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.TimeUtil;
 
 
-import org.litepal.LitePal;
-
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Base64;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,23 +154,30 @@ public class PostingActivity extends BaseActivity {
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO:发布帖子
+                //发布帖子
                 if(SharedPreferenceUtil.getParam("current_certify", "").equals("未认证")){
-                    new TipDialog(PostingActivity.this, "未认证，是否刷新认证信息", new TipDialog.OnDismissListener() {
+                    factory = new TipDialogFactory();
+                    List<String> data = new ArrayList<>();
+                    data.add("未认证，是否刷新认证信息");
+                    dialog = factory.createDialog(PostingActivity.this, DialogFactory.DIALOG_TITLE_ACCOUNT_CERTIFY, data, null, new BaseDialog.MyDialogListener() {
                         @Override
-                        public void onDismiss(Boolean isConfirm) {
-                            if(isConfirm){
+                        public void onClick(Boolean isConfirm, String data) {
+                            if(isConfirm) {
                                 navigateTo(CertificationActivity.class);
                             }
                         }
-                    }).show();
+                    });
+                    dialog.show();
                 }else if(StringUtil.isEmpty(post.getLabel())){
                     showToast("请选择标签");
                 }else {
-                    new TipDialog(PostingActivity.this, "确认标签并发布帖子？", new TipDialog.OnDismissListener() {
+                    factory = new TipDialogFactory();
+                    List<String> data = new ArrayList<>();
+                    data.add("是否确认标签并发布帖子");
+                    dialog = factory.createDialog(PostingActivity.this, DialogFactory.DIALOG_TITLE_POST_ADD, data, null, new BaseDialog.MyDialogListener() {
                         @Override
-                        public void onDismiss(Boolean isConfirm) {
-                            if(isConfirm){
+                        public void onClick(Boolean isConfirm, String data) {
+                            if(isConfirm) {
                                 post.setTitle(titleEt.getText().toString());
                                 post.setContent(contentRe.getHtml());
                                 post.setDatetime(TimeUtil.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"));
@@ -201,12 +204,12 @@ public class PostingActivity extends BaseActivity {
                                             message.what = POST_ADD_SUCCESS;
                                             handler.sendMessage(message);
                                         }
-
                                     }
                                 });
                             }
                         }
-                    }).show();
+                    });
+                    dialog.show();
                 }
             }
         });

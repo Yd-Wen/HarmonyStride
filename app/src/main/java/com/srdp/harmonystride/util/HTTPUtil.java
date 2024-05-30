@@ -16,6 +16,7 @@ import okhttp3.RequestBody;
 public class HTTPUtil {
     public static final OkHttpClient client = new OkHttpClient();
     public static final String IP = "http://yindongwen.top:8080"; //服务器IP地址
+    //public static final String IP = "http:/10.152.221.7:8080"; //服务器IP地址
     //public static final String IP = "http://10.152.221.238:8080";
     public static final Gson gson = new Gson();
 
@@ -209,6 +210,11 @@ public class HTTPUtil {
         String url = "/certification/find";
         url = url + "?" + "uid=" + uid ;
         LogUtil.d("verify", url);
+        GET(url, callback);
+    }
+
+    public static void check(String fileName, okhttp3.Callback callback){
+        String url = "/app/check" + "?" + "fileName=" + fileName;
         GET(url, callback);
     }
 

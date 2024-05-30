@@ -1,6 +1,5 @@
 package com.srdp.harmonystride.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -11,9 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.srdp.harmonystride.MyApplication;
+import com.srdp.harmonystride.dialog.BaseDialog;
+import com.srdp.harmonystride.dialog.factory.DialogFactory;
 
 public class BaseActivity extends AppCompatActivity {
     private ActivityResultLauncher activityResultLauncher;
+    protected DialogFactory factory;
+    protected BaseDialog dialog;
 
     @Override
     protected  void onCreate(@Nullable Bundle savedInstanceState){

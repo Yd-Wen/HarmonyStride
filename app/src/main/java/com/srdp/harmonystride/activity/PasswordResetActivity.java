@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,7 +45,7 @@ public class PasswordResetActivity extends BaseActivity {
     private static final int MESSAGE_GET_SUCCESS = 5; //短信发送成功
     private static final int MESSAGE_GET_ERROR = 6; //短信发送失败
 
-    private Toolbar toolbar;
+    private ImageView closeIv;
     private EditText accountEt;
     private EditText newPwdEt;
     private EditText verificationCodeEt;
@@ -91,10 +92,7 @@ public class PasswordResetActivity extends BaseActivity {
     }
 
     private void initViews(){
-        toolbar = findViewById(R.id.tool_bar);
-        //不要忘记设置工具栏
-        setSupportActionBar(toolbar);
-
+        closeIv = findViewById(R.id.iv_close);
         accountEt = findViewById(R.id.et_account);
         verificationCodeEt = findViewById(R.id.et_verification_code);
         newPwdEt = findViewById(R.id.et_password_new);
@@ -106,7 +104,12 @@ public class PasswordResetActivity extends BaseActivity {
     }
 
     private void initEvents(){
-
+        closeIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         eventHandler = new EventHandler(){
             @Override
             public void afterEvent(int event, int result, Object data) {
@@ -252,26 +255,6 @@ public class PasswordResetActivity extends BaseActivity {
         setResult(Activity.RESULT_OK, resutltIntent);
         finish();
         showToast("重置密码成功");
-    }
-
-    //获取工具栏菜单
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_close, menu);
-        return true;
-    }
-
-    //为工具栏菜单绑定单击事件监听器
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.close:
-                finish();
-                break;
-            default:
-                break;
-        }
-        return true;
     }
 
     @Override

@@ -14,19 +14,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 //import com.hyphenate.chat.EMClient;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.dialog.TipDialog;
+import com.srdp.harmonystride.dialog.BaseDialog;
+import com.srdp.harmonystride.dialog.factory.DialogFactory;
+import com.srdp.harmonystride.dialog.factory.TipDialogFactory;
 import com.srdp.harmonystride.entity.Result;
-import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.rong.imkit.RongIM;
 import okhttp3.Call;
@@ -137,10 +138,13 @@ public class SettingActivity extends BaseActivity {
         accountDeleteTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new TipDialog(SettingActivity.this, "是否注销账号？请谨慎操作！", new TipDialog.OnDismissListener() {
+                factory = new TipDialogFactory();
+                List<String> data = new ArrayList<>();
+                data.add("是否注销账号，请谨慎操作");
+                dialog = factory.createDialog(SettingActivity.this, DialogFactory.DIALOG_TITLE_ACCOUNT_DELETE, data, null, new BaseDialog.MyDialogListener() {
                     @Override
-                    public void onDismiss(Boolean isConfirm) {
-                        if(isConfirm){
+                    public void onClick(Boolean isConfirm, String data) {
+                        if(isConfirm) {
                             //删除账号
                             HTTPUtil.deleteUserById((int) SharedPreferenceUtil.getParam("current_uid", 0), new Callback() {
                                 @Override
@@ -165,7 +169,8 @@ public class SettingActivity extends BaseActivity {
                             });
                         }
                     }
-                }).show();
+                });
+                dialog.show();
             }
         });
 
@@ -239,10 +244,13 @@ public class SettingActivity extends BaseActivity {
         logoutTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new TipDialog(SettingActivity.this, "是否退出登录？", new TipDialog.OnDismissListener() {
+                factory = new TipDialogFactory();
+                List<String> data = new ArrayList<>();
+                data.add("是否退出登录");
+                dialog = factory.createDialog(SettingActivity.this, DialogFactory.DIALOG_TITLE_ACCOUNT_LOGOUT, data, null, new BaseDialog.MyDialogListener() {
                     @Override
-                    public void onDismiss(Boolean isConfirm) {
-                        if(isConfirm){
+                    public void onClick(Boolean isConfirm, String data) {
+                        if(isConfirm) {
                             Intent intent = new Intent(MyApplication.getContext(), LoginActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             navigateTo(intent);
@@ -251,10 +259,10 @@ public class SettingActivity extends BaseActivity {
                             SharedPreferenceUtil.setParam("is_login", false);
                             //登出IM
                             RongIM.getInstance().disconnect();
-                            //EMClient.getInstance().logout(true);
                         }
                     }
-                }).show();
+                });
+                dialog.show();
             }
         });
     }

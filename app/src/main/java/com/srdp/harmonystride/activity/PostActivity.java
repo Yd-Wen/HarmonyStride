@@ -33,8 +33,10 @@ import com.google.gson.reflect.TypeToken;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.adapter.CommentAdapter;
-import com.srdp.harmonystride.dialog.EditTextDialog;
-import com.srdp.harmonystride.dialog.TipDialog;
+import com.srdp.harmonystride.dialog.BaseDialog;
+import com.srdp.harmonystride.dialog.factory.DialogFactory;
+import com.srdp.harmonystride.dialog.factory.EditDialogFactory;
+import com.srdp.harmonystride.dialog.factory.TipDialogFactory;
 import com.srdp.harmonystride.entity.Application;
 import com.srdp.harmonystride.entity.Comment;
 import com.srdp.harmonystride.entity.Post;
@@ -241,6 +243,22 @@ public class PostActivity extends BaseActivity {
                     toolbarAvatarCiv.setVisibility(View.GONE);
                     toolbarNicknameTv.setVisibility(View.GONE);
                 }
+                if(Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()){
+                    //折叠状态
+                    toolbarAvatarCiv.setVisibility(View.VISIBLE);
+                    toolbarNicknameTv.setVisibility(View.VISIBLE);
+                    toolbar.setNavigationIcon(R.drawable.back);
+                } else if(Math.abs(verticalOffset) == 0){
+                    //展开状态
+                    toolbarAvatarCiv.setVisibility(View.GONE);
+                    toolbarNicknameTv.setVisibility(View.GONE);
+                    toolbar.setNavigationIcon(R.drawable.back);
+                } else if(Math.abs(verticalOffset) < appBarLayout.getTotalScrollRange()){
+                    //折叠中状态
+                    toolbarAvatarCiv.setVisibility(View.GONE);
+                    toolbarNicknameTv.setVisibility(View.GONE);
+                    toolbar.setNavigationIcon(null);
+                }
             }
         });
 
@@ -275,23 +293,32 @@ public class PostActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if(SharedPreferenceUtil.getParam("current_certify", "").equals("未认证")){
-                    new TipDialog(PostActivity.this, "未认证，是否刷新认证信息", new TipDialog.OnDismissListener() {
+                    factory = new TipDialogFactory();
+                    List<String> data = new ArrayList<>();
+                    data.add("未认证，是否刷新认证信息");
+                    dialog = factory.createDialog(PostActivity.this, DialogFactory.DIALOG_TITLE_ACCOUNT_CERTIFY, data, null, new BaseDialog.MyDialogListener() {
                         @Override
-                        public void onDismiss(Boolean isConfirm) {
-                            if(isConfirm){
+                        public void onClick(Boolean isConfirm, String data) {
+                            if(isConfirm) {
                                 navigateTo(CertificationActivity.class);
                             }
                         }
-                    }).show();
+                    });
+                    dialog.show();
                 }else if(isAllowApply){
-                    new EditTextDialog(PostActivity.this, EditTextDialog.EDIT_TYPE_APPLY_REASON, "", new EditTextDialog.OnDismissListener() {
+                    factory = new EditDialogFactory();
+                    List<String> data = new ArrayList<>();
+                    data.add("");
+                    data.add(DialogFactory.DIALOG_HINT_APPLY_REASON);
+                    dialog = factory.createDialog(PostActivity.this, DialogFactory.DIALOG_TITLE_APPLY_REASON, data, null, new BaseDialog.MyDialogListener() {
                         @Override
-                        public void onDismiss(Boolean isUpdate, String data) {
-                            if(isUpdate){
+                        public void onClick(Boolean isConfirm, String data) {
+                            if(isConfirm){
                                 submitApply(data);
                             }
                         }
-                    }).show();
+                    });
+                    dialog.show();
                 }else {
                     showToast("申请已关闭，请联系发帖人开放申请");
                 }
@@ -325,14 +352,18 @@ public class PostActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if(SharedPreferenceUtil.getParam("current_certify", "").equals("未认证")){
-                    new TipDialog(PostActivity.this, "未认证，是否刷新认证信息", new TipDialog.OnDismissListener() {
+                    factory = new TipDialogFactory();
+                    List<String> data = new ArrayList<>();
+                    data.add("未认证，是否刷新认证信息");
+                    dialog = factory.createDialog(PostActivity.this, DialogFactory.DIALOG_TITLE_ACCOUNT_CERTIFY, data, null, new BaseDialog.MyDialogListener() {
                         @Override
-                        public void onDismiss(Boolean isConfirm) {
-                            if(isConfirm){
+                        public void onClick(Boolean isConfirm, String data) {
+                            if(isConfirm) {
                                 navigateTo(CertificationActivity.class);
                             }
                         }
-                    }).show();
+                    });
+                    dialog.show();
                 }else {
                     //TODO 发布评论
                     Comment comment = new Comment();

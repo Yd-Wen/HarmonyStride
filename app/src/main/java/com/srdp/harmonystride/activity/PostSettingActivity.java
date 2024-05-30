@@ -1,8 +1,6 @@
 package com.srdp.harmonystride.activity;
 
 
-import static com.srdp.harmonystride.util.ImageUtil.getImagePath;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,24 +13,20 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.dialog.TipDialog;
-import com.srdp.harmonystride.entity.Post;
+import com.srdp.harmonystride.dialog.BaseDialog;
+import com.srdp.harmonystride.dialog.factory.DialogFactory;
+import com.srdp.harmonystride.dialog.factory.TipDialogFactory;
 import com.srdp.harmonystride.entity.Result;
-import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.LogUtil;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,14 +140,18 @@ public class PostSettingActivity extends BaseActivity {
         postDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new TipDialog(PostSettingActivity.this, "确定删除该帖子？该操作不可逆", new TipDialog.OnDismissListener() {
+                factory = new TipDialogFactory();
+                List<String> data = new ArrayList<>();
+                data.add("是否确定删除该帖子，该操作不可逆");
+                dialog = factory.createDialog(PostSettingActivity.this, DialogFactory.DIALOG_TITLE_POST_DELETE, data, null, new BaseDialog.MyDialogListener() {
                     @Override
-                    public void onDismiss(Boolean isConfirm) {
-                        if(isConfirm){
+                    public void onClick(Boolean isConfirm, String data) {
+                        if(isConfirm) {
                             deletePost(curPid);
                         }
                     }
-                }).show();
+                });
+                dialog.show();
             }
         });
     }

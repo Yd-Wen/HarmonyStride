@@ -57,7 +57,7 @@
         <com.scwang.smart.refresh.layout.SmartRefreshLayout
             android:id="@+id/smart_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:srlAccentColor="@color/colorAccent"
             app:srlPrimaryColor="@color/colorPrimary"
             app:srlReboundDuration="300"
@@ -67,7 +67,8 @@
             app:srlHeaderHeight="@dimen/dimen100"
             app:srlFooterHeight="@dimen/dimen50"
             app:srlEnableLoadMore="true"
-            app:srlEnableRefresh="false">
+            app:srlEnableRefresh="false"
+            android:background="@color/colorDividingLine">
 
             <pl.droidsonroids.gif.GifImageView
                 android:layout_width="match_parent"

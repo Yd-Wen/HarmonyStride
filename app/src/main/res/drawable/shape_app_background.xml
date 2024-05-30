@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    <gradient-->
+<!--        android:type="linear"-->
+<!--        android:startColor="@color/colorPrimaryDark"-->
+<!--        android:endColor="@color/colorPrimary"-->
+<!--        android:angle="45" />-->
+
+    <gradient
+        android:type="radial"
+        android:startColor="@color/colorPrimaryDark"
+        android:endColor="@color/colorBtnBlue"
+        android:centerX="0.5"
+        android:centerY="0.3"
+        android:gradientRadius="600dp"/>
+
+<!--    <gradient-->
+<!--        android:type="sweep"-->
+<!--        android:startColor="@color/colorPrimaryDark"-->
+<!--        android:endColor="@color/colorBtnBlue"-->
+<!--        android:centerX="0.5"-->
+<!--        android:centerY="0.3" />-->
+
+</shape>
+

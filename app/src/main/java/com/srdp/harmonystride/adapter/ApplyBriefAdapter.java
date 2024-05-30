@@ -17,25 +17,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.activity.PostActivity;
 import com.srdp.harmonystride.activity.ProfileActivity;
-import com.srdp.harmonystride.dialog.TipDialog;
+import com.srdp.harmonystride.dialog.BaseDialog;
+import com.srdp.harmonystride.dialog.factory.DialogFactory;
+import com.srdp.harmonystride.dialog.factory.TipDialogFactory;
 import com.srdp.harmonystride.entity.Application;
-import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
 import com.srdp.harmonystride.util.ImageUtil;
 import com.srdp.harmonystride.util.LogUtil;
-import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.ToastUtil;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,11 +119,14 @@ public class ApplyBriefAdapter extends RecyclerView.Adapter<ApplyBriefAdapter.Vi
         viewHolder.moreIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO:通过不通过
-                new TipDialog(mContext, "是否接受该用户申请", new TipDialog.OnDismissListener() {
+                //通过不通过
+                DialogFactory factory = new TipDialogFactory();
+                List<String> data = new ArrayList<>();
+                data.add("是否接受该用户申请");
+                BaseDialog dialog = factory.createDialog(mContext, DialogFactory.DIALOG_TITLE_APPLY_AGREE, data, null, new BaseDialog.MyDialogListener() {
                     @Override
-                    public void onDismiss(Boolean isConfirm) {
-                        if(isConfirm){
+                    public void onClick(Boolean isConfirm, String data) {
+                        if(isConfirm) {
                             int position = viewHolder.getAdapterPosition();
                             Map<String, Object> params = new HashMap<>();
                             params.put("pid",  String.valueOf(pid));
@@ -159,7 +158,8 @@ public class ApplyBriefAdapter extends RecyclerView.Adapter<ApplyBriefAdapter.Vi
                             });
                         }
                     }
-                }).show();
+                });
+                dialog.show();
             }
         });
         return viewHolder;

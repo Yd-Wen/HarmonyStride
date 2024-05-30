@@ -8,6 +8,7 @@ buildscript {
         maven{ url 'https://maven.aliyun.com/repository/public'}
         maven{ url 'https://maven.aliyun.com/repository/jcenter'}
         maven {url  "https://maven.rongcloud.cn/repository/maven-releases/"}
+        maven { url "https://s01.oss.sonatype.org/content/groups/public" }
 
         google()
         jcenter()

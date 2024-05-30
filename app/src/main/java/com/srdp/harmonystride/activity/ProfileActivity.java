@@ -275,10 +275,17 @@ public class ProfileActivity extends BaseActivity {
                     //折叠状态
                     avatarToolbarCiv.setVisibility(View.VISIBLE);
                     nicknameToolbarTv.setVisibility(View.VISIBLE);
-                }else {
+                    toolbar.setNavigationIcon(R.drawable.back);
+                } else if(Math.abs(verticalOffset) == 0){
                     //展开状态
                     avatarToolbarCiv.setVisibility(View.GONE);
                     nicknameToolbarTv.setVisibility(View.GONE);
+                    toolbar.setNavigationIcon(R.drawable.back);
+                } else if(Math.abs(verticalOffset) < appBarLayout.getTotalScrollRange()){
+                    //折叠中状态
+                    avatarToolbarCiv.setVisibility(View.GONE);
+                    nicknameToolbarTv.setVisibility(View.GONE);
+                    toolbar.setNavigationIcon(null);
                 }
             }
         });

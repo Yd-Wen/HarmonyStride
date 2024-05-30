@@ -1,7 +1,5 @@
 package com.srdp.harmonystride.activity;
 
-import static com.mob.MobSDK.submitPolicyGrantResult;
-
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,14 +8,10 @@ import android.os.Message;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-//import com.hyphenate.EMCallBack;
-//import com.hyphenate.chat.EMClient;
-//import com.hyphenate.chat.EMOptions;
 import com.srdp.harmonystride.R;
-import com.srdp.harmonystride.dialog.PrivacyDialog;
+import com.srdp.harmonystride.dialog.BaseDialog;
+import com.srdp.harmonystride.dialog.factory.DialogFactory;
+import com.srdp.harmonystride.dialog.factory.TipDialogFactory;
 import com.srdp.harmonystride.entity.Result;
 import com.srdp.harmonystride.util.LogUtil;
 import com.srdp.harmonystride.util.RongIMUtil;
@@ -28,6 +22,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -63,7 +59,7 @@ public class WelcomeActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case GET_IM_USER_TOKEN_SUCCESS:
-                    //TODO 连接IM服务器
+                    //连接IM服务器
                     LogUtil.e("获取IM用户Token成功", "WelcomeActivity");
                     loginIM();
                     break;
@@ -135,7 +131,7 @@ public class WelcomeActivity extends BaseActivity {
                     //是否已经登录
                     Boolean isLogin = (Boolean) SharedPreferenceUtil.getParam("is_login", false);
                     if(isLogin){
-                        //TODO 连接IM服务器
+                        //连接IM服务器
                         if(StringUtil.isEmpty((String)SharedPreferenceUtil.getParam("user_token", ""))){
                             getUserToken();
                         }else {
@@ -156,9 +152,22 @@ public class WelcomeActivity extends BaseActivity {
 
     //展示隐私内容
     private void showPrivacy(){
-       String privacyStr = initPrivacy("privacy.txt");
-        PrivacyDialog privacyDialog = new PrivacyDialog(this);
-        privacyDialog.getContentTv().setText(privacyStr);
+        factory = new TipDialogFactory();
+        List<String> data = new ArrayList<>();
+        data.add(initPrivacy("privacy.txt"));
+        dialog = factory.createDialog(WelcomeActivity.this, DialogFactory.DIALOG_TITLE_PRIVACY_AUTHORIZE, data, null, new BaseDialog.MyDialogListener() {
+            @Override
+            public void onClick(Boolean isConfirm, String data) {
+                if(isConfirm) {
+                    SharedPreferenceUtil.setParam("privacy_agree", true);
+                    navigateTo(LoginActivity.class);
+                    finish();
+                } else {
+                    System.exit(0);
+                }
+            }
+        });
+        dialog.show();
     }
 
     //获取IM用户的TOKEN

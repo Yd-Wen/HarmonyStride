@@ -1,6 +1,7 @@
 package com.srdp.harmonystride.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,13 +39,12 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.srdp.harmonystride.MyApplication;
 import com.srdp.harmonystride.R;
 import com.srdp.harmonystride.activity.CertificationActivity;
-import com.srdp.harmonystride.activity.LoginActivity;
 import com.srdp.harmonystride.activity.PostingActivity;
 import com.srdp.harmonystride.activity.ProfileActivity;
 import com.srdp.harmonystride.activity.SearchActivity;
 import com.srdp.harmonystride.activity.SettingActivity;
+import com.srdp.harmonystride.adapter.MyBannerAdapter;
 import com.srdp.harmonystride.adapter.PostBriefAdapter;
-import com.srdp.harmonystride.dialog.TipDialog;
 import com.srdp.harmonystride.entity.Post;
 import com.srdp.harmonystride.entity.User;
 import com.srdp.harmonystride.util.HTTPUtil;
@@ -54,7 +54,10 @@ import com.srdp.harmonystride.util.ScrollUtil;
 import com.srdp.harmonystride.util.SharedPreferenceUtil;
 import com.srdp.harmonystride.util.StringUtil;
 import com.srdp.harmonystride.util.TimeUtil;
-import com.srdp.harmonystride.util.ToastUtil;
+import com.youth.banner.Banner;
+import com.youth.banner.adapter.BannerImageAdapter;
+import com.youth.banner.holder.BannerImageHolder;
+import com.youth.banner.indicator.CircleIndicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,8 +89,8 @@ public class HomeFragment extends Fragment{
     private NavigationView navigationView;
     private CircleImageView avatarCiv;
     private TextView nicknameTv;
-    private ImageView certifyIv;
-    private ImageView postIv;
+
+    private Banner banner;
 
     private FloatingActionButton floatingActionButton;
 
@@ -105,6 +108,8 @@ public class HomeFragment extends Fragment{
 
     private ScrollUtil scrollUtil; // 滑动工具
     private static final int SCROLL_THRESHOLD = 1000; // 设置滑动阈值
+
+    private List<Integer> bannerImgList = new ArrayList<>();
 
     private List<Post> postList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
@@ -134,7 +139,6 @@ public class HomeFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
-
         //初始化视图
         initViews();
         //初始化事件
@@ -148,6 +152,10 @@ public class HomeFragment extends Fragment{
         List<User> Users = LitePal.where("account = ?", SharedPreferenceUtil.getParam("current_account", "").toString()).find(User.class);
         curUser = Users.get(0);
         curTag = getString(R.string.post_label_all);
+        bannerImgList.clear();
+        bannerImgList.add(R.drawable.banner_certify);
+        bannerImgList.add(R.drawable.banner_post);
+        bannerImgList.add(R.drawable.banner_notification);
     }
 
     private void requestDatas(String time, String label, Boolean isLoadMore){
@@ -218,8 +226,11 @@ public class HomeFragment extends Fragment{
         //设置新标题
         titleTv.setText(R.string.home);
 
-        certifyIv = view.findViewById(R.id.iv_certify);
-        postIv = view.findViewById(R.id.iv_post);
+        banner = view.findViewById(R.id.banner);
+        banner.isAutoLoop(true);
+        banner.setIndicator(new CircleIndicator(getContext()));
+
+
 
         floatingActionButton = view.findViewById(R.id.floating_action_btn);
 
@@ -249,11 +260,19 @@ public class HomeFragment extends Fragment{
                     toolbarAvatarCiv.setVisibility(View.VISIBLE);
                     toolbarNicknameTv.setVisibility(View.VISIBLE);
                     titleTv.setVisibility(View.GONE);
-                }else {
+                    searchIv.setVisibility(View.VISIBLE);
+                } else if(Math.abs(verticalOffset) == 0){
                     //展开状态
                     toolbarAvatarCiv.setVisibility(View.GONE);
                     toolbarNicknameTv.setVisibility(View.GONE);
                     titleTv.setVisibility(View.VISIBLE);
+                    searchIv.setVisibility(View.VISIBLE);
+                } else if(Math.abs(verticalOffset) < appBarLayout.getTotalScrollRange()){
+                    //折叠中状态
+                    toolbarAvatarCiv.setVisibility(View.GONE);
+                    toolbarNicknameTv.setVisibility(View.GONE);
+                    titleTv.setVisibility(View.GONE);
+                    searchIv.setVisibility(View.GONE);
                 }
             }
         });
@@ -269,22 +288,6 @@ public class HomeFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
-
-        certifyIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent certifyIntent = new Intent(getActivity(), CertificationActivity.class);
-                startActivity(certifyIntent);
-            }
-        });
-
-        postIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), PostingActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -464,6 +467,15 @@ public class HomeFragment extends Fragment{
         super.onStart();
         //初始化数据
         initDatas();
+
+        banner.setAdapter(new MyBannerAdapter(getActivity(), bannerImgList));
+//        banner.setAdapter(new BannerImageAdapter<Integer>(bannerImgList) {
+//            @Override
+//            public void onBindView(BannerImageHolder holder, Integer data, int position, int size) {
+//                holder.imageView.setImageResource(data);
+//            }
+//        });
+
         //加载用户数据
         loadUserInfo();
         //请求数据

@@ -182,7 +182,8 @@
                 app:srlFooterMaxDragRate="1.5"
                 app:srlHeaderHeight="@dimen/dimen100"
                 app:srlFooterHeight="@dimen/dimen50"
-                app:srlEnableLoadMore="true">
+                app:srlEnableLoadMore="true"
+                android:background="@color/colorDividingLine">
 
                 <pl.droidsonroids.gif.GifImageView
                     android:layout_width="match_parent"

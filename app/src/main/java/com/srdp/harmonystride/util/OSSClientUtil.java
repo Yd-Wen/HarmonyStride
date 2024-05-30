@@ -7,6 +7,7 @@ import com.alibaba.sdk.android.oss.ClientConfiguration;
 import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.OSSClient;
 import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
 import com.alibaba.sdk.android.oss.common.OSSLog;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSFederationCredentialProvider;
@@ -47,22 +48,18 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class OSSClientUtil {
-//    private static interface onUpload{
-//
-//    }
-
     private static final String TAG = "OSSClientUtil";
     //oss访问地址
     private static final String ENDPOINT = "oss-cn-hangzhou.aliyuncs.com";
     //oss账号的AccessKey ID
-    private static String ACCESS_KEY_ID = "STS.NTtatrYHb2JPoCX5FeRq3VvNL";
+    private static String ACCESS_KEY_ID = "";
     //oss账号的AccessKey Secret
-    private static String ACCESS_KEY_SECRET = "2ibHwtugTQDeK55o5r1u4EYFcA37YjuDDpy4i5mWYbdy";
+    private static String ACCESS_KEY_SECRET = "";
     //oss Bucket名称
     private static final String BUCKET_NAME = "harmonystride-bucket";
     private static final String ROOT = "img/";
     // 从STS服务获取的安全令牌（SecurityToken）
-    private static String SECURITY_TOKEN= "CAISoAJ1q6Ft5B2yfSjIr5fBKs7GtJdDhYi7bWXp0UYwXv4fubPlrjz2IHhMf3hsAesatPs3mW1R7f8flqJIRoReREvCUcZr8syyGLYy0NOT1fau5Jko1beiewHKeRyZsebWZ+LmNqS/Ht6md1HDkAJq3LL+bk/Mdle5MJqP+/EFA9MMRVv6FxIkYu1bPQx/ssQXGGLMPPK2SH7Qj3HXEVBjt3gw6yl24r/txdaHuFiMzg/6w/UQoILgOYS+bsVheZ1iWNS4wKs0VNKYjXABsUYWrfYs1fUeom+bhLzHXQkNuSfhGvHP79hiIDV+YqUHAKNepJD+76Yg4reCy9ysl0wSZbwICn+GGZrZwMLeHeSvJ80lb7f3NmjAycyf7nx2Dqer7RgagAEK6wpnIPfYdVuCzwYn/Vf2OdHj7zaFyyygVlNEmq1UzAdnUlxp3YK2VeLa46OTybQqcHEK9jR/b4+3bKj5Kgo4fxVE2kMgLi8CvukTtZQoOYY1Fh7U7M/twu454v3qtSAtMzF45NLKvDI4NV9xrwtGWIELZU0JLlhf8lLjaoz8BiAA";
+    private static String SECURITY_TOKEN= "";
     //凭证过期时间
     private static String EXPIRATION = "2024-02-19T03:44:40Z";
     //获取凭证
@@ -238,6 +235,51 @@ public class OSSClientUtil {
             Log.e("RawMessage", e.getRawMessage());
             return false;
         }
+    }
+
+    public static byte[] downloadFile(String fileUrl) {
+
+        // 生成object key
+        String objectKey = fileUrl.replace(ENDPOINT+ "/", "");
+        System.out.println("objectKey: " + objectKey);
+
+        // 下载请求
+        GetObjectRequest getObjectRequest = new GetObjectRequest(BUCKET_NAME, objectKey);
+
+        ossClient.asyncGetObject(getObjectRequest, new OSSCompletedCallback<GetObjectRequest, GetObjectResult>() {
+            @Override
+            public void onSuccess(GetObjectRequest request, GetObjectResult result) {
+                // 开始读取数据
+                long length = result.getContentLength();
+                if (length > 0) {
+                    byte[] buffer = new byte[(int) length];
+                    int readCount = 0;
+                    while (readCount < length) {
+                        try{
+                            readCount += result.getObjectContent().read(buffer, readCount, (int) length - readCount);
+                        }catch (Exception e){
+                            OSSLog.logInfo(e.toString());
+                        }
+                    }
+                    // 将下载后的文件存放在指定的本地路径，例如D:\\localpath\\exampleobject.jpg。
+//                    try {
+//                        FileOutputStream fout = new FileOutputStream("download_filePath");
+//                        fout.write(buffer);
+//                        fout.close();
+//                    } catch (Exception e) {
+//                        OSSLog.logInfo(e.toString());
+//                    }
+                }
+            }
+
+            @Override
+            public void onFailure(GetObjectRequest request, ClientException clientException,
+                                  ServiceException serviceException)  {
+
+            }
+        });
+
+        return null;
     }
 }
 
