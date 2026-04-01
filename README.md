@@ -20,22 +20,6 @@
   - https://github.com/Yd-Wen/HarmonyStride
   - https://gitee.com/yindong-wen/HarmonyStride
 
-- 基础功能演示
-
-<<<<<<< HEAD
-  [https://github.com/user-attachments/assets/38b173aa-4fea-4923-8be4-83bfc5a43655](https://gitee.com/link?target=https%3A%2F%2Fgithub.com%2Fuser-attachments%2Fassets%2F38b173aa-4fea-4923-8be4-83bfc5a43655)
-
-- 核心功能演示
-=======
-https://github.com/user-attachments/assets/38b173aa-4fea-4923-8be4-83bfc5a43655
-
-- 核心功能演示
-
-https://github.com/user-attachments/assets/60144771-6d58-41d6-aeba-0e0b9d29d375
->>>>>>> 573c1ab1dbd06685647d618dd81ae60ed0961971
-
-  [https://github.com/user-attachments/assets/60144771-6d58-41d6-aeba-0e0b9d29d375](https://gitee.com/link?target=https%3A%2F%2Fgithub.com%2Fuser-attachments%2Fassets%2F60144771-6d58-41d6-aeba-0e0b9d29d375)
-
 ### 核心功能
 
 - 📋 **帖子系统**：发布和浏览求职、招聘、求助、志愿等活动信息
