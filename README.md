@@ -19,6 +19,9 @@
 
   - https://github.com/Yd-Wen/HarmonyStride
   - https://gitee.com/yindong-wen/HarmonyStride
+- 功能演示
+  - https://oss.yindongwen.top/demo/HarmonyStride_01.mp4
+  - https://oss.yindongwen.top/demo/HarmonyStride_02.mp4
 
 ### 核心功能
 
