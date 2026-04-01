@@ -1,0 +1,78 @@
+HarmonyStride (与你同行)
+Copyright 2024 HarmonyStride Contributors
+
+This product includes software developed for the HarmonyStride project.
+(https://github.com/Yd-Wen/HarmonyStride)
+
+==============================================================================
+
+THIRD-PARTY DEPENDENCIES
+
+This software uses the following open source packages:
+
+AndroidX Libraries
+  Copyright (C) Google Inc.
+  Licensed under the Apache License, Version 2.0
+
+Material Components for Android
+  Copyright (C) Google Inc.
+  Licensed under the Apache License, Version 2.0
+
+OkHttp
+  Copyright (C) Square, Inc.
+  Licensed under the Apache License, Version 2.0
+
+Gson
+  Copyright (C) Google Inc.
+  Licensed under the Apache License, Version 2.0
+
+LitePal
+  Copyright (C) Guo Lin
+  Licensed under the Apache License, Version 2.0
+
+Glide
+  Copyright (C) Google Inc.
+  Licensed under the Apache License, Version 2.0
+
+CircleImageView
+  Copyright (C) Henning Dodenhof
+  Licensed under the Apache License, Version 2.0
+
+Android GIF Drawable
+  Copyright (C) Karol Wrótniak
+  Licensed under the MIT License
+
+SmartRefreshLayout
+  Copyright (C) scwang90
+  Licensed under the Apache License, Version 2.0
+
+Banner
+  Copyright (C) youth5201314
+  Licensed under the Apache License, Version 2.0
+
+RichEditor Android
+  Copyright (C) Daichi Furiya
+  Licensed under the Apache License, Version 2.0
+
+EasyPermissions
+  Copyright (C) Google Inc.
+  Licensed under the Apache License, Version 2.0
+
+Aliyun OSS Android SDK
+  Copyright (C) Alibaba Cloud
+  Licensed under the Apache License, Version 2.0
+
+RongCloud IM SDK
+  Copyright (C) Beijing Rongcloud Network Technology Co., Ltd.
+  Licensed under the RongCloud License
+
+Mob SMS SDK
+  Copyright (C) MobTech
+  Licensed under the MobTech License
+
+==============================================================================
+
+For the full text of the Apache License, Version 2.0, please see:
+http://www.apache.org/licenses/LICENSE-2.0
+
+For third-party licenses, please refer to the respective project repositories.
