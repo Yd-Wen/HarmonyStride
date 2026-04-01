@@ -16,40 +16,17 @@
 **与你同行**（HarmonyStride）是一款专为残障人士、志愿者和用人单位打造的Android社交应用。用户可以在平台上发布帖子（求职、招聘、求助、志愿活动），申请感兴趣的帖子，并通过即时通讯功能进行沟通交流。
 
 - 仓库地址：
+
   - https://github.com/Yd-Wen/HarmonyStride
   - https://gitee.com/yindong-wen/HarmonyStride
-- 项目演示：
-- 基础功能
 
-<p align="center" style="background:#f6f8fa; padding:20px; border-radius:12px;">
-  <video 
-    width="280" 
-    autoplay 
-    loop 
-    muted 
-    playsinline
-    style="object-fit: cover; border-radius:16px;">
-    <source src="demo_01.mp4" type="video/mp4">
-    您的浏览器不支持视频播放
-  </video>
-</p>
+- 基础功能演示
 
-- 核心功能
+  [https://github.com/user-attachments/assets/38b173aa-4fea-4923-8be4-83bfc5a43655](https://gitee.com/link?target=https%3A%2F%2Fgithub.com%2Fuser-attachments%2Fassets%2F38b173aa-4fea-4923-8be4-83bfc5a43655)
 
-<p align="center" style="background:#f6f8fa; padding:20px; border-radius:12px;">
-  <video 
-    width="280" 
-    autoplay 
-    loop 
-    muted 
-    playsinline
-    style="object-fit: cover; border-radius:16px;">
-    <source src="demo_02.mp4" type="video/mp4">
-    您的浏览器不支持视频播放
-  </video>
-</p>
+- 核心功能演示
 
-
+  [https://github.com/user-attachments/assets/60144771-6d58-41d6-aeba-0e0b9d29d375](https://gitee.com/link?target=https%3A%2F%2Fgithub.com%2Fuser-attachments%2Fassets%2F60144771-6d58-41d6-aeba-0e0b9d29d375)
 
 ### 核心功能
 
