@@ -113,8 +113,8 @@ implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
 **SmartRefreshLayout** - 强大的下拉刷新和上拉加载库
 
-- 仓库地址：https://github.com/scwang90/SmartRefreshLayout
-- 文档：https://github.com/scwang90/SmartRefreshLayout/blob/main/art/md_property.md
+- 仓库地址：[https://github.com/scwang90/SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)
+- 文档：[https://github.com/scwang90/SmartRefreshLayout/blob/main/art/md_property.md](https://github.com/scwang90/SmartRefreshLayout/blob/main/art/md_property.md)
 
 ```gradle
 implementation 'io.github.scwang90:refresh-layout-kernel:2.1.0'      //核心必须依赖
@@ -128,7 +128,7 @@ implementation 'io.github.scwang90:refresh-footer-classics:2.1.0'    //经典加
 
 **richeditor-android** - Android原生富文本编辑器
 
-- 仓库地址：https://github.com/wasabeef/richeditor-android
+- 仓库地址：[https://github.com/wasabeef/richeditor-android](https://github.com/wasabeef/richeditor-android)
 
 ```gradle
 implementation 'jp.wasabeef:richeditor-android:2.0.0'
@@ -138,7 +138,7 @@ implementation 'jp.wasabeef:richeditor-android:2.0.0'
 
 **Banner** - Android图片轮播控件
 
-- 仓库地址：https://github.com/youth5201314/banner
+- 仓库地址：[https://github.com/youth5201314/banner](https://github.com/youth5201314/banner)
 
 ```gradle
 implementation 'io.github.youth5201314:banner:2.2.3'
@@ -148,8 +148,8 @@ implementation 'io.github.youth5201314:banner:2.2.3'
 
 **Glide** - 快速高效的Android图片加载库
 
-- 仓库地址：https://github.com/bumptech/glide
-- 文档：https://bumptech.github.io/glide/
+- 仓库地址：[https://github.com/bumptech/glide](https://github.com/bumptech/glide)
+- 文档：[https://bumptech.github.io/glide](https://bumptech.github.io/glide)
 
 ```gradle
 implementation 'com.github.bumptech.glide:glide:4.12.0'
@@ -160,7 +160,7 @@ annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
 **CircleImageView** - 圆形ImageView
 
-- 仓库地址：https://github.com/hdodenhof/CircleImageView
+- 仓库地址：[https://github.com/hdodenhof/CircleImageView](https://github.com/hdodenhof/CircleImageView)
 
 ```gradle
 implementation 'de.hdodenhof:circleimageview:3.1.0'
@@ -170,7 +170,7 @@ implementation 'de.hdodenhof:circleimageview:3.1.0'
 
 **EasyPermissions** - 简化Android权限处理
 
-- 仓库地址：https://github.com/googlesamples/easypermissions
+- 仓库地址：[https://github.com/googlesamples/easypermissions](https://github.com/googlesamples/easypermissions)
 
 ```gradle
 implementation 'pub.devrel:easypermissions:3.0.0'
@@ -180,8 +180,8 @@ implementation 'pub.devrel:easypermissions:3.0.0'
 
 **LitePal** - Android开源数据库框架
 
-- 仓库地址：https://github.com/guolindev/LitePal
-- 文档：https://github.com/guolindev/LitePal/tree/master/README.md
+- 仓库地址：[https://github.com/guolindev/LitePal](https://github.com/guolindev/LitePal)
+- 文档：[https://github.com/guolindev/LitePal/tree/master/README.md](https://github.com/guolindev/LitePal/tree/master/README.md)
 
 ```gradle
 implementation 'org.litepal.guolindev:core:3.2.3'
@@ -191,8 +191,8 @@ implementation 'org.litepal.guolindev:core:3.2.3'
 
 **OkHttp** - 高效的HTTP客户端
 
-- 仓库地址：https://github.com/square/okhttp
-- 文档：https://square.github.io/okhttp/
+- 仓库地址：[https://github.com/square/okhttp](https://github.com/square/okhttp)
+- 文档：[https://square.github.io/okhttp](https://square.github.io/okhttp)
 
 ```gradle
 implementation 'com.squareup.okhttp3:okhttp:3.8.1'
@@ -200,7 +200,7 @@ implementation 'com.squareup.okhttp3:okhttp:3.8.1'
 
 **Gson** - JSON解析库
 
-- 仓库地址：https://github.com/google/gson
+- 仓库地址：[https://github.com/google/gson](https://github.com/google/gson)
 
 ```gradle
 implementation 'com.google.code.gson:gson:2.9.0'
@@ -210,7 +210,7 @@ implementation 'com.google.code.gson:gson:2.9.0'
 
 **融云IM SDK** - 即时通讯云服务
 
-- 官网：https://www.rongcloud.cn/
+- 官网：[https://www.rongcloud.cn](https://www.rongcloud.cn)
 
 ```gradle
 // 即时通讯 UI 基础组件
@@ -223,7 +223,7 @@ implementation 'cn.rongcloud.sdk:im_lib:5.6.10'
 
 **Mob SMS SDK** - 短信验证码服务
 
-- 官网：https://www.mob.com/
+- 官网：[https://www.mob.com](https://www.mob.com)
 
 ```gradle
 // 在project的build.gradle中添加插件
@@ -245,7 +245,7 @@ MobSDK {
 
 **阿里云对象存储SDK** - 图片等资源上传
 
-- 文档：https://help.aliyun.com/document_detail/32043.html
+- 文档：[https://help.aliyun.com/document_detail/32043.html](https://help.aliyun.com/document_detail/32043.html)
 
 ```gradle
 implementation 'com.aliyun.dpa:oss-android-sdk:2.9.13'
@@ -255,13 +255,11 @@ implementation 'com.aliyun.dpa:oss-android-sdk:2.9.13'
 
 **android-gif-drawable** - 支持GIF动画显示
 
-- 仓库地址：https://github.com/koral--/android-gif-drawable
+- 仓库地址：[https://github.com/koral--/android-gif-drawable](https://github.com/koral--/android-gif-drawable)
 
 ```gradle
 implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.28'
 ```
-
----
 
 ## 🚀 部署步骤
 
